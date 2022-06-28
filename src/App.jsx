@@ -1,0 +1,29 @@
+import Home from './pages/home/Home';
+import Velcome from './pages/velcome/Velcome';
+import Live from './pages/live/Live';
+import Matches from './pages/matches/Matches';
+import Authorization from './pages/authorization/Authorization';
+import Registration from './pages/registration/Registration';
+import Match from './pages/match/match';
+import { Routes, Route } from "react-router-dom";
+import './App.scss';
+
+function App(props) {
+  const { app } = props;
+  return (
+    <div className="app">
+      <Routes>
+        <Route path="/" element={<Velcome />} />
+        <Route path="/auth" element={<Authorization />} />
+        <Route path="/registration" element={<Registration app={app}/>} />
+        <Route path="/home" element={<Home />} >
+          <Route path="/home/matches" element={<Matches app={app} />} />
+          <Route path="/home/live" element={<Live />} />
+          <Route path="/home/match" element={<Match />} />
+        </Route>
+      </Routes>
+    </div>
+  );
+}
+
+export default App;

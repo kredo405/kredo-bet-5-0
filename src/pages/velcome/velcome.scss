@@ -1,0 +1,39 @@
+.velcome {
+    background-image: url('./fon.png');
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &__title-wrapper {
+        display: flex;
+        justify-content: center;
+        margin-top: 10%;
+        h1 {
+            color: aliceblue;
+        }
+    }
+    &__buttons-group {
+        margin-top: 10%;
+    }
+    &__text {
+        display: flex;
+        justify-content: center;
+        p {
+            font-size: 32px;
+            color: aliceblue;
+        }
+    }
+    &__link {
+        color: aliceblue;
+        text-decoration: none;
+        width: 100%;
+        &:hover {
+            color: rgb(201, 225, 247);
+            text-decoration: none; 
+        }
+    }
+    &__btn {
+        width: 100%;  
+    }
+}

@@ -2,7 +2,9 @@ import { Form, Button, FloatingLabel, Alert } from 'react-bootstrap';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
-import './registration.scss';
+import { LockClosedIcon } from '@heroicons/react/solid';
+import ErrorMessage from '../../components/error-message/Error-message';
+import logo from './logo2.png'
 
 const Registration = (props) => {
     const [email, setEmail] = useState('');
@@ -43,47 +45,70 @@ const Registration = (props) => {
     }
 
     return (
-        <div className="registration">
-            <div className='registration__wrapper'>
-                <div className="registration__title-wrapper">
-                    <h1>Регистрация</h1>
-                </div>
-                <Form onSubmit={onSubmit}>
-                    <FloatingLabel
-                        controlId="floatingInput"
-                        label="Email"
-                        className="mb-3"
-                    >
-                        <Form.Control
-                            type="email"
-                            placeholder="Введите Email"
-                            name="email"
-                            value={email}
-                            onChange={onValueChange} />
-                    </FloatingLabel>
-                    <FloatingLabel controlId="floatingPassword" label="Пароль">
-                        <Form.Control
-                            type="password"
-                            placeholder="Введите пароль"
-                            name="password"
-                            value={password}
-                            onChange={onValueChange} />
-                    </FloatingLabel>
-                    <div className="registration__button-wrapper">
-                        <Button className='registration__button' variant="success" type="submit">
-                            Регистрация
-                        </Button>
-                    </div>
-                </Form>
-                <div className="authtorization__error">
-                        {error ?
-                        <Alert variant='danger'>
-                            {errorMessage}
-                      </Alert>
-                        : null}
-                    </div>
+        <>
+        <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-md w-full space-y-8">
+            <div>
+              <img
+                className="mx-auto h-16 w-auto"
+                src={logo}
+                alt="logo"
+              />
+              <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Регистрация</h2>
             </div>
+            <form className="mt-8 space-y-6" onSubmit={onSubmit}>
+              <input type="hidden" name="remember" defaultValue="true" />
+              <div className="rounded-md shadow-sm -space-y-px">
+                <div>
+                  <label htmlFor="email-address" className="sr-only">
+                    Email адрес
+                  </label>
+                  <input
+                    id="email-address"
+                    name="email"
+                    type="email"
+                    onChange={onValueChange}
+                    autoComplete="email"
+                    required
+                    className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm mb-2"
+                    placeholder="Email адрес"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="password" className="sr-only">
+                    Пароль
+                  </label>
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    onChange={onValueChange}
+                    autoComplete="current-password"
+                    required
+                    className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                    placeholder="Пароль"
+                  />
+                </div>
+              </div>
+  
+              <div>
+                <button
+                  type="submit"
+                  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  <span className="absolute left-0 inset-y-0 flex items-center pl-3">
+                    <LockClosedIcon className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" aria-hidden="true" />
+                  </span>
+                  Регистрация
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
+        <div className='flex justify-center'>
+          {error ? <ErrorMessage message={errorMessage}/> : null}
+      </div>
+      </>
     )
 }
 

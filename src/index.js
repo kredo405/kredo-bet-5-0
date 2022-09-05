@@ -1,14 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
 import { BrowserRouter } from 'react-router-dom';
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import './index.css';
+import App from './App';
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_API_KEY,
@@ -27,11 +26,8 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <BrowserRouter>
         <Provider store={store}>
-            <App app={app}/>
+            <App app={app} />
         </Provider>
     </BrowserRouter>
-
-
 );
 
-reportWebVitals();

@@ -1,7 +1,5 @@
-import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, Avatar } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import './listMatchesLive.scss';
 
 const ListMatchesLive = () => {
     const [arrMatches, setArrayMatches] = useState([]);
@@ -27,30 +25,7 @@ const ListMatchesLive = () => {
 
     let matches = arrMatches.map(el => {
         return (
-           <div className="list-item">
-                <ListItemButton key={el.fixture.id}>
-                <ListItemIcon>
-                    <Avatar alt="logo" src={el.teams.home.logo} />
-                </ListItemIcon>
-                <div className="listMatchesLive__teamName">
-                    <div>
-                    <p className='listMatchesLive__text'>{el.teams.home.name}</p> 
-                    </div>
-                </div>
-                <div className="listMatchesLive__score">
-                    <div>
-                        <ListItemText primary={`${el.goals.home} : ${el.goals.away}`} />
-                    </div>
-                </div>
-                <div className="listMatchesLive__teamName">
-                    <div>
-                       <p className='listMatchesLive__text'>{el.teams.away.name}</p> 
-                    </div>
-                </div>
-                <ListItemIcon>
-                    <Avatar alt="logo" src={el.teams.away.logo} />
-                </ListItemIcon>
-            </ListItemButton>
+           <div className="list-item" key={el.fixture.id}>
            </div>
         );
     })
@@ -58,13 +33,7 @@ const ListMatchesLive = () => {
 
     return (
         <div className="listMatchesLive">
-            <List
-                sx={{ width: '100%', maxWidth: 800, bgcolor: 'background.paper' }}
-                component="nav"
-                aria-labelledby="nested-list-subheader"
-            >
-                {matches}
-            </List>
+           
         </div>
     )
 }

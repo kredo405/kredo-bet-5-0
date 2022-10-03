@@ -1,10 +1,8 @@
 import { createStore } from 'redux';
 const initialState = {
     match: {
-        fixture_id: '',
-        logoHome: '',
+        id: '',
         homeName: '',
-        logoAway: '',
         awayName: '',
         goalsHome: '',
         goalsAway: '',
@@ -13,9 +11,42 @@ const initialState = {
         leagueId: '',
         country: '',
         flag: '',
-        status: '',
         date: '',
+        time: '',
     },
+    playerStatsHome: [{
+        assists: '',
+        games: '',
+        games_starts: '',
+        goals: '',
+        goals_per90: '',
+        minutes: '',
+        player: '',
+        position: '',
+        xg: '',
+        xg_per90: '',
+        goals_per_shot: '',
+        goals_per_shot_on_target: '',
+        shots_on_target_per90: '',
+        shots_total_per90: '',
+    }],
+    playerStatsAway: [{
+        assists: '',
+        games: '',
+        games_starts: '',
+        goals: '',
+        goals_per90: '',
+        minutes: '',
+        player: '',
+        position: '',
+        xg: '',
+        xg_per90: '',
+        goals_per_shot: '',
+        goals_per_shot_on_target: '',
+        shots_on_target_per90: '',
+        shots_total_per90: '',
+    }],
+
     defaultShootingHome: {
         goals: "Нет данных",
         goals_per_shot: "Нет данных",
@@ -96,10 +127,8 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 match: {
-                    fixture_id: action.payload.id,
-                    logoHome: action.payload.homeLogo,
+                    id: action.payload.id,
                     homeName: action.payload.homeName,
-                    logoAway: action.payload.awayLogo,
                     awayName: action.payload.awayName,
                     goalsHome: action.payload.goalsHome,
                     goalsAway: action.payload.goalsAway,
@@ -108,8 +137,8 @@ const reducer = (state = initialState, action) => {
                     leagueId: action.payload.leagueId,
                     country: action.payload.country,
                     flag: action.payload.flag,
-                    status: action.payload.status,
                     date: action.payload.date,
+                    time: action.payload.time,
                 }
             };
         case 'DEFAULTSHOOTING':
@@ -147,6 +176,16 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 arbworld: action.payload
             };
+        case 'PLAYERHOME':
+            return {
+                ...state,
+                playerStatsHome: action.payload
+            };  
+        case 'PLAYERAWAY':
+            return {
+                ...state,
+                playerStatsAway: action.payload
+            };   
         default:
             return state;
     }

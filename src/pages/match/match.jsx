@@ -8,6 +8,9 @@ import Header from "../../components/header/Header";
 import Statistics from '../../components/Statistics/Statistics'
 import MoneyWay from "../../components/MoneyWay/MoneyWay";
 import Predictions from "../../components/Predictions/Predictions";
+import ToolsPrediction from "../../components/ToolsPrediction/ToolsPrediction";
+import PlayersStatistics from "../../components/PlayersStatistics/PlayersStatistics";
+import PoisonDestribution from "../../components/PoisonDestribution/PoisonDisrebution";
 import axios from 'axios';
 
 const { TabPane } = Tabs;
@@ -43,15 +46,9 @@ const Match = () => {
                     <span>{match.homeName} - {match.awayName}</span>
                 </div>
                 <div className="flex mt-5 items-center">
-                    <div className="flex justify-center w-2/5">
-                        <img className="w-6/12" src={match.logoHome} alt="Лого" />
-                    </div>
                     <span className="w-1/5 text-center">
-                        {match.status.short === "NS" ? match.date.slice(11, 16) : `${match.goalsHome} : ${match.goalsAway}`}
+                        {`${match.date}: ${match.time}`}
                     </span>
-                    <div className="flex justify-center w-2/5">
-                        <img className="w-6/12" src={match.logoAway} alt="Лого" />
-                    </div>
                 </div>
                 <div className="mt-5 mb-5">
                     <Tabs
@@ -61,13 +58,17 @@ const Match = () => {
                     >
                         <Tab eventKey="stat" title="Статистика">
                             <Statistics id={match.leagueId} homeName={match.homeName} awayName={match.awayName}/>
+                            <PlayersStatistics id={match.leagueId} homeName={match.homeName} awayName={match.awayName}/>
                             <MoneyWay id={match.leagueId} homeName={match.homeName} awayName={match.awayName}/>
                         </Tab>
                         <Tab eventKey="prediction" title="Прогнозы">
                             <Predictions id={match.leagueId} homeName={match.homeName} awayName={match.awayName}/>
                         </Tab>
-                        <Tab eventKey="prediction-kredo-bet" title="Прогноз Kredo-bet">
-                            
+                        <Tab eventKey="tools" title="Коллективный разум">
+                            <ToolsPrediction id={match.leagueId} homeName={match.homeName} awayName={match.awayName}/>
+                        </Tab>
+                        <Tab eventKey="prediction-kredo-bet" title="Распределение Паусона">
+                            <PoisonDestribution id={match.leagueId} homeName={match.homeName} awayName={match.awayName}/>
                         </Tab>
                     </Tabs>
                 </div>

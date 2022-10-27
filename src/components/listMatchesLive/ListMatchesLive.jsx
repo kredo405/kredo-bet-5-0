@@ -8,7 +8,7 @@ import { Soccer365Services } from "../../services/soccer365";
 
 const ErrorMessage = (error) => {
     message.error(error);
-  };
+};
 
 const ListMatchesLive = () => {
     const [arrMatches, setArrayMatches] = useState([]);
@@ -18,7 +18,7 @@ const ListMatchesLive = () => {
     const history = useNavigate();
 
     useEffect(() => {
-        if(state.token === '') {
+        if (state.token === '') {
             history('/')
         }
         Soccer365Services.getAllMatches()
@@ -33,7 +33,7 @@ const ListMatchesLive = () => {
     }, []);
 
     let elements = arrMatches.map((el, i) => {
-        const matchElementFilter =  el.matches.filter(item => item.date.length <= 4 && item.date !== 'Завершен')
+        const matchElementFilter = el.matches.filter(item => item.date.length <= 4 && item.date !== 'Завершен')
         let matchElements = matchElementFilter.map((item, i) => {
             return (
                 <div key={item.id} onClick={() => {
@@ -70,18 +70,20 @@ const ListMatchesLive = () => {
     })
 
     return (
-        <div className="container lg:px-44 mt-4">
+        <>
             <Header />
-            {isLoading ?
-                elements :
-                <div className="h-screen flex flex-col justify-center items-center">
-                    <div className="mb-4">
-                        <span className="font-mono text-xl font-medium text-sky-600">Собираем информацию</span>
+            <div className="container lg:px-44 mt-4">
+                {isLoading ?
+                    elements :
+                    <div className="h-screen flex flex-col justify-center items-center">
+                        <div className="mb-4">
+                            <span className="font-mono text-xl font-medium text-sky-600">Собираем информацию</span>
+                        </div>
+                        <Spin size="large" />
                     </div>
-                    <Spin size="large" />
-                </div>
-            }
-        </div>
+                }
+            </div>
+        </>
     )
 }
 

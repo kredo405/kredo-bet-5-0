@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import findTeam from '../../utils/findTeam';
 import DroppingOdds from '../DroppingOdds/DroppingOdds';
 import { useSelector, useDispatch } from "react-redux";
-import axios from 'axios';
+import { arbworldServices } from '../../services/arbworld';
 
 const MoneyWay = (props) => {
     const [moneyWay1X2, setMoneyWay1X2] = useState({
@@ -26,81 +26,44 @@ const MoneyWay = (props) => {
         percentOver: "Нет данных",
         percentUnder: "Нет данных",
     });
-    const [arbworldData, setArbworldData] = useState({});
-    const dispatch = useDispatch();
+
 
     useEffect(() => {
-        const options = {
-            method: 'GET',
-            url: 'http://localhost:8000/arbworld',
-        };
 
-        axios.request(options).then(function (response) {
-            console.log(response.data);
-            dispatch({
-                type: 'ARBWORLD',
-                payload: response.data.arbworld
-            });
+        try {
+            const getData = async () => {
+                const moneyWay1x2 = await arbworldServices.getMoneyWay1x2()
+                const moneyWayOverUnder = await arbworldServices.getMoneyWayUnderOver()
 
-            setArbworldData(response.data);
+                console.log(props)
 
-            // Поиск команд 
-            response.data.arbworld.moneyWay1x2.forEach(el => {
-                if (el.homeName.toLowerCase() === props.homeName.toLowerCase()) {
-                    setMoneyWay1X2(el)
-                }
-                if (el.homeName.toLowerCase() === props.awayName.toLowerCase()) {
-                    setMoneyWay1X2(el)
-                }
-                if (el.awayName.toLowerCase() === props.homeName.toLowerCase()) {
-                    setMoneyWay1X2(el)
-                }
-                if (el.awayName.toLowerCase() === props.awayName.toLowerCase()) {
-                    setMoneyWay1X2(el)
-                }
-            });
-            response.data.arbworld.moneyWayOverUnder.forEach(el => {
-                if (el.homeName.toLowerCase() === props.homeName.toLowerCase()) {
-                    setMoneyWayOverUnder(el)
-                }
-                if (el.homeName.toLowerCase() === props.awayName.toLowerCase()) {
-                    setMoneyWayOverUnder(el)
-                }
-                if (el.awayName.toLowerCase() === props.homeName.toLowerCase()) {
-                    setMoneyWayOverUnder(el)
-                }
-                if (el.awayName.toLowerCase() === props.awayName.toLowerCase()) {
-                    setMoneyWayOverUnder(el)
-                }
-            });
+                const moneyWay1X2Element = moneyWay1x2.data.moneyWay.find(el => el.homeName.toLowerCase() === props.homeName.toLowerCase() && el.homeAway.toLowerCase() === props.awayName.toLowerCase())
+                const moneyWayOverUnderElement = moneyWayOverUnder.data.moneyWay.find(el => el.homeName.toLowerCase() === props.homeName.toLowerCase() && el.homeAway.toLowerCase() === props.awayName.toLowerCase())
 
-            if (moneyWay1X2.homeName === "Нет данных") {
-                const el = findTeam(response.data.arbworld.moneyWay1x2, props.homeName, 'arb', 'home');
-                if (el) {
-                    setMoneyWay1X2(el)
-                } else {
-                    const el = findTeam(response.data.arbworld.moneyWay1x2, props.awayName, 'arb', 'away');
-                    if (el) {
-                        setMoneyWay1X2(el)
-                    }
-                }
-            } 
-            if (moneyWayOverUnder.homeName === "Нет данных") {
-                const el = findTeam(response.data.arbworld.moneyWayOverUnder, props.homeName, 'arb', 'home');
-                if (el) {
-                    setMoneyWayOverUnder(el)
-                } else {
-                    const el = findTeam(response.data.arbworld.moneyWayOverUnder, props.awayName, 'arb', 'away');
-                    if (el) {
-                        setMoneyWayOverUnder(el)
-                    }
-                }
+                const posPercentOver = moneyWayOverUnderElement.percentOver.indexOf('%')
+                const posPercentUnder = moneyWayOverUnderElement.percentUnder.indexOf('%')
+                const posPercentHome = moneyWay1X2Element.percentHome.indexOf('%')
+                const posPercentDraw = moneyWay1X2Element.percentDraw.indexOf('%')
+                const posPercentAway = moneyWay1X2Element.percentAway.indexOf('%')
+
+                moneyWay1X2Element.percentHome = +moneyWay1X2Element.percentHome.slice(0, posPercentHome)
+                moneyWay1X2Element.percentDraw = +moneyWay1X2Element.percentDraw.slice(0, posPercentDraw)
+                moneyWay1X2Element.percentAway = +moneyWay1X2Element.percentAway.slice(0, posPercentAway)
+                moneyWayOverUnderElement.percentOver = +moneyWayOverUnderElement.percentOver.slice(0, posPercentOver)
+                moneyWayOverUnderElement.percentUnder = +moneyWayOverUnderElement.percentUnder.slice(0, posPercentUnder)
+
+                setMoneyWay1X2(moneyWay1X2Element)
+                setMoneyWayOverUnder(moneyWayOverUnderElement)
             }
 
+            getData()
+        }
+        catch (error) {
+            console.log(error)
+        }
 
-        }).catch(function (error) {
-            console.error(error);
-        });
+
+
     }, []);
 
 
@@ -120,60 +83,55 @@ const MoneyWay = (props) => {
                 </thead>
                 <tbody>
                     <tr>
-                        <td>П1</td>
-                        <td><p>{moneyWay1X2.oddsHome}</p></td>
-                        <td><p
-                            className={+moneyWay1X2.percentHome > +moneyWay1X2.percentDraw && +moneyWay1X2.percentHome > +moneyWay1X2.percentAway ? 'bg-green-200 flex justify-center' : +moneyWay1X2.percentHome > +moneyWay1X2.percentDraw && +moneyWay1X2.percentHome < +moneyWay1X2.percentAway ||
-                                +moneyWay1X2.percentHome < +moneyWay1X2.percentDraw && +moneyWay1X2.percentHome > +moneyWay1X2.percentAway ? 'bg-yellow-200 flex justify-center' : 'bg-rose-200 flex justify-center'}>
-                            {moneyWay1X2.percentHome}%</p>
+                        <td><p className='text-center text-sky-900 font-mono font-semibold'>П1</p></td>
+                        <td><p className='text-center text-sky-600 font-mono font-semibold'>{moneyWay1X2.oddsHome}</p></td>
+                        <td><p className='text-center text-sky-600 font-mono font-semibold'>
+                            {moneyWay1X2.percentHome}</p>
                         </td>
-                        <td><p>{(moneyWay1X2.money * moneyWay1X2.percentHome / 100).toFixed(1)}$</p></td>
+                        <td><p className='text-center text-sky-600 font-mono font-semibold'>{+moneyWay1X2.money * +moneyWay1X2.percentHome / 100}$</p></td>
                     </tr>
                     <tr>
                         <td>X</td>
-                        <td><p>{moneyWay1X2.oddsDraw}</p></td>
+                        <td><p className='text-center text-sky-600 font-mono font-semibold'>{moneyWay1X2.oddsDraw}</p></td>
                         <td>
-                            <p className={+moneyWay1X2.percentDraw > +moneyWay1X2.percentHome && +moneyWay1X2.percentDraw > +moneyWay1X2.percentAway ? 'bg-green-200 flex justify-center' : +moneyWay1X2.percentDraw > +moneyWay1X2.percentHome && +moneyWay1X2.percentDraw < +moneyWay1X2.percentAway ||
-                                +moneyWay1X2.percentDraw < +moneyWay1X2.percentHome && +moneyWay1X2.percentDraw > +moneyWay1X2.percentAway ? 'bg-yellow-200 flex justify-center' : 'bg-rose-200 flex justify-center'}>
-                                {moneyWay1X2.percentDraw}%
+                            <p className='text-center text-sky-600 font-mono font-semibold'>
+                                {moneyWay1X2.percentDraw}
                             </p>
                         </td>
-                        <td><p>{(moneyWay1X2.money * moneyWay1X2.percentDraw / 100).toFixed(1)}$</p></td>
+                        <td><p className='text-center text-sky-600 font-mono font-semibold'>{+moneyWay1X2.money * moneyWay1X2.percentDraw / 100}$</p></td>
                     </tr>
                     <tr>
                         <td>П2</td>
-                        <td><p>{moneyWay1X2.oddsAway}</p></td>
+                        <td><p className='text-center text-sky-600 font-mono font-semibold'>{moneyWay1X2.oddsAway}</p></td>
                         <td>
-                            <p className={+moneyWay1X2.percentAway > +moneyWay1X2.percentHome && +moneyWay1X2.percentAway > +moneyWay1X2.percentDraw ? 'bg-green-200 flex justify-center' : +moneyWay1X2.percentAway > +moneyWay1X2.percentHome && +moneyWay1X2.percentAway < +moneyWay1X2.percentDraw ||
-                                +moneyWay1X2.percentAway < +moneyWay1X2.percentHome && +moneyWay1X2.percentAway > +moneyWay1X2.percentDraw ? 'bg-yellow-200 flex justify-center' : 'bg-rose-200 flex justify-center'}>
-                                {moneyWay1X2.percentAway}%
+                            <p className='text-center text-sky-600 font-mono font-semibold'>
+                                {moneyWay1X2.percentAway}
                             </p>
                         </td>
-                        <td><p>{(moneyWay1X2.money * moneyWay1X2.percentAway / 100).toFixed(1)}$</p></td>
+                        <td><p className='text-center text-sky-600 font-mono font-semibold'>{+moneyWay1X2.money * moneyWay1X2.percentAway / 100}$</p></td>
                     </tr>
                     <tr>
                         <td>Больше 2.5</td>
-                        <td><p>{moneyWayOverUnder.oddsOver}</p></td>
+                        <td><p className='text-center text-sky-600 font-mono font-semibold'>{moneyWayOverUnder.oddsOver}</p></td>
                         <td>
-                            <p className={+moneyWayOverUnder.percentOver > +moneyWayOverUnder.percentUnder ? 'bg-green-200 flex justify-center' : 'bg-rose-200 flex justify-center'}>
-                                {moneyWayOverUnder.percentOver}%
+                            <p className='text-center text-sky-600 font-mono font-semibold'>
+                                {moneyWayOverUnder.percentOver}
                             </p>
                         </td>
-                        <td><p>{(moneyWayOverUnder.money * moneyWayOverUnder.percentOver / 100).toFixed(1)}$</p></td>
+                        <td><p className='text-center text-sky-600 font-mono font-semibold'>{+moneyWayOverUnder.money * +moneyWayOverUnder.percentOver / 100}$</p></td>
                     </tr>
                     <tr>
                         <td>Меньше 2.5</td>
-                        <td><p>{moneyWayOverUnder.oddsUnder}</p></td>
+                        <td><p className='text-center text-sky-600 font-mono font-semibold'>{moneyWayOverUnder.oddsUnder}</p></td>
                         <td>
-                            <p className={+moneyWayOverUnder.percentUnder > +moneyWayOverUnder.percentOver ? 'bg-green-200 flex justify-center' : 'bg-rose-200 flex justify-center'}>
-                                {moneyWayOverUnder.percentUnder}%
+                            <p className='text-center text-sky-600 font-mono font-semibold'>
+                                {moneyWayOverUnder.percentUnder}
                             </p>
                         </td>
-                        <td><p>{(moneyWayOverUnder.money * moneyWayOverUnder.percentUnder / 100).toFixed(1)}$</p></td>
+                        <td><p className='text-center text-sky-600 font-mono font-semibold'>{+moneyWayOverUnder.money * +moneyWayOverUnder.percentUnder / 100}$</p></td>
                     </tr>
                 </tbody>
             </Table>
-            <DroppingOdds data={arbworldData} homeName={props.homeName} awayName={props.awayName}/>
         </>
     )
 }

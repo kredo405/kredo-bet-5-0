@@ -5,6 +5,8 @@ import Matches from './components/matches/Matches';
 import Authorization from './pages/authorization/Authorization';
 import Registration from './pages/registration/Registration';
 import Match from './pages/match/match';
+import CollectiveMind from './pages/collectiveMind/CollectiveMind';
+import CollectiveMindMatch from './pages/collectiveMind/CollectiveMindMatch';
 import { Routes, Route } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -24,6 +26,8 @@ function App(props) {
         <Route path="/home" element={<Home />} />
         <Route path="/live" element={<Live />} />
         <Route path="/match" element={<Match />} />  
+        <Route path="/collectiveMind" element={<CollectiveMind />} />  
+        <Route path="/collectiveMindMatch" element={<CollectiveMindMatch />} />  
       </Routes>
     </div>
   );

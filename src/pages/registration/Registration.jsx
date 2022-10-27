@@ -3,6 +3,7 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
 import { LockClosedIcon } from '@heroicons/react/solid';
+import { useSelector, useDispatch } from "react-redux";
 import ErrorMessage from '../../components/error-message/Error-message';
 import logo from './logo2.png'
 
@@ -12,7 +13,8 @@ const Registration = (props) => {
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');;
     const { app } = props;
-    let navigate = useNavigate();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const onValueChange = (e) => {
         if (e.target.name === 'email') {
@@ -32,6 +34,10 @@ const Registration = (props) => {
                 const user = userCredential.user;
                 localStorage.setItem('token', user.accessToken);
                 localStorage.setItem('email', user.email);
+                dispatch({
+                  type: 'TOKEN',
+                  payload: user.accessToken
+              })
                 if(user.accessToken) {
                     navigate("/home/matches", { replace: true });
                 }

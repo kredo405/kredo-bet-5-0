@@ -1,86 +1,55 @@
 import { useState, useEffect } from 'react';
 import findTeam from '../../utils/findTeam';
 import { useSelector, useDispatch } from "react-redux";
-import { Collapse } from 'antd';
-import axios from 'axios';
-
+import { predictionsServices } from "../../services/predctions";
 
 const Predictions = (props) => {
-    const [predictionsBetzona, setPredictionsBetZona] = useState([]);
-    const [predictionsOnlineBookmaker, setPredictionsOnlineBookmaker] = useState([]);
-    const { Panel } = Collapse;
 
-    useEffect(() => {
-        const options = {
-            method: 'GET',
-            url: 'http://localhost:8000/betzona',
-        };
+    const [predictions, setPredictions] = useState({
+        homeName: '',
+        awayName: '',
+        text: '',
+        predictionsOne: '',
+        predictionsTwo: '',
+    })
 
-        axios.request(options).then(function (response) {
-            console.log(response.data);
-            setPredictionsBetZona(response.data.betzona);
+ useEffect(() => {
+    const getPredictions = async () => {
+        const onlineBookmaker = await predictionsServices.getOnlineBookmaker()
+        console.log(onlineBookmaker)
+        onlineBookmaker.data.predicitons.forEach(el => {
+            if(findTeam(el.nameHome, props.homeName) && findTeam(el.nameAway, props.awayName)) {
+                setPredictions(el)
+            }
+            else {
+                setPredictions({
+                    text: '...',
+                    predictionsOne: 'Нет прогнозов',
+                    predictionsTwo: '',
+                })
+            }
+        })
+    }
 
-        }).catch(function (error) {
-            console.error(error);
-        });
-
-    }, []);
-
-    useEffect(() => {
-        const options = {
-            method: 'GET',
-            url: 'http://localhost:8000/onlineBookmaker',
-        };
-
-        axios.request(options).then(function (response) {
-            console.log(response.data);
-            setPredictionsOnlineBookmaker(response.data.onlineBookmaker);
-
-        }).catch(function (error) {
-            console.error(error);
-        });
-
-    }, []);
-
-    let betzona = predictionsBetzona.map((el, i) => {
-        return (
-            <Panel header={`${el.homeName} - ${el.awayName}(${el.forecast.bet}; ${el.forecast.odd})`} key={i + 1000}>
-                <h5 className='text-center font-semibold py-2 text-lg'>{el.homeName}</h5>
-                <p className='text-slate-600 font-mono'>{el.homePreview.info}</p>
-                <h5 className='text-center font-semibold py-2 text-lg'>{el.awayName}</h5>
-                <p className='text-slate-600 font-mono'>{el.awayPreview.info}</p>
-                <h5 className='text-center font-semibold py-2 text-lg'>Прогноз</h5>
-                <p className='text-slate-600 font-mono'>{el.forecast.text}</p>
-            </Panel>
-        )
-    });
-
-    let onlineBookmaker = predictionsOnlineBookmaker.map((el, i) => {
-        return (
-            <Panel header={`${el.nameHome} - ${el.nameAway}(1:${el.predictionOne}; 2:${el.predictionTwo})`} key={i + 2000}>
-                <h5 className='text-center font-semibold py-2 text-lg'>Прогноз</h5>
-                <p className='text-slate-400 font-mono'>{el.text}</p>
-                <p className='text-slate-600 italic'>{el.predictionOne}</p>
-                <p className='text-slate-600 italic'>{el.predictionTwo}</p>
-            </Panel>
-        )
-    });
+    getPredictions()
+ }, [])
 
 
     return (
         <>
-            <Collapse accordion>
-                <Panel header="Online Bookmaker" key="1">
-                    <Collapse defaultActiveKey="1">
-                        {onlineBookmaker}
-                    </Collapse>
-                </Panel>
-                <Panel header="Betzona" key="2">
-                    <Collapse defaultActiveKey="2">
-                        {betzona}
-                    </Collapse>
-                </Panel>
-            </Collapse>
+        <div>
+                <h2 className="text-center py-3 font-serif text-2xl font-bold text-slate-600">Прогнозы</h2>
+                <ul className="h-96 mb-36 lg:px-60">
+                <li  className="p-3 border-2 border-blue-100 border-double my-4 rounded-lg shadow-lg shadow-cyan-50">
+                <h2 className="text-center text-lg font-semibold my-3">
+                    <span className="bg-lime-300 p-2 mr-2">{predictions.predictionsOne}</span>
+                    :
+                    <span className="bg-lime-300 p-2 ml-2">{predictions.predictionsTwo}</span>
+                </h2>
+                <p className="font-sans text-zinc-600 font-medium">{predictions.text}</p>
+            </li>
+                </ul>
+            </div>
         </>
     )
 }

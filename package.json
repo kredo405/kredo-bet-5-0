@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/charts": "^1.4.2",
+    "@betting-api/all": "^0.1.0",
+    "@betting-api/parimatch": "^0.1.0",
     "@headlessui/react": "^1.6.6",
     "@heroicons/react": "^1.0.6",
     "@testing-library/jest-dom": "^5.16.4",
@@ -10,6 +13,7 @@
     "@testing-library/user-event": "^13.5.0",
     "antd": "^4.22.2",
     "axios": "^0.27.2",
+    "bing-translate-api": "^2.6.0",
     "bootstrap": "^5.1.3",
     "firebase": "^9.8.3",
     "moment": "^2.29.4",

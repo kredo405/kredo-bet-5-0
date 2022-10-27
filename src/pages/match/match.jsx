@@ -1,78 +1,149 @@
-import { useSelector, useDispatch } from "react-redux";
-import { getFirestore } from "firebase/firestore";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import { useEffect, useState } from 'react';
-import { useNavigate } from "react-router-dom";
 import Header from "../../components/header/Header";
-import Statistics from '../../components/Statistics/Statistics'
-import MoneyWay from "../../components/MoneyWay/MoneyWay";
-import Predictions from "../../components/Predictions/Predictions";
-import ToolsPrediction from "../../components/ToolsPrediction/ToolsPrediction";
-import PlayersStatistics from "../../components/PlayersStatistics/PlayersStatistics";
-import PoisonDestribution from "../../components/PoisonDestribution/PoisonDisrebution";
-import axios from 'axios';
-
-const { TabPane } = Tabs;
-
-const onChange = (key) => {
-    console.log(key);
-};
+import { Progress, Spin, BackTop, Empty } from 'antd';
+import Comment from "../../components/Comment/Comment";
+import Bets from "../../components/Bets/Bets";
+import Form from "../../components/Form/Form";
+import LastMatches from "../../components/lastMatches/LastMatches";
+import { Soccer365Services } from "../../services/soccer365";
 
 const Match = () => {
-    const state = useSelector(state => state);
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const app = state.app;
-    const db = getFirestore(app);
+    const [data, setData] = useState({});
+    const [form, setForm] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
-    const { match } = state;
+    useEffect(() => {
+
+        const getInfo = async () => {
+            try {
+                const matchesInfo = await Soccer365Services.getMatchInfo();
+                console.log(matchesInfo.data)
+                const posHome = matchesInfo.data.match[0].percentOutcomes.home.indexOf('%')
+                const posDraw = matchesInfo.data.match[0].percentOutcomes.draw.indexOf('%')
+                const posAway = matchesInfo.data.match[0].percentOutcomes.away.indexOf('%')
+                matchesInfo.data.match[0].percentOutcomes.home = matchesInfo.data.match[0].percentOutcomes.home.slice(0, posHome)
+                matchesInfo.data.match[0].percentOutcomes.draw = matchesInfo.data.match[0].percentOutcomes.draw.slice(0, posDraw)
+                matchesInfo.data.match[0].percentOutcomes.away = matchesInfo.data.match[0].percentOutcomes.away.slice(0, posAway)
+                setData(matchesInfo.data.match[0]);
+                const matchesForm = await Soccer365Services.getForm();
+                console.log(matchesForm.data)
+                setForm(matchesForm.data.form[0])
+                const matchesLineups = await Soccer365Services.getLineups();
+                console.log(matchesLineups.data)
+                // setLineups(matchesLineups.data.lineups[0])
+                setIsLoading(true);
+            }
+            catch (error) {
+                console.log(error)
+            }
+        }
+
+        getInfo()
+
+    }, []);
 
     return (
         <div>
             <Header />
-            <div className="container">
-                <div className="w-full h-14 flex justify-between items-center bg-stone-200 mb-2.5">
-                    <div className="flex w-6/12 items-center ml-2">
-                        <img className="lg:w-1/12 w-2/12 h-4/5" src={match.leagueLogo} alt="лого" />
-                        <span className="p-2">{match.leagueName}</span>
+            <BackTop />
+            {isLoading ?
+                <div className="container lg:px-80">
+                    <div className="flex justify-center mb-8 bg-neutral-50 p-3">
+                    <h1 className='text-slate-700 font-mono text-xl text-center'>{data.title}</h1>
+                </div>
+                <div className="flex justify-evenly item-center">
+                    <div className="flex flex-col items-center">
+                        <img src={data.homeLogo} alt="логотип" />
+                        <span className="py-3 font-mono text-lg font-medium text-teal-900">{data.homeTeam}</span>
                     </div>
-                    <div className="flex w-6/12 justify-end items-center">
-                        <img className="lg:w-1/12 w-2/12 h-4/5" src={match.flag} alt="флаг" />
-                        <span className="p-2">{match.country}</span>
+                    <div className="flex items-center">
+                        <span className='text-2xl'>{data.homeGoal}:{data.awayGoal}</span>
+                    </div>
+                    <div className="flex flex-col items-center">
+                        <img src={data.awayLogo} alt="логотип" />
+                        <span className="py-3 font-mono text-lg font-medium text-teal-900">{data.awayTeam}</span>
                     </div>
                 </div>
-                <div className="flex justify-center">
-                    <span>{match.homeName} - {match.awayName}</span>
+                {data.odds ?
+                <div className="flex flex-wrap justify-center">
+                <div className="flex px-3 border-2 border-slate-400 border-solid m-2 items-center">
+                    <span className="pr-2">П1</span>
+                    <span className="text-pink-500">{data.odds.oddHomeWin}</span>
                 </div>
-                <div className="flex mt-5 items-center">
-                    <span className="w-1/5 text-center">
-                        {`${match.date}: ${match.time}`}
-                    </span>
+                <div className="flex px-3 border-2 border-slate-400 border-solid m-2 items-center">
+                    <span className="pr-2">Х</span>
+                    <span className="text-pink-500">{data.odds.oddDraw}</span>
                 </div>
+                <div className="flex px-3 border-2 border-slate-400 border-solid m-2 items-center">
+                    <span className="pr-2">П2</span>
+                    <span className="text-pink-500">{data.odds.oddAwayWin}</span>
+                </div>
+                <div className="flex px-3 border-2 border-slate-400 border-solid m-2 items-center">
+                    <span className="pr-2">ТБ2.5</span>
+                    <span className="text-pink-500">{data.odds.oddTotalO25}</span>
+                </div>
+                <div className="flex px-3 border-2 border-slate-400 border-solid m-2 items-center">
+                    <span className="pr-2">ТМ2.5</span>
+                    <span className="text-pink-500">{data.odds.oddTotalU25}</span>
+                </div>
+                <div className="flex px-3 border-2 border-slate-400 border-solid m-2 items-center">
+                    <span className="pr-2">ОЗ ДА</span>
+                    <span className="text-pink-500">{data.odds.oddBtsYes}</span>
+                </div>
+                <div className="flex px-3 border-2 border-slate-400 border-solid m-2 items-center">
+                    <span className="pr-2">ОЗ Нет</span>
+                    <span className="text-pink-500">{data.odds.oddBtsNo}</span>
+                </div>
+            </div>
+                :
+                null}
+                
+                <div className="flex w-full justify-around items-center mt-5">
+                    <div className={`flex flex-col justify-center items-center`}>
+                        <span className="p-3 text-xl font-mono">П1</span>
+                        <Progress type="circle" percent={+data.percentOutcomes.home} width={100} />
+                    </div>
+                    <div className={`flex flex-col justify-center items-center`}>
+                        <span className="p-3 text-xl font-mono">Х</span>
+                        <Progress type="circle" percent={+data.percentOutcomes.draw} width={100} />
+                    </div>
+                    <div className={`flex flex-col justify-center items-center`}>
+                        <span className="p-3 text-xl font-mono">П2</span>
+                        <Progress type="circle" percent={+data.percentOutcomes.away} width={100} />
+                    </div>
+                </div>
+
                 <div className="mt-5 mb-5">
                     <Tabs
-                        defaultActiveKey="stat"
+                        defaultActiveKey="predict"
                         id="uncontrolled-tab-example"
                         className="mb-3"
                     >
-                        <Tab eventKey="stat" title="Статистика">
-                            <Statistics id={match.leagueId} homeName={match.homeName} awayName={match.awayName}/>
-                            <PlayersStatistics id={match.leagueId} homeName={match.homeName} awayName={match.awayName}/>
-                            <MoneyWay id={match.leagueId} homeName={match.homeName} awayName={match.awayName}/>
+                        <Tab eventKey="predict" title="Статистика">
+                            <Form data={form} homeName={data.homeTeam} awayName={data.awayTeam} />
+                            <LastMatches data={form} homeName={data.homeTeam} awayName={data.awayTeam} />
                         </Tab>
-                        <Tab eventKey="prediction" title="Прогнозы">
-                            <Predictions id={match.leagueId} homeName={match.homeName} awayName={match.awayName}/>
-                        </Tab>
-                        <Tab eventKey="tools" title="Коллективный разум">
-                            <ToolsPrediction id={match.leagueId} homeName={match.homeName} awayName={match.awayName}/>
-                        </Tab>
-                        <Tab eventKey="prediction-kredo-bet" title="Распределение Паусона">
-                            <PoisonDestribution id={match.leagueId} homeName={match.homeName} awayName={match.awayName}/>
+                        <Tab eventKey="bets" title="Ставки и прогнозы">
+                            <Bets
+                                data={data.predictions}
+                                form={form}
+                                homeName={data.homeTeam}
+                                awayName={data.awayTeam} />
+                                <Comment data={data.predictions} />
                         </Tab>
                     </Tabs>
+                </div> 
                 </div>
-            </div>
+                :
+                <div className="h-screen flex flex-col justify-center items-center">
+                    <div className="mb-4">
+                        <span className="font-mono text-xl font-medium text-sky-600">Собираем информацию</span>
+                    </div>
+                    <Spin size="large" />
+                </div>
+            }
         </div>
     )
 }

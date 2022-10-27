@@ -1,11 +1,61 @@
 import { Link } from 'react-router-dom';
 import { Popover } from '@headlessui/react'
+import { oddsServices } from '../../services/odds';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from "react-redux";
+import moment from 'moment';
 import logo from './Kredo-bet.png';
 import fon2 from './fon2.png';
 
 
 
 export default function Velcome() {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const getInfo = async () => {
+      try {
+          const odds = await oddsServices.getAllOdds()
+          const arrOdds = odds.data.filter(el => moment().format("YYYY-MM-DD") === el.date_start.slice(0, 10))
+
+          const arrData = arrOdds.map(el => {
+              return {
+                  date_start: el.date_start,
+                  team1: el.team1,
+                  team2: el.team2,
+                  team1_rus: el.team1_rus,
+                  team2_rus: el.team2_rus,
+                  markets: {
+                      bothToScore: el.markets.bothToScore,
+                      handicaps1: el.markets.handicaps1,
+                      handicaps2: el.markets.handicaps2,
+                      totals: el.markets.totals,
+                      totals1: el.markets.totals1,
+                      totals2: el.markets.totals2,
+                      win1: el.markets.win1,
+                      win1X: el.markets.win1X,
+                      win2: el.markets.win2,
+                      winX: el.markets.winX,
+                      winX2: el.markets.winX2,
+                  }
+              }
+          })
+
+          console.log(arrData)
+          dispatch({
+              type: 'ODDS',
+              payload: arrData
+          });
+      }
+      catch (error) {
+          console.log(error)
+      }
+  }
+
+  getInfo()
+  }, [])
+
   return (
     <div className="relative bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto">
@@ -77,7 +127,7 @@ export default function Velcome() {
                 </div>
                 <div className="mt-3 sm:mt-0 sm:ml-3">
                   <Link
-                    to="/home"
+                    to="/auth"
                     className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10"
                   >
                     Войти

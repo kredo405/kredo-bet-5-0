@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
+import { useSelector, useDispatch } from "react-redux";
 import ErrorMessage from '../../components/error-message/Error-message';
 import logo from './logo2.png'
 
@@ -11,7 +12,8 @@ const Authorization = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    let navigate = useNavigate();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
 
     const onValueChange = (e) => {
@@ -31,6 +33,10 @@ const Authorization = () => {
                 const user = userCredential.user;
                 sessionStorage.setItem('token', user.accessToken);
                 sessionStorage.setItem('email', user.email);
+                dispatch({
+                  type: 'TOKEN',
+                  payload: user.accessToken
+              })
                 if(user.accessToken) {
                     navigate("/home", { replace: true });
                 }

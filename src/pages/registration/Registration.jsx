@@ -4,14 +4,18 @@ import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
 import { LockClosedIcon } from '@heroicons/react/solid';
 import { useSelector, useDispatch } from "react-redux";
-import ErrorMessage from '../../components/error-message/Error-message';
+import { Modal } from 'antd';
 import logo from './logo2.png'
+
+const errorModal = (message) => {
+  Modal.error({
+      title: message
+  });
+};
 
 const Registration = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');;
     const { app } = props;
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -45,8 +49,7 @@ const Registration = (props) => {
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                setError(true);
-                setErrorMessage(errorMessage);
+                errorModal(error.message);
             });
     }
 
@@ -111,9 +114,6 @@ const Registration = (props) => {
             </form>
           </div>
         </div>
-        <div className='flex justify-center'>
-          {error ? <ErrorMessage message={errorMessage}/> : null}
-      </div>
       </>
     )
 }

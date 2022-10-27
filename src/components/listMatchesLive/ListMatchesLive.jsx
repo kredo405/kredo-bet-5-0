@@ -1,14 +1,16 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { message, Spin } from 'antd';
+import { Modal, Spin } from 'antd';
 import Header from "../header/Header";
 import { Soccer365Services } from "../../services/soccer365";
 
 
-const ErrorMessage = (error) => {
-    message.error(error);
-};
+const errorModal = (message) => {
+    Modal.error({
+        title: message
+    });
+  };
 
 const ListMatchesLive = () => {
     const [arrMatches, setArrayMatches] = useState([]);
@@ -28,7 +30,7 @@ const ListMatchesLive = () => {
                 setIsLoading(true)
             }).catch(error => {
                 console.error(error)
-                ErrorMessage(error.message)
+                errorModal(error.message)
             });
     }, []);
 

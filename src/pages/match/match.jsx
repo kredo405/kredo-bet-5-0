@@ -2,16 +2,19 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import { useEffect, useState } from 'react';
 import Header from "../../components/header/Header";
-import { Progress, Spin, BackTop, Empty, message } from 'antd';
+import { Progress, Spin, BackTop, Empty, Modal } from 'antd';
 import Comment from "../../components/Comment/Comment";
 import Bets from "../../components/Bets/Bets";
 import Form from "../../components/Form/Form";
 import LastMatches from "../../components/lastMatches/LastMatches";
 import { Soccer365Services } from "../../services/soccer365";
 
-const ErrorMessage = (error) => {
-    message.error(error);
+const errorModal = (message) => {
+    Modal.error({
+        title: message
+    });
   };
+  
 
 const Match = () => {
     const [data, setData] = useState({});
@@ -41,7 +44,7 @@ const Match = () => {
             }
             catch (error) {
                 console.log(error)
-                ErrorMessage(error.message)
+                errorModal(error.message)
             }
         }
 

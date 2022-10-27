@@ -2,12 +2,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Soccer365Services } from "../../services/soccer365";
-import { Empty, BackTop, Spin, message } from 'antd';
+import { Empty, BackTop, Spin, Modal } from 'antd';
 
-const ErrorMessage = (error) => {
-    message.error(error);
+const errorModal = (message) => {
+    Modal.error({
+        title: message
+    });
   };
-
+  
 const Matches = (props) => {
     const [arrMatches, setArrayMatches] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -27,13 +29,13 @@ const Matches = (props) => {
                 setIsLoading(true)
             }).catch(error => {
                 console.error(error)
-                ErrorMessage(error.message)
+                errorModal(error.message)
             });
     }, []);
 
     let elements = arrMatches.map((el, i) => {
-        const matchElementFilter = el.matches.filter(item => item.date.length > 4 && item.date !== 'Завершен' && item.date !== 'Перерыв')
-        let matchElements = matchElementFilter.map((item, i) => {
+        // const matchElementFilter = el.matches.filter(item => item.date.length > 4 && item.date !== 'Завершен' && item.date !== 'Перерыв')
+        let matchElements = el.matches.map((item, i) => {
             return (
                 <div key={item.id} onClick={() => {
                     history('/match');

@@ -3,17 +3,21 @@ import { Link } from 'react-router-dom';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
+import { Modal } from 'antd';
 import { useSelector, useDispatch } from "react-redux";
-import ErrorMessage from '../../components/error-message/Error-message';
 import logo from './logo2.png'
+
+const errorModal = (message) => {
+  Modal.error({
+      title: message
+  });
+};
 
 const Authorization = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
 
     const onValueChange = (e) => {
         if (e.target.name === 'email') {
@@ -41,8 +45,7 @@ const Authorization = () => {
                 }
             })
             .catch((error) => {
-                const errorMessage = error.message;
-                setErrorMessage(errorMessage);
+              errorModal(error.message);
             });
     }
 
@@ -127,9 +130,6 @@ const Authorization = () => {
             </div>
           </form>
         </div>
-      </div>
-      <div className='flex justify-center'>
-          {errorMessage !== '' ? <ErrorMessage message={errorMessage} /> : null}
       </div>
     </>
     )

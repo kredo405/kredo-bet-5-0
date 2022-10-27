@@ -62,16 +62,16 @@ const Match = () => {
                     <h1 className='text-slate-700 font-mono text-xl text-center'>{data.title}</h1>
                 </div>
                 <div className="flex justify-evenly item-center">
-                    <div className="flex flex-col items-center">
+                    <div className="flex flex-col items-center w-5/12">
                         <img src={data.homeLogo} alt="логотип" />
-                        <span className="py-3 font-mono text-lg font-medium text-teal-900">{data.homeTeam}</span>
+                        <span className="py-3 text-center font-mono text-clip text-lg font-medium text-teal-900">{data.homeTeam}</span>
                     </div>
-                    <div className="flex items-center">
+                    <div className="flex justify-center items-center w-2/12">
                         <span className='text-2xl'>{data.homeGoal}:{data.awayGoal}</span>
                     </div>
-                    <div className="flex flex-col items-center">
+                    <div className="flex flex-col items-center w-5/12 ">
                         <img src={data.awayLogo} alt="логотип" />
-                        <span className="py-3 font-mono text-lg font-medium text-teal-900">{data.awayTeam}</span>
+                        <span className="py-3 text-center font-mono text-lg font-medium text-teal-900">{data.awayTeam}</span>
                     </div>
                 </div>
                 {data.odds ?

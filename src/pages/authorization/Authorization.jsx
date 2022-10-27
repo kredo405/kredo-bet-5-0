@@ -10,7 +10,6 @@ import logo from './logo2.png'
 const Authorization = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -42,9 +41,7 @@ const Authorization = () => {
                 }
             })
             .catch((error) => {
-                const errorCode = error.code;
                 const errorMessage = error.message;
-                setError(true);
                 setErrorMessage(errorMessage);
             });
     }
@@ -132,7 +129,7 @@ const Authorization = () => {
         </div>
       </div>
       <div className='flex justify-center'>
-          {error ? <ErrorMessage message={errorMessage}/> : null}
+          {errorMessage !== '' ? <ErrorMessage message={errorMessage} /> : null}
       </div>
     </>
     )

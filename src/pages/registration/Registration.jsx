@@ -39,7 +39,7 @@ const Registration = (props) => {
                   payload: user.accessToken
               })
                 if(user.accessToken) {
-                    navigate("/home/matches", { replace: true });
+                    navigate("/home", { replace: true });
                 }
             })
             .catch((error) => {

@@ -3,7 +3,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { Table } from 'react-bootstrap';
 import { arbworldServices } from "../../services/arbworld";
 import { calcCorrectScore } from "../../utils/calcCorrectScore";
+import { message } from 'antd';
 import findTeam from "../../utils/findTeam";
+
+const ErrorMessage = (error) => {
+    message.error(error);
+  };
 
 const ToolsPrediction = (props) => {
     const state = useSelector(state => state);
@@ -155,6 +160,7 @@ const ToolsPrediction = (props) => {
             }
             catch (error) {
                 console.log(error)
+                ErrorMessage(error.message)
             }
         }
 

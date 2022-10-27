@@ -2,18 +2,22 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Soccer365Services } from "../../services/soccer365";
-import { Empty, BackTop, Spin } from 'antd';
+import { Empty, BackTop, Spin, message } from 'antd';
 
+const ErrorMessage = (error) => {
+    message.error(error);
+  };
 
 const Matches = (props) => {
     const [arrMatches, setArrayMatches] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('')
     const dispatch = useDispatch();
     const state = useSelector(state => state);
     const history = useNavigate();
 
     useEffect(() => {
-        if(state.token === '') {
+        if (state.token === '') {
             history('/')
         }
         Soccer365Services.getAllMatches()
@@ -23,11 +27,12 @@ const Matches = (props) => {
                 setIsLoading(true)
             }).catch(error => {
                 console.error(error)
+                ErrorMessage(error.message)
             });
     }, []);
 
     let elements = arrMatches.map((el, i) => {
-        const matchElementFilter =  el.matches.filter(item => item.date.length > 4 && item.date !== 'Завершен' && item.date !== 'Перерыв')
+        const matchElementFilter = el.matches.filter(item => item.date.length > 4 && item.date !== 'Завершен' && item.date !== 'Перерыв')
         let matchElements = matchElementFilter.map((item, i) => {
             return (
                 <div key={item.id} onClick={() => {

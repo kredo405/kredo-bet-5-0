@@ -1,10 +1,15 @@
-import { Alert } from 'react-bootstrap';
+import { Alert } from 'antd';
+
 
 const ErrorMessage = (props) => {
     return (
-        <Alert key='danger' variant='danger'>
-            {props.message}
-        </Alert>
+        <Alert
+      message="Ошибка!"
+      description={props.message}
+      type="error"
+      showIcon
+      closable
+    />
     )
 }
 

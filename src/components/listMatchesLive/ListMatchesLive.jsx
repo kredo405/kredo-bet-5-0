@@ -1,9 +1,14 @@
 import { useSelector, useDispatch } from "react-redux";
-import { Spinner } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import { message, Spin } from 'antd';
 import Header from "../header/Header";
 import { Soccer365Services } from "../../services/soccer365";
+
+
+const ErrorMessage = (error) => {
+    message.error(error);
+  };
 
 const ListMatchesLive = () => {
     const [arrMatches, setArrayMatches] = useState([]);
@@ -23,6 +28,7 @@ const ListMatchesLive = () => {
                 setIsLoading(true)
             }).catch(error => {
                 console.error(error)
+                ErrorMessage(error.message)
             });
     }, []);
 
@@ -68,8 +74,11 @@ const ListMatchesLive = () => {
             <Header />
             {isLoading ?
                 elements :
-                <div className="flex justify-center items-center h-screen">
-                    <Spinner animation="border" variant="secondary" size="lg" />
+                <div className="h-screen flex flex-col justify-center items-center">
+                    <div className="mb-4">
+                        <span className="font-mono text-xl font-medium text-sky-600">Собираем информацию</span>
+                    </div>
+                    <Spin size="large" />
                 </div>
             }
         </div>

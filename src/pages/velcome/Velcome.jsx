@@ -3,11 +3,14 @@ import { Popover } from '@headlessui/react'
 import { oddsServices } from '../../services/odds';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
+import {message } from 'antd';
 import moment from 'moment';
 import logo from './Kredo-bet.png';
 import fon2 from './fon2.png';
 
-
+const ErrorMessage = (error) => {
+  message.error(error);
+};
 
 export default function Velcome() {
 
@@ -50,6 +53,7 @@ export default function Velcome() {
       }
       catch (error) {
           console.log(error)
+          ErrorMessage(error.message)
       }
   }
 

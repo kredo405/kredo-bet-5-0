@@ -4,7 +4,6 @@ import { Avatar, Progress } from 'antd';
 import axios from 'axios';
 
 const LastMatches = (props) => {
-    console.log(props)
     const matchesHome = props.data.matchesHome
     const matchesAway = props.data.matchesAway
 

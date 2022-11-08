@@ -14,9 +14,9 @@ const UserVotes = (props) => {
                             <span className="text-center py-3 font-serif font-bold text-sky-600">П2</span>
                         </div>
                         <ProgressBar>
-                            <ProgressBar striped variant="success" label={`${+props.data.winerHome}%`} now={+props.data.winerHome} key={+props.data.winerHome} />
-                            <ProgressBar striped variant="warning" label={`${+props.data.draw}%`} now={+props.data.draw} key={+props.data.draw} />
-                            <ProgressBar striped variant="info" label={`${+props.data.winerAway}%`} now={+props.data.winerAway} key={+props.data.winerAway} />
+                            <ProgressBar striped variant="success" label={`${+props.data.winerHome}%`} now={+props.data.winerHome + 2} key={1} />
+                            <ProgressBar striped variant="warning" label={`${+props.data.draw}%`} now={+props.data.draw} key={2} />
+                            <ProgressBar striped variant="info" label={`${+props.data.winerAway}%`} now={+props.data.winerAway} key={3} />
                         </ProgressBar>
                     </div>
                     <div>
@@ -25,8 +25,8 @@ const UserVotes = (props) => {
                             <span className="text-center py-3 font-serif font-bold text-sky-600">Тотал меньше 2.5</span>
                         </div>
                         <ProgressBar>
-                            <ProgressBar striped variant="success" label={`${+props.data.totlaOver}%`} now={+props.data.totlaOver} key={+props.data.totlaOver} />
-                            <ProgressBar striped variant="info" label={`${+props.data.totalUnder}%`} now={+props.data.totalUnder} key={+props.data.totalUnder} />
+                            <ProgressBar striped variant="success" label={`${+props.data.totlaOver}%`} now={+props.data.totlaOver + 1} key={4} />
+                            <ProgressBar striped variant="info" label={`${+props.data.totalUnder}%`} now={+props.data.totalUnder} key={5} />
                         </ProgressBar>
                     </div>
                     <div>
@@ -35,8 +35,8 @@ const UserVotes = (props) => {
                             <span className="text-center py-3 font-serif font-bold text-sky-600">Обе забьют Нет</span>
                         </div>
                         <ProgressBar>
-                            <ProgressBar striped variant="success" label={`${+props.data.btsYes}%`} now={+props.data.btsYes} key={+props.data.btsYes} />
-                            <ProgressBar striped variant="info" label={`${+props.data.btsNo}%`} now={+props.data.btsNo} key={+props.data.btsNo} />
+                            <ProgressBar striped variant="success" label={`${+props.data.btsYes}%`} now={+props.data.btsYes + 1} key={6} />
+                            <ProgressBar striped variant="info" label={`${+props.data.btsNo}%`} now={+props.data.btsNo} key={7} />
                         </ProgressBar>
                     </div>
                 </>

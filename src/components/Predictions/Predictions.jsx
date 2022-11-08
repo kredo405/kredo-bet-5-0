@@ -12,15 +12,15 @@ import UserVotes from '../UserVotes/UserVotes';
 
 const Predictions = (props) => {
     const state = useSelector(state => state);
-    const [data, setData] = useState(<p className='text-center font-mono text-lg font-semibold text-red-700'>Нет прогнозов!!!</p>)
+    const [data, setData] = useState(<p className='text-center font-mono text-lg font-semibold text-red-700'>На этом матч не нашлось прогнозов</p>)
     const [percent, setPercent] = useState({
-        btsNo: '0',
-        btsYes: '0',
-        draw: '0',
-        totalUnder: '0',
-        totlaOver: '0',
-        winerAway: '0',
-        winerHome: '0',
+        btsNo: '',
+        btsYes: '',
+        draw: '',
+        totalUnder: '',
+        totlaOver: '',
+        winerAway: '',
+        winerHome: '',
     })
 
     useEffect(() => {
@@ -28,7 +28,7 @@ const Predictions = (props) => {
             try {
                 const betzonaLinks = state.betzona.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName))
                 let betzona
-                
+
                 if (betzonaLinks.length !== 0) {
                     const betzonaPredict = await predictionsServices.getBetzonaPredict(betzonaLinks[0].link)
                     console.log(betzonaPredict)
@@ -40,7 +40,7 @@ const Predictions = (props) => {
 
                 const sportAndBetsLink = state.sportAndBets.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName))
                 let sportAndBets
-                
+
                 if (sportAndBetsLink.length !== 0) {
                     const sportAndBetsPredict = await predictionsServices.getSportAndBetsPredict(sportAndBetsLink[0].link)
                     console.log(sportAndBetsPredict)
@@ -76,7 +76,7 @@ const Predictions = (props) => {
 
                 const liveresultlLink = state.liveresult.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName))
                 let liveresult
-                
+
                 if (liveresultlLink.length !== 0) {
                     const liveresultPredict = await predictionsServices.getLiveresultPredict(liveresultlLink[0].link)
                     console.log(liveresultPredict)
@@ -89,7 +89,7 @@ const Predictions = (props) => {
 
                 const stavkiprognozylLink = state.stavkiprognozy.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName))
                 let stavkiprognozy
-                
+
                 if (stavkiprognozylLink.length !== 0) {
                     const stavkiprognozyPredict = await predictionsServices.getStavkiprognozyPredict(stavkiprognozylLink[0].link)
                     console.log(stavkiprognozyPredict)
@@ -104,34 +104,36 @@ const Predictions = (props) => {
 
                 console.log(arrPredictionsFilter)
 
-                const arrElements = arrPredictionsFilter.map((el, i) => {
-                    return (
-                        <div key={i}>
-                            <Accordion>
-                                <AccordionSummary
-                                    expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="panel1a-content"
-                                    id={i}
-                                >
-                                    <Typography>{el.predict}</Typography>
-                                </AccordionSummary>
-                                <AccordionDetails>
-                                    <Typography>
-                                        {el.text}
-                                    </Typography>
-                                </AccordionDetails>
-                            </Accordion>
-                        </div>
-                    )
-                })
-                setData(arrElements)
+                if (arrPredictionsFilter.length > 0) {
+                    const arrElements = arrPredictionsFilter.map((el, i) => {
+                        return (
+                            <div key={i}>
+                                <Accordion>
+                                    <AccordionSummary
+                                        expandIcon={<ExpandMoreIcon />}
+                                        aria-controls="panel1a-content"
+                                        id={i}
+                                    >
+                                        <Typography>{el.predict}</Typography>
+                                    </AccordionSummary>
+                                    <AccordionDetails>
+                                        <Typography>
+                                            {el.text}
+                                        </Typography>
+                                    </AccordionDetails>
+                                </Accordion>
+                            </div>
+                        )
+                    })
+                    setData(arrElements)
+                }
 
-                for(let key in percent) {
+                for (let key in percent) {
                     let pos = percent[key].indexOf('%')
                     percent[key] = percent[key].slice(0, pos)
                     setPercent(percent)
                 }
-               
+
             }
             catch (error) {
                 console.log(error)
@@ -149,7 +151,7 @@ const Predictions = (props) => {
                 {data}
             </div>
             <div>
-            <UserVotes data={percent}/>
+                <UserVotes data={percent} />
             </div>
         </>
     )

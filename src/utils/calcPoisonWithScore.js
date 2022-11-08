@@ -245,7 +245,6 @@ export const calcPoisonWithScore = (data) => {
             it2U25: poisonGoals0Away + poisonGoals1Away + poisonGoals2Away,
         }
 
-        console.log(percentOutcomes)
         return percentOutcomes;
     }
     else {

@@ -285,9 +285,7 @@ export const calPercentForMatches = (matchesHome, matchesAway, homeName, awayNam
         winnerAway: outcomes['Match Winner'].away,
         winnerHome: outcomes['Match Winner'].home,
     }
-
-    console.log(matchesPercent)
-
+    
     return matchesPercent
 }
 

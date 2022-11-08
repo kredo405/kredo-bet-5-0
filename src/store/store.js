@@ -40,10 +40,16 @@ const initialState = {
                 winX2: { v: '...' },
             }
         }
-    ], 
+    ],
     token: '',
     homeNameEng: '',
-    awayNameEng: ''
+    awayNameEng: '',
+    betzona: [{link:'',homeName:'',awayName:''}],
+    euroFootball: [{link:'',homeName:'',awayName:''}],
+    sportAndBets: [{link:'',homeName:'',awayName:''}],
+    legalbet: [{link:'',homeName:'',awayName:''}],
+    liveresult: [{link:'',homeName:'',awayName:''}],
+    stavkiprognozy: [{link:'',homeName:'',awayName:''}],
 }
 
 const reducer = (state = initialState, action) => {
@@ -67,17 +73,47 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 token: action.payload
-            }; 
+            };
         case 'HOMENAMEENG':
             return {
                 ...state,
                 homeNameEng: action.payload
-            };   
+            };
         case 'AWAYNAMEENG':
             return {
                 ...state,
                 awayNameEng: action.payload
-            };      
+            };
+        case 'BETZONA':
+            return {
+                ...state,
+                betzona: action.payload
+            };
+        case 'EUROFOOTBALL':
+            return {
+                ...state,
+                euroFootball: action.payload
+            };
+        case 'SPORTANDBETS':
+            return {
+                ...state,
+                sportAndBets: action.payload
+            };
+        case 'LEGALBET':
+            return {
+                ...state,
+                legalbet: action.payload
+            };
+        case 'LIVERESULT':
+            return {
+                ...state,
+                liveresult: action.payload
+            };
+        case 'STAVKIPROGNOZY':
+            return {
+                ...state,
+                stavkiprognozy: action.payload
+            };
         default:
             return state;
     }

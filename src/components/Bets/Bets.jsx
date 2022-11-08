@@ -3,6 +3,8 @@ import { calcPoisonDestribution } from '../../utils/calcPoisonDestributin';
 import { calPercentForMatches } from '../../utils/calcPercentForMatches';
 import { calcPoisonWithScore } from '../../utils/calcPoisonWithScore';
 import ToolsPrediction from '../ToolsPrediction/ToolsPrediction';
+import Comment from '../Comment/Comment';
+import Predictions from '../Predictions/Predictions';
 
 const Bets = (props) => {
 
@@ -24,6 +26,7 @@ const Bets = (props) => {
                         homeName={props.homeName}
                         awayName={props.awayName}
                     />
+                     <Comment data={props.data} />
                 </div>
             </div>
         </>

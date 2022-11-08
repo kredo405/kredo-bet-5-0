@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Table } from 'react-bootstrap';
 import { arbworldServices } from "../../services/arbworld";
 import { calcCorrectScore } from "../../utils/calcCorrectScore";
+import Predictions from "../Predictions/Predictions";
 import { Modal } from 'antd';
 import findTeam from "../../utils/findTeam";
 
@@ -53,6 +54,7 @@ const ToolsPrediction = (props) => {
 
     useEffect(() => {
         state.odds.forEach(el => {
+           if(el.team1_rus && el.team2_rus) {
             if (findTeam(el.team1_rus, homeName) && findTeam(el.team2_rus, awayName)) {
 
                 const totals = el.markets.totals.filter(bet => bet.type === 1.5 || bet.type === 2.5 || bet.type === 3.5)
@@ -114,6 +116,7 @@ const ToolsPrediction = (props) => {
             else {
                 console.log('не нашлось')
             }
+           }
         })
 
         const getData = async () => {
@@ -395,6 +398,7 @@ const ToolsPrediction = (props) => {
                         </tr>
                     </tbody>
                 </Table>
+                <Predictions homeName={props.homeName} awayName={props.awayName}/>
             </div>
         </>
     )

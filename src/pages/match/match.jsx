@@ -139,7 +139,6 @@ const Match = () => {
                                 form={form}
                                 homeName={data.homeTeam}
                                 awayName={data.awayTeam} />
-                                <Comment data={data.predictions} />
                         </Tab>
                     </Tabs>
                 </div> 

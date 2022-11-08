@@ -1,16 +1,17 @@
 import { Link } from 'react-router-dom';
 import { Popover } from '@headlessui/react'
 import { oddsServices } from '../../services/odds';
+import { predictionsServices } from '../../services/predctions';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import {Modal } from 'antd';
+import { Modal } from 'antd';
 import moment from 'moment';
 import logo from './Kredo-bet.png';
 import fon2 from './fon2.png';
 
 const errorModal = (message) => {
   Modal.error({
-      title: message
+    title: message
   });
 };
 
@@ -21,45 +22,78 @@ export default function Velcome() {
   useEffect(() => {
     const getInfo = async () => {
       try {
-          const odds = await oddsServices.getAllOdds()
-          const arrOdds = odds.data.filter(el => moment().format("YYYY-MM-DD") === el.date_start.slice(0, 10))
+        const odds = await oddsServices.getAllOdds()
+        const euroFootball = await predictionsServices.getEuroFootball()
+        const betzona = await predictionsServices.getBetzona()
+        console.log(betzona)
+        const sportAndBets = await predictionsServices.getSportAndBets()
+        const legalbet = await predictionsServices.getLegalbet()
+        const liveresult = await predictionsServices.getLiveresult()
+        const stavkiprognozy = await predictionsServices.getStavkiprognozy()
 
-          const arrData = arrOdds.map(el => {
-              return {
-                  date_start: el.date_start,
-                  team1: el.team1,
-                  team2: el.team2,
-                  team1_rus: el.team1_rus,
-                  team2_rus: el.team2_rus,
-                  markets: {
-                      bothToScore: el.markets.bothToScore,
-                      handicaps1: el.markets.handicaps1,
-                      handicaps2: el.markets.handicaps2,
-                      totals: el.markets.totals,
-                      totals1: el.markets.totals1,
-                      totals2: el.markets.totals2,
-                      win1: el.markets.win1,
-                      win1X: el.markets.win1X,
-                      win2: el.markets.win2,
-                      winX: el.markets.winX,
-                      winX2: el.markets.winX2,
-                  }
-              }
-          })
+        const arrOdds = odds.data.filter(el => moment().format("YYYY-MM-DD") === el.date_start.slice(0, 10))
 
-          console.log(arrData)
-          dispatch({
-              type: 'ODDS',
-              payload: arrData
-          });
+        const arrData = arrOdds.map(el => {
+          return {
+            date_start: el.date_start,
+            team1: el.team1,
+            team2: el.team2,
+            team1_rus: el.team1_rus,
+            team2_rus: el.team2_rus,
+            markets: {
+              bothToScore: el.markets.bothToScore,
+              handicaps1: el.markets.handicaps1,
+              handicaps2: el.markets.handicaps2,
+              totals: el.markets.totals,
+              totals1: el.markets.totals1,
+              totals2: el.markets.totals2,
+              win1: el.markets.win1,
+              win1X: el.markets.win1X,
+              win2: el.markets.win2,
+              winX: el.markets.winX,
+              winX2: el.markets.winX2,
+            }
+          }
+        })
+
+        console.log(arrData)
+        dispatch({
+          type: 'ODDS',
+          payload: arrData
+        });
+        dispatch({
+          type: 'BETZONA',
+          payload: betzona.data.predicitons
+        });
+        dispatch({
+          type: 'EUROFOOTBALL',
+          payload: euroFootball.data.predicitons
+        });
+        dispatch({
+          type: 'SPORTANDBETS',
+          payload: sportAndBets.data.predicitons
+        });
+        dispatch({
+          type: 'LEGALBET',
+          payload: legalbet.data.predicitons
+        });
+        dispatch({
+          type: 'LIVERESULT',
+          payload: liveresult.data.predicitons
+        });
+        dispatch({
+          type: 'STAVKIPROGNOZY',
+          payload: stavkiprognozy.data.predicitons
+        });
+
       }
       catch (error) {
-          console.log(error)
-          errorModal(error.message)
+        console.log(error)
+        errorModal(error.message)
       }
-  }
+    }
 
-  getInfo()
+    getInfo()
   }, [])
 
   return (
@@ -94,22 +128,22 @@ export default function Velcome() {
               </nav>
             </div>
 
-              <Popover.Panel
-                focus
-                className="absolute z-10 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden"
-              >
-                <div className="rounded-lg shadow-md bg-white ring-1 ring-black ring-opacity-5 overflow-hidden">
-                  <div className="px-5 pt-4 flex items-center justify-between">
-                    <div>
-                      <img
-                        className="h-16 w-auto"
-                        src={logo}
-                        alt="logo"
-                      />
-                    </div>
+            <Popover.Panel
+              focus
+              className="absolute z-10 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden"
+            >
+              <div className="rounded-lg shadow-md bg-white ring-1 ring-black ring-opacity-5 overflow-hidden">
+                <div className="px-5 pt-4 flex items-center justify-between">
+                  <div>
+                    <img
+                      className="h-16 w-auto"
+                      src={logo}
+                      alt="logo"
+                    />
                   </div>
                 </div>
-              </Popover.Panel>
+              </div>
+            </Popover.Panel>
           </Popover>
 
           <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">

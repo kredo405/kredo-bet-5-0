@@ -50,6 +50,9 @@ const initialState = {
     legalbet: [{link:'',homeName:'',awayName:''}],
     liveresult: [{link:'',homeName:'',awayName:''}],
     stavkiprognozy: [{link:'',homeName:'',awayName:''}],
+    oddsRu: [{link:'',homeName:'',awayName:''}],
+    isLoading: false,
+    correctScore: {}
 }
 
 const reducer = (state = initialState, action) => {
@@ -64,6 +67,11 @@ const reducer = (state = initialState, action) => {
                     percent: action.payload.percent,
                 }
             };
+        case 'CORRECTSCORE':
+            return {
+                ...state,
+                correctScore: action.payload
+            };    
         case 'ODDS':
             return {
                 ...state,
@@ -114,6 +122,16 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 stavkiprognozy: action.payload
             };
+        case 'ODDSRU':
+            return {
+                ...state,
+                oddsRu: action.payload
+            };    
+        case 'ISLOADING':
+            return {
+                ...state,
+                isLoading: action.payload
+            };        
         default:
             return state;
     }

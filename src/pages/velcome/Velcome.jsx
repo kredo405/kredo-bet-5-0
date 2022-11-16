@@ -25,11 +25,10 @@ export default function Velcome() {
         const odds = await oddsServices.getAllOdds()
         const euroFootball = await predictionsServices.getEuroFootball()
         const betzona = await predictionsServices.getBetzona()
-        console.log(betzona)
-        const sportAndBets = await predictionsServices.getSportAndBets()
         const legalbet = await predictionsServices.getLegalbet()
         const liveresult = await predictionsServices.getLiveresult()
         const stavkiprognozy = await predictionsServices.getStavkiprognozy()
+        const oddsRu = await predictionsServices.getOddsRu()
 
         const arrOdds = odds.data.filter(el => moment().format("YYYY-MM-DD") === el.date_start.slice(0, 10))
 
@@ -70,10 +69,6 @@ export default function Velcome() {
           payload: euroFootball.data.predicitons
         });
         dispatch({
-          type: 'SPORTANDBETS',
-          payload: sportAndBets.data.predicitons
-        });
-        dispatch({
           type: 'LEGALBET',
           payload: legalbet.data.predicitons
         });
@@ -84,6 +79,10 @@ export default function Velcome() {
         dispatch({
           type: 'STAVKIPROGNOZY',
           payload: stavkiprognozy.data.predicitons
+        });
+        dispatch({
+          type: 'ODDSRU',
+          payload: oddsRu.data.predicitons
         });
 
       }

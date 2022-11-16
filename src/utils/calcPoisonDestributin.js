@@ -1,5 +1,10 @@
 export const calcPoisonDestribution = (data) => {
-    // Рассчитываем владение мячом
+
+    let expectedGoalsHome = 0
+    let expectedGoalsAway = 0
+
+    if(data.possesionHome !== '0' && data.possesionAway !== '0') {
+        // Рассчитываем владение мячом
     const posessionHome = (+data.possesionHome + +data.possesionVsAway) / 2
     const possesionAway = (+data.possesionAway + +data.possesionVsHome) / 2
     // Рассчитываем Удары Взависимости от владения
@@ -16,8 +21,18 @@ export const calcPoisonDestribution = (data) => {
     const expectedShotsAway = (shotsAway + shotsVsHome) / 2
     const goalsPerShotsHome = +data.goalsForAvgHome / +data.shotsHome
     const goalsPerShotsAway = +data.goalsForAvgAway / +data.shotsAway
-    const expectedGoalsHome = (((expectedShotsHome * goalsPerShotsHome) + ((goalsHome + goalsVsAway) / 2)) / 2) + 0.2
-    const expectedGoalsAway = ((expectedShotsAway * goalsPerShotsAway) + ((goalsAway + goalsVsHome) / 2)) / 2
+    expectedGoalsHome = (((expectedShotsHome * goalsPerShotsHome) + ((goalsHome + goalsVsAway) / 2)) / 2) + 0.2
+    expectedGoalsAway = ((expectedShotsAway * goalsPerShotsAway) + ((goalsAway + goalsVsHome) / 2)) / 2
+    } else {
+    // Рассчитываем индивидуальный тотал команд
+    const expectedShotsHome = (+data.shotsHome + +data.shotsVsAway) / 2
+    const expectedShotsAway = (+data.shotsAway + +data.shotsVsHome) / 2
+    const goalsPerShotsHome = +data.goalsForAvgHome / +data.shotsHome
+    const goalsPerShotsAway = +data.goalsForAvgAway / +data.shotsAway
+    expectedGoalsHome = (((expectedShotsHome * goalsPerShotsHome) + ((+data.goalsForAvgHome + +data.goalsAgainstAvgAway) / 2)) / 2) + 0.2
+    expectedGoalsAway = ((expectedShotsAway * goalsPerShotsAway) + ((+data.goalsForAvgAway + +data.goalsAgainstAvgHome) / 2)) / 2
+    }
+
 
     // рассчиываем распределение паусона все матчи
     const poissonGoals = (expectedGoals, goals, number) => {

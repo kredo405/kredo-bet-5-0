@@ -8,10 +8,12 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import UserVotes from '../UserVotes/UserVotes';
+import { Spin } from 'antd';
 
 
 const Predictions = (props) => {
     const state = useSelector(state => state);
+    const dispatch = useDispatch();
     const [data, setData] = useState(<p className='text-center font-mono text-lg font-semibold text-red-700'>На этом матч не нашлось прогнозов</p>)
     const [percent, setPercent] = useState({
         btsNo: '',
@@ -21,7 +23,8 @@ const Predictions = (props) => {
         totlaOver: '',
         winerAway: '',
         winerHome: '',
-    })
+    });
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         const getPredictions = async () => {
@@ -38,18 +41,17 @@ const Predictions = (props) => {
                     betzona = [{ predict: '', text: '' }]
                 }
 
-                const sportAndBetsLink = state.sportAndBets.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName))
-                let sportAndBets
+                const oddsRuLinks = state.oddsRu.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName))
+                let oddsRu
 
-                if (sportAndBetsLink.length !== 0) {
-                    const sportAndBetsPredict = await predictionsServices.getSportAndBetsPredict(sportAndBetsLink[0].link)
-                    console.log(sportAndBetsPredict)
-                    sportAndBets = sportAndBetsPredict.data.predicitons
+                if (oddsRuLinks.length !== 0) {
+                    const oddsPredict = await predictionsServices.getOddsRuPredict(oddsRuLinks[0].link)
+                    console.log(oddsPredict)
+                    oddsRu = oddsPredict.data.predicitons
                 }
                 else {
-                    sportAndBets = [{ predict: '', text: '' }]
+                    oddsRu = [{ predict: '', text: '' }]
                 }
-
                 const euroFootballLink = state.euroFootball.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName))
                 let euroFootball
 
@@ -74,7 +76,8 @@ const Predictions = (props) => {
                     legalbet = [{ predict: '', text: '' }]
                 }
 
-                const liveresultlLink = state.liveresult.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName))
+                const liveresultFilterOnNull = state.liveresult.filter(el => el.homeName && el.awayName)
+                const liveresultlLink = liveresultFilterOnNull.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName))
                 let liveresult
 
                 if (liveresultlLink.length !== 0) {
@@ -99,7 +102,7 @@ const Predictions = (props) => {
                     stavkiprognozy = [{ predict: '', text: '' }]
                 }
 
-                const arrPredictions = [...betzona, ...sportAndBets, ...euroFootball, ...legalbet, ...liveresult, ...stavkiprognozy]
+                const arrPredictions = [...betzona, ...oddsRu, ...euroFootball, ...legalbet, ...liveresult, ...stavkiprognozy]
                 const arrPredictionsFilter = arrPredictions.filter(el => el.predict !== '' && el.text !== '')
 
                 console.log(arrPredictionsFilter)
@@ -107,7 +110,7 @@ const Predictions = (props) => {
                 if (arrPredictionsFilter.length > 0) {
                     const arrElements = arrPredictionsFilter.map((el, i) => {
                         return (
-                            <div key={i}>
+                            <div className='mt-3' key={i}>
                                 <Accordion>
                                     <AccordionSummary
                                         expandIcon={<ExpandMoreIcon />}
@@ -133,7 +136,7 @@ const Predictions = (props) => {
                     percent[key] = percent[key].slice(0, pos)
                     setPercent(percent)
                 }
-
+                setIsLoading(true)
             }
             catch (error) {
                 console.log(error)
@@ -141,18 +144,28 @@ const Predictions = (props) => {
         }
 
         getPredictions()
+
     }, [])
 
 
     return (
         <>
             <h2 className="text-center py-3 font-serif text-2xl font-bold text-slate-600">Прогнозы</h2>
-            <div>
-                {data}
-            </div>
-            <div>
-                <UserVotes data={percent} />
-            </div>
+            {isLoading ?
+                <>
+                    <div>
+                        {data}
+                    </div>
+                    <div>
+                        <UserVotes data={percent} />
+                    </div>
+                </>
+                :
+                <div className="h-16 flex flex-col justify-center items-center">
+                    <Spin size="large" />
+                </div>
+            }
+
         </>
     )
 }

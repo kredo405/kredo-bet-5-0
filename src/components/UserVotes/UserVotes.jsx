@@ -1,6 +1,7 @@
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
 const UserVotes = (props) => {
+    
     return (
         <>
             {props.data.winerHome && props.data.draw && props.data.winerAway && props.data.totlaOver && props.data.totalUnder && props.data.btsYes &&

@@ -278,8 +278,6 @@ export const calcPoisonWithScore = (data) => {
             winOrdrawAway: 0,
             winnerAway: 0,
             winnerHome: 0,
-            draw: 0,
-            draw: 0,
         }
     }
 }

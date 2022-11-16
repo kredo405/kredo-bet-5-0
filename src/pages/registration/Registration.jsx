@@ -1,5 +1,4 @@
-import { Form, Button, FloatingLabel, Alert } from 'react-bootstrap';
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, getRedirectResult, FacebookAuthProvider, signInWithPopup, GoogleAuthProvider} from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
 import { LockClosedIcon } from '@heroicons/react/solid';
@@ -11,7 +10,11 @@ const errorModal = (message) => {
   Modal.error({
       title: message
   });
-};
+}
+
+const providerGoogle = new GoogleAuthProvider()
+const providerFacebook = new FacebookAuthProvider();
+
 
 const Registration = (props) => {
     const [email, setEmail] = useState('');
@@ -26,6 +29,80 @@ const Registration = (props) => {
         } else if (e.target.name === 'password') {
             setPassword(e.target.value);
         }
+    }
+
+    const googleAuth = () => {
+      const auth = getAuth();
+      signInWithPopup(auth, providerGoogle)
+        .then((result) => {
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          const token = credential.accessToken;
+          const user = result.user;
+          console.log(user)
+
+          localStorage.setItem('token', token);
+          localStorage.setItem('email', user.email);
+          localStorage.setItem('photoURL', user.photoURL);
+          localStorage.setItem('name', user.displayName);
+          dispatch({
+            type: 'TOKEN',
+            payload: token
+        })
+          if(token) {
+              navigate("/home", { replace: true });
+          }
+          
+        }).catch((error) => {
+          // Handle Errors here.
+          const errorCode = error.code;
+          console.log(errorCode)
+          const errorMessage = error.message;
+          console.log(errorMessage)
+          // The email of the user's account used.
+          const email = error.customData.email;
+          console.log(email)
+          // The AuthCredential type that was used.
+          const credential = GoogleAuthProvider.credentialFromError(error);
+          console.log(credential)
+          // ...
+        });
+    }
+
+    const facebookAuth = () => {
+      const auth = getAuth();
+      signInWithPopup(auth, providerFacebook)
+        .then((result) => {
+          const credential = FacebookAuthProvider.credentialFromResult(result);
+          const token = credential.accessToken;
+          const user = result.user;
+          console.log(user)
+
+        //   localStorage.setItem('token', token);
+        //   localStorage.setItem('email', user.email);
+        //   localStorage.setItem('photoURL', user.photoURL);
+        //   localStorage.setItem('name', user.displayName);
+        //   dispatch({
+        //     type: 'TOKEN',
+        //     payload: token
+        // })
+          // if(token) {
+          //     navigate("/home", { replace: true });
+          // }
+          
+        }).catch((error) => {
+          // Handle Errors here.
+          const errorCode = error.code;
+          console.log(errorCode)
+          const errorMessage = error.message;
+          console.log(errorMessage)
+          // The email of the user's account used.
+          const email = error.customData.email;
+          console.log(email)
+          // The AuthCredential type that was used.
+          const credential = GoogleAuthProvider.credentialFromError(error);
+          console.log(credential)
+          // ...
+        });
     }
 
     const onSubmit = (e) => {
@@ -55,7 +132,7 @@ const Registration = (props) => {
 
     return (
         <>
-        <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-full flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
           <div className="max-w-md w-full space-y-8">
             <div>
               <img
@@ -112,6 +189,11 @@ const Registration = (props) => {
                 </button>
               </div>
             </form>
+          </div>
+          <div className="flex mt-5">
+            <button className="px-3" onClick={googleAuth}><img className="w-[55px]" src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" alt="google" /></button>
+            <button className="px-3" onClick={facebookAuth}><img className="w-[55px]" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Facebook_icon.svg/2048px-Facebook_icon.svg.png" alt="facebook" /></button>
+            <button className="px-3" onClick={facebookAuth}><img className="w-[55px]" src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="github" /></button>
           </div>
         </div>
       </>

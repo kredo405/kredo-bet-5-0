@@ -16,11 +16,11 @@ const LastMatches = (props) => {
                     <img className='w-[20px] h-[20px]' src={el.homeLogo} alt="Логотип" />
                     <span className='text-center px-1 text-xs lg:text-lg text-blue-900 font-mono font-bold'>{el.homeTeam}</span>
                 </div>
-                <span className='w-1/12 lg:w-3/12 mt-3 text-center text-xs lg:text-lg font-sans font-medium text-red-400'>{el.homeGoals} : {el.awayGoals}</span>
                 <div className='w-4/12 flex items-center'>
                     <img className='w-[20px] h-[20px]' src={el.awayLogo} alt="Логотип" />
                     <span className='text-center px-1 text-xs lg:text-lg text-blue-900 font-mono font-bold'>{el.awayTeam}</span>
                 </div>
+                <span className='w-1/12 lg:w-3/12 mt-3 text-center text-xs lg:text-lg font-sans font-medium text-red-400'>{el.homeGoals} : {el.awayGoals}</span>
             </li>
         )
     })
@@ -33,11 +33,11 @@ const LastMatches = (props) => {
                     <img className='w-[20px] h-[20px]' src={el.homeLogo} alt="Логотип" />
                     <span className='text-center px-1 text-xs lg:text-lg text-blue-900 font-mono font-bold'>{el.homeTeam}</span>
                 </div>
-                <span className='w-1/12 lg:w-3/12 mt-3 text-center text-xs lg:text-lg font-sans font-medium text-red-400'>{el.homeGoals} : {el.awayGoals}</span>
                 <div className='w-4/12 flex items-center'>
                     <img className='w-[20px] h-[20px]' src={el.awayLogo} alt="Логотип" />
                     <span className='text-center px-1 text-xs lg:text-lg text-blue-900 font-mono font-bold'>{el.awayTeam}</span>
                 </div>
+                <span className='w-1/12 lg:w-3/12 mt-3 text-center text-xs lg:text-lg font-sans font-medium text-red-400'>{el.homeGoals} : {el.awayGoals}</span>
             </li>
         )
     })

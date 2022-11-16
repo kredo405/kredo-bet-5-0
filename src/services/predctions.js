@@ -1,6 +1,26 @@
 import axios from 'axios';
 
 export const predictionsServices = {
+    async getOddsRu() {
+        const options = {
+            method: 'GET',
+            url: 'https://node-api-ochre.vercel.app/oddsRu',
+        };
+
+        return axios.request(options);
+    },
+    async getOddsRuPredict(link) {
+        const options = {
+            method: 'GET',
+            url: 'https://node-api-ochre.vercel.app/oddsRuPredict',
+            params: {
+                link: `${link}`
+              }
+        };
+
+        return axios.request(options);
+    },
+
     async getOnlineBookmaker() {
         const options = {
             method: 'GET',

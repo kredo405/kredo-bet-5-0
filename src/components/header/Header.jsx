@@ -15,8 +15,9 @@ function classNames(...classes) {
 }
 
 const Header = (props) => {
-  let email = localStorage.getItem('email');
-  let navigate = useNavigate();
+  const email = localStorage.getItem('email');
+  const navigate = useNavigate();
+  const name = localStorage.getItem('name')
 
   const logOut = () => {
     localStorage.clear();
@@ -75,12 +76,13 @@ const Header = (props) => {
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                   {/* Profile dropdown */}
                   <Menu as="div" className="ml-3 relative">
-                    <div>
-                      <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                    <div className="flex items-center">
+                      <span className="hidden md:block font-sans align-middle text-slate-50 pr-3">{localStorage.getItem('name') !== 'null' ? localStorage.getItem('name') : null}</span>
+                      <Menu.Button className="bg-gray-800 flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                         <span className="sr-only">Open user menu</span>
                         <img
                           className="h-8 w-8 rounded-full"
-                          src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__480.png"
+                          src={localStorage.getItem('photoURL')}
                           alt="user"
                         />
                       </Menu.Button>

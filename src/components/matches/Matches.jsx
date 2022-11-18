@@ -54,10 +54,12 @@ const Matches = () => {
             try {
                 const matches = await Soccer365Services.getAllMatches()
                 console.log(matches)
-                const matchesFilter = matches.data.matches.filter(el => {
+                const matchesFilter = []
+
+                matches.data.matches.forEach(el => {
                     leagues.forEach(item => {
                         if (el.leagueName === item.league && el.country === item.country) {
-                            return el
+                            matchesFilter.push(el) 
                         }
                     })
 

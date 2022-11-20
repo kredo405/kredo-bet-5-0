@@ -61,6 +61,9 @@ const Matches = () => {
                         if (el.leagueName === item.league && el.country === item.country) {
                             matchesFilter.push(el) 
                         }
+                        if (el.leagueName === item.league && item.country === '') {
+                            matchesFilter.push(el) 
+                        }
                     })
 
                 })

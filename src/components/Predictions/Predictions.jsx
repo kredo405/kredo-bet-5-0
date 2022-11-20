@@ -90,19 +90,19 @@ const Predictions = (props) => {
                     liveresult = [{ predict: '', text: '' }]
                 }
 
-                const stavkiprognozylLink = state.stavkiprognozy.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName))
-                let stavkiprognozy
+                // const stavkiprognozylLink = state.stavkiprognozy.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName))
+                // let stavkiprognozy
 
-                if (stavkiprognozylLink.length !== 0) {
-                    const stavkiprognozyPredict = await predictionsServices.getStavkiprognozyPredict(stavkiprognozylLink[0].link)
-                    console.log(stavkiprognozyPredict)
-                    stavkiprognozy = stavkiprognozyPredict.data.predicitons
-                }
-                else {
-                    stavkiprognozy = [{ predict: '', text: '' }]
-                }
+                // if (stavkiprognozylLink.length !== 0) {
+                //     const stavkiprognozyPredict = await predictionsServices.getStavkiprognozyPredict(stavkiprognozylLink[0].link)
+                //     console.log(stavkiprognozyPredict)
+                //     stavkiprognozy = stavkiprognozyPredict.data.predicitons
+                // }
+                // else {
+                //     stavkiprognozy = [{ predict: '', text: '' }]
+                // }
 
-                const arrPredictions = [...betzona, ...oddsRu, ...euroFootball, ...legalbet, ...liveresult, ...stavkiprognozy]
+                const arrPredictions = [...betzona, ...oddsRu, ...euroFootball, ...legalbet, ...liveresult,]
                 const arrPredictionsFilter = arrPredictions.filter(el => el.predict !== '' && el.text !== '')
 
                 console.log(arrPredictionsFilter)
@@ -140,6 +140,7 @@ const Predictions = (props) => {
             }
             catch (error) {
                 console.log(error)
+                setIsLoading(true)
             }
         }
 

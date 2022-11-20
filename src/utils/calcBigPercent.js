@@ -78,333 +78,469 @@ export const calcBigPercent = (percentPoison, percentMatches, percentWithScore, 
 
     for (let key in matchOdds.markets) {
         if (key === 'win1' && +matchOdds.markets[key].v >= 1.3 || key === 'win1' && +matchOdds.markets[key].v === 0) {
-            arrOutcomes.push(winnerHome)
+            const obj = {
+                outcomes: 'Победа 1',
+                percent: winnerHome,
+                odds: matchOdds.markets[key].v
+            }
+            arrOutcomes.push(obj)
         }
         if (key === 'winX' && +matchOdds.markets[key].v >= 1.3 || key === 'winX' && +matchOdds.markets[key].v === 0) {
-            arrOutcomes.push(draw)
+            const obj = {
+                outcomes: 'Ничья',
+                percent: draw,
+                odds: matchOdds.markets[key].v
+            }
+            arrOutcomes.push(obj)
         }
         if (key === 'win2' && +matchOdds.markets[key].v >= 1.3 || key === 'win2' && +matchOdds.markets[key].v === 0) {
-            arrOutcomes.push(winnerAway)
+            const obj = {
+                outcomes: 'Победа 2',
+                percent: winnerAway,
+                odds: matchOdds.markets[key].v
+            }
+            arrOutcomes.push(obj)
         }
         if (key === 'win1X' && +matchOdds.markets[key].v >= 1.3 || key === 'win1X' && +matchOdds.markets[key].v === 0) {
-            arrOutcomes.push(winOrDrawHome)
+            const obj = {
+                outcomes: '1X',
+                percent: winOrDrawHome,
+                odds: matchOdds.markets[key].v
+            }
+            arrOutcomes.push(obj)
         }
         if (key === 'winX2' && +matchOdds.markets[key].v >= 1.3 || key === 'winX2' && +matchOdds.markets[key].v === 0) {
-            arrOutcomes.push(winOrdrawAway)
+            const obj = {
+                outcomes: '2X',
+                percent: winOrdrawAway,
+                odds: matchOdds.markets[key].v
+            }
+            arrOutcomes.push(obj)
         }
-        if (key === 'handicaps1' && +matchOdds.markets[key][1].v >= 1.3 || key === 'handicaps1' && +matchOdds.markets[key][1].v === 0) {
-            arrOutcomes.push(foraHomeMinus15)
+        if (key === 'handicaps1') {
+            matchOdds.markets[key].forEach(el => {
+                if(el.type === -1.5 && +el.v >= 1.3) {
+                    const obj = {
+                        outcomes: 'Фора 1 -1.5',
+                        percent: foraHomeMinus15,
+                        odds: el.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 1.5 && +el.v >= 1.3) {
+                    const obj = {
+                        outcomes: 'Фора 1 +1.5',
+                        percent: foraHomePlus15,
+                        odds: el.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === -1.5 && +el.v === 0) {
+                    const obj = {
+                        outcomes: 'Фора 1 -1.5',
+                        percent: foraHomeMinus15,
+                        odds: el.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 1.5 && +el.v === 0) {
+                    const obj = {
+                        outcomes: 'Фора 1 +1.5',
+                        percent: foraHomePlus15,
+                        odds: el.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+            })
         }
-        if (key === 'handicaps2' && +matchOdds.markets[key][1].v >= 1.3 || key === 'handicaps2' && +matchOdds.markets[key][1].v === 0) {
-            arrOutcomes.push(foraAwayMinus15)
+        if (key === 'handicaps2') {
+            matchOdds.markets[key].forEach(el => {
+                if(el.type === -1.5 && +el.v >= 1.3) {
+                    const obj = {
+                        outcomes: 'Фора 2 -1.5',
+                        percent: foraAwayMinus15,
+                        odds: el.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 1.5 && +el.v >= 1.3) {
+                    const obj = {
+                        outcomes: 'Фора 2 +1.5',
+                        percent: foraAwayPlus15,
+                        odds: el.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === -1.5 && +el.v === 0) {
+                    const obj = {
+                        outcomes: 'Фора 2 -1.5',
+                        percent: foraAwayPlus15,
+                        odds: el.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 1.5 && +el.v === 0) {
+                    const obj = {
+                        outcomes: 'Фора 2 +1.5',
+                        percent: foraAwayPlus15,
+                        odds: el.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+            })
+            
         }
-        if (key === 'handicaps1' && matchOdds.markets[key][0] && +matchOdds.markets[key][0].v >= 1.3 || key === 'handicaps1' && matchOdds.markets[key][0] && +matchOdds.markets[key][0].v === 0) {
-            arrOutcomes.push(foraHomePlus15)
-        }
-        if (key === 'handicaps2' && matchOdds.markets[key][0] && +matchOdds.markets[key][0].v >= 1.3 || key === 'handicaps2' && matchOdds.markets[key][0] && +matchOdds.markets[key][0].v === 0) {
-            arrOutcomes.push(foraAwayPlus15)
-        }
-        if (key === 'totals' && +matchOdds.markets[key][0].over.v >= 1.3 || key === 'totals' && +matchOdds.markets[key][0].over.v === 0) {
-            arrOutcomes.push(to15)
-        }
-        if (key === 'totals' && +matchOdds.markets[key][1].over.v >= 1.3 || key === 'totals' && +matchOdds.markets[key][1].over.v === 0) {
-            arrOutcomes.push(to25)
-        }
-        if (key === 'totals' && +matchOdds.markets[key][2].over.v >= 1.3 || key === 'totals' && +matchOdds.markets[key][2].over.v === 0) {
-            arrOutcomes.push(to35)
-        }
-        if (key === 'totals' && +matchOdds.markets[key][0].under.v >= 1.3 || key === 'totals' && +matchOdds.markets[key][0].under.v === 0) {
-            arrOutcomes.push(tu15)
-        }
-        if (key === 'totals' && +matchOdds.markets[key][1].under.v >= 1.3 || key === 'totals' && +matchOdds.markets[key][1].under.v === 0) {
-            arrOutcomes.push(tu25)
-        }
-        if (key === 'totals' && +matchOdds.markets[key][2].under.v >= 1.3 || key === 'totals' && +matchOdds.markets[key][2].under.v === 0) {
-            arrOutcomes.push(tu35)
+        if (key === 'totals') {
+            matchOdds.markets[key].forEach(el => {
+                if(el.type === 1.5 && +el.over.v >= 1.3) {
+                    const obj = {
+                        outcomes: 'Тотал больше 1.5',
+                        percent: to15,
+                        odds: el.over.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 1.5 && +el.under.v >= 1.3) {
+                    const obj = {
+                        outcomes: 'Тотал меньше 1.5',
+                        percent: tu15,
+                        odds: el.under.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 2.5 && +el.over.v >= 1.3) {
+                    const obj = {
+                        outcomes: 'Тотал больше 2.5',
+                        percent: to25,
+                        odds: el.over.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 2.5 && +el.under.v >= 1.3) {
+                    const obj = {
+                        outcomes: 'Тотал меньше 2.5',
+                        percent: tu25,
+                        odds: el.under.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 3.5 && +el.over.v >= 1.3) {
+                    const obj = {
+                        outcomes: 'Тотал больше 3.5',
+                        percent: to35,
+                        odds: el.over.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 3.5 && +el.under.v >= 1.3) {
+                    const obj = {
+                        outcomes: 'Тотал меньше 3.5',
+                        percent: tu35,
+                        odds: el.under.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 1.5 && +el.over.v === 0) {
+                    const obj = {
+                        outcomes: 'Тотал больше 1.5',
+                        percent: to15,
+                        odds: el.over.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 1.5 && +el.under.v === 0) {
+                    const obj = {
+                        outcomes: 'Тотал меньше 1.5',
+                        percent: tu15,
+                        odds: el.under.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 2.5 && +el.over.v === 0) {
+                    const obj = {
+                        outcomes: 'Тотал больше 2.5',
+                        percent: to25,
+                        odds: el.over.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 2.5 && +el.under.v === 0) {
+                    const obj = {
+                        outcomes: 'Тотал меньше 2.5',
+                        percent: tu25,
+                        odds: el.under.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 3.5 && +el.over.v === 0) {
+                    const obj = {
+                        outcomes: 'Тотал больше 3.5',
+                        percent: to35,
+                        odds: el.over.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 3.5 && +el.under.v === 0) {
+                    const obj = {
+                        outcomes: 'Тотал меньше 3.5',
+                        percent: tu35,
+                        odds: el.under.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+            }) 
         }
         if (key === 'bothToScore' && +matchOdds.markets[key].yes.v >= 1.3 || key === 'bothToScore' && +matchOdds.markets[key].yes.v === 0) {
-            arrOutcomes.push(btsYes)
+            const obj = {
+                outcomes: 'Обе забьют ДА',
+                percent: btsYes,
+                odds: matchOdds.markets[key].yes.v
+            }
+            arrOutcomes.push(obj)
         }
         if (key === 'bothToScore' && +matchOdds.markets[key].no.v >= 1.3 || key === 'bothToScore' && +matchOdds.markets[key].no.v === 0) {
-            arrOutcomes.push(btsNo)
+            const obj = {
+                outcomes: 'Обе забьют Нет',
+                percent: btsNo,
+                odds: matchOdds.markets[key].no.v
+            }
+            arrOutcomes.push(obj)
         }
-        if (key === 'totals1' && +matchOdds.markets[key][0].over.v >= 1.3 || key === 'totals1' && +matchOdds.markets[key][0].over.v === 0) {
-            arrOutcomes.push(it1O05)
+        if (key === 'totals1') {
+            matchOdds.markets[key].forEach(el => {
+                if(el.type === 0.5 && +el.over.v >= 1.3) {
+                    const obj = {
+                        outcomes: 'Команда 1 забьет',
+                        percent: it1O05,
+                        odds: el.over.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 1.5 && +el.over.v >= 1.3) {
+                    const obj = {
+                        outcomes: 'Ит1 больше 1.5',
+                        percent: it1O15,
+                        odds: el.over.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 2.5 && +el.over.v >= 1.3) {
+                    const obj = {
+                        outcomes: 'Ит1 больше 2.5',
+                        percent: it1O25,
+                        odds: el.over.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 0.5 && +el.under.v >= 1.3) {
+                    const obj = {
+                        outcomes: 'Команда 1 не забьет',
+                        percent: it1U05,
+                        odds: el.under.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 1.5 && +el.under.v >= 1.3) {
+                    const obj = {
+                        outcomes: 'Ит1 меньше 1.5',
+                        percent: it1U15,
+                        odds: el.under.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 2.5 && +el.under >= 1.3) {
+                    const obj = {
+                        outcomes: 'Ит1 меньше 2.5',
+                        percent: it1U25,
+                        odds: el.under.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+        
+                if(el.type === 0.5 && +el.over.v === 0) {
+                    const obj = {
+                        outcomes: 'Команда 1 забьет',
+                        percent: it1O05,
+                        odds: el.over.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 1.5 && +el.over.v === 0) {
+                    const obj = {
+                        outcomes: 'Ит1 больше 1.5',
+                        percent: it1O15,
+                        odds: el.over.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 2.5 && +el.over.v === 0) {
+                    const obj = {
+                        outcomes: 'Ит1 больше 2.5',
+                        percent: it1O25,
+                        odds: el.over.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 0.5 && +el.under.v === 0) {
+                    const obj = {
+                        outcomes: 'Команда 1 не забьет',
+                        percent: it1U05,
+                        odds: el.under.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 1.5 && +el.under.v === 0) {
+                    const obj = {
+                        outcomes: 'Ит1 меньше 1.5',
+                        percent: it1U15,
+                        odds: el.under.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 2.5 && +el.under === 0) {
+                    const obj = {
+                        outcomes: 'Ит1 меньше 2.5',
+                        percent: it1U25,
+                        odds: el.under.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+            })
         }
-        if (key === 'totals1' && +matchOdds.markets[key][1].over.v >= 1.3 || key === 'totals1' && +matchOdds.markets[key][1].over.v === 0) {
-            arrOutcomes.push(it1O15)
-        }
-        if (key === 'totals1' && matchOdds.markets[key][2] && +matchOdds.markets[key][2].over.v >= 1.3 || key === 'totals1' && matchOdds.markets[key][2] && +matchOdds.markets[key][2].over.v === 0) {
-            arrOutcomes.push(it1O25)
-        }
-        if (key === 'totals1' && +matchOdds.markets[key][0].under.v >= 1.3 || key === 'totals1' && +matchOdds.markets[key][0].under.v === 0) {
-            arrOutcomes.push(it1U05)
-        }
-        if (key === 'totals1' && +matchOdds.markets[key][1].under.v >= 1.3 || key === 'totals1' && +matchOdds.markets[key][1].under.v === 0) {
-            arrOutcomes.push(it1U15)
-        }
-        if (key === 'totals1' && matchOdds.markets[key][2] && +matchOdds.markets[key][2].under.v >= 1.3 || key === 'totals1' && matchOdds.markets[key][2] && +matchOdds.markets[key][2].under.v === 0) {
-            arrOutcomes.push(it1U25)
-        }
-        if (key === 'totals2' && +matchOdds.markets[key][0].over.v >= 1.3 || key === 'totals2' && +matchOdds.markets[key][0].over.v === 0) {
-            arrOutcomes.push(it2O05)
-        }
-        if (key === 'totals2' && +matchOdds.markets[key][1].over.v >= 1.3 || key === 'totals2' && +matchOdds.markets[key][1].over.v === 0) {
-            arrOutcomes.push(it2O15)
-        }
-        if (key === 'totals2' && matchOdds.markets[key][2] && +matchOdds.markets[key][2].over.v >= 1.3 || key === 'totals2' && matchOdds.markets[key][2] && +matchOdds.markets[key][2].over.v === 0) {
-            arrOutcomes.push(it2O25)
-        }
-        if (key === 'totals2' && +matchOdds.markets[key][0].under.v >= 1.3 || key === 'totals2' && +matchOdds.markets[key][0].under.v === 0) {
-            arrOutcomes.push(it2U05)
-        }
-        if (key === 'totals2' && +matchOdds.markets[key][1].under.v >= 1.3 || key === 'totals2' && +matchOdds.markets[key][1].under.v === 0) {
-            arrOutcomes.push(it2U15)
-        }
-        if (key === 'totals2' && matchOdds.markets[key][2] && +matchOdds.markets[key][2].under.v >= 1.3 || key === 'totals2' && matchOdds.markets[key][2] && +matchOdds.markets[key][2].under.v === 0) {
-            arrOutcomes.push(it2U25)
+        if (key === 'totals2') {
+            matchOdds.markets[key].forEach(el => {
+                if(el.type === 0.5 && +el.over.v >= 1.3) {
+                    const obj = {
+                        outcomes: 'Команда 2 забьет',
+                        percent: it2O05,
+                        odds: el.over.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 1.5 && +el.over.v >= 1.3) {
+                    const obj = {
+                        outcomes: 'Ит2 больше 1.5',
+                        percent: it2O15,
+                        odds: el.over.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 2.5 && +el.over.v >= 1.3) {
+                    const obj = {
+                        outcomes: 'Ит2 больше 2.5',
+                        percent: it2O25,
+                        odds: el.over.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 0.5 && +el.under.v >= 1.3) {
+                    const obj = {
+                        outcomes: 'Команда 2 не забьет',
+                        percent: it2U05,
+                        odds: el.under.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 1.5 && +el.under.v >= 1.3) {
+                    const obj = {
+                        outcomes: 'Ит2 меньше 1.5',
+                        percent: it2U15,
+                        odds: el.under.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 2.5 && +el.under >= 1.3) {
+                    const obj = {
+                        outcomes: 'Ит2 меньше 2.5',
+                        percent: it2U25,
+                        odds: el.under.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+        
+                if(el.type === 0.5 && +el.over.v === 0) {
+                    const obj = {
+                        outcomes: 'Команда 2 забьет',
+                        percent: it2O05,
+                        odds: el.over.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 1.5 && +el.over.v === 0) {
+                    const obj = {
+                        outcomes: 'Ит2 больше 1.5',
+                        percent: it2O15,
+                        odds: el.over.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 2.5 && +el.over.v === 0) {
+                    const obj = {
+                        outcomes: 'Ит2 больше 2.5',
+                        percent: it2O25,
+                        odds: el.over.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 0.5 && +el.under.v === 0) {
+                    const obj = {
+                        outcomes: 'Команда 2 не забьет',
+                        percent: it2U05,
+                        odds: el.under.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 1.5 && +el.under.v === 0) {
+                    const obj = {
+                        outcomes: 'Ит2 меньше 1.5',
+                        percent: it2U15,
+                        odds: el.under.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+                if(el.type === 2.5 && +el.under === 0) {
+                    const obj = {
+                        outcomes: 'Ит2 меньше 2.5',
+                        percent: it2U25,
+                        odds: el.under.v
+                    }
+                    arrOutcomes.push(obj)
+                }
+            })
         }
     }
 
     const getMaxOfArray = (numArray) => {
-        const max = Math.max.apply(null, numArray)
+        const max = Math.max(...numArray.map(obj => obj.percent))
 
         return max
     }
 
     const max1 = getMaxOfArray(arrOutcomes)
-    const arrOutcomes1 = arrOutcomes.filter(el => el !== max1)
+    const arrOutcomes1 = arrOutcomes.filter(el => el.percent !== max1)
     const max2 = getMaxOfArray(arrOutcomes1)
-    const arrOutcomes2 = arrOutcomes1.filter(el => el !== max2)
+    const arrOutcomes2 = arrOutcomes1.filter(el => el.percent !== max2)
     const max3 = getMaxOfArray(arrOutcomes2)
-    const arrOutcomes3 = arrOutcomes2.filter(el => el !== max3)
+    const arrOutcomes3 = arrOutcomes2.filter(el => el.percent !== max3)
     const max4 = getMaxOfArray(arrOutcomes3)
-    const arrOutcomes4 = arrOutcomes3.filter(el => el !== max4)
+    const arrOutcomes4 = arrOutcomes3.filter(el => el.percent !== max4)
     const max5 = getMaxOfArray(arrOutcomes4)
-    const arrOutcomes5 = arrOutcomes4.filter(el => el !== max5)
+    const arrOutcomes5 = arrOutcomes4.filter(el => el.percent !== max5)
     const max6 = getMaxOfArray(arrOutcomes5)
-    const arrOutcomes6 = arrOutcomes5.filter(el => el !== max6)
+    const arrOutcomes6 = arrOutcomes5.filter(el => el.percent !== max6)
     const max7 = getMaxOfArray(arrOutcomes6)
-    const arrOutcomes7 = arrOutcomes6.filter(el => el !== max7)
+    const arrOutcomes7 = arrOutcomes6.filter(el => el.percent !== max7)
     const max8 = getMaxOfArray(arrOutcomes7)
-    const arrOutcomes8 = arrOutcomes7.filter(el => el !== max8)
+    const arrOutcomes8 = arrOutcomes7.filter(el => el.percent !== max8)
     const max9 = getMaxOfArray(arrOutcomes8)
-    const arrOutcomes9 = arrOutcomes8.filter(el => el !== max9)
+    const arrOutcomes9 = arrOutcomes8.filter(el => el.percent !== max9)
     const max10 = getMaxOfArray(arrOutcomes9)
-
-    //поиск по числу названиz исхода
-    const findOutcomes = (el) => {
-        if(el === btsNo) {
-            return {
-                outcomes: 'Обе забьют Нет',
-                odds: matchOdds.markets.bothToScore.no.v,
-                percent: btsNo
-            }
-        }
-        if(el === btsNo) {
-            return {
-                outcomes: 'Обе забьют Да',
-                odds: matchOdds.markets.bothToScore.yes.v,
-                percent: btsYes
-            }
-        }
-        if(el === draw) {
-            return {
-                outcomes: 'Ничья',
-                odds: matchOdds.markets.winX.v,
-                percent: draw
-            }
-        }
-        if(el === foraAwayMinus15) {
-            return {
-                outcomes: 'Ф2-1.5',
-                odds:  matchOdds.markets.handicaps2[1] ? matchOdds.markets.handicaps2[1].v : 0,
-                percent: foraAwayMinus15
-            }
-        }
-        if(el === foraAwayPlus15) {
-            return {
-                outcomes: 'Ф2+1.5',
-                odds: matchOdds.markets.handicaps2[0] ? matchOdds.markets.handicaps2[0].v : 0,
-                percent: foraAwayPlus15
-            }
-        }
-        if(el === foraHomeMinus15) {
-            return {
-                outcomes: 'Ф1-1.5',
-                odds: matchOdds.markets.handicaps1[1] ? matchOdds.markets.handicaps1[1].v : 0,
-                percent: foraHomeMinus15
-            }
-        }
-        if(el === foraHomePlus15) {
-            return {
-                outcomes: 'Ф1+1.5',
-                odds: matchOdds.markets.handicaps1[0] ? matchOdds.markets.handicaps1[0].v : 0,
-                percent: foraHomePlus15
-            }
-        }
-        if(el === it1O05) {
-            return {
-                outcomes: 'Команда 1 забьет',
-                odds: matchOdds.markets.totals1[0] ? matchOdds.markets.totals1[0].over.v : 0,
-                percent: it1O05
-            }
-        }
-        if(el === it1O15) {
-            return {
-                outcomes: 'Ит1 Больше 1.5',
-                odds: matchOdds.markets.totals1[1] ? matchOdds.markets.totals1[1].over.v : 0,
-                percent: it1O15
-            }
-        }
-        if(el === it1O25) {
-            return {
-                outcomes: 'Ит1 Больше 2.5',
-                odds: matchOdds.markets.totals1[2] ? matchOdds.markets.totals1[2].over.v : 0,
-                percent: it1O25
-            }
-        }
-        if(el === it1U05) {
-            return {
-                outcomes: 'Команда 1 не забьет',
-                odds: matchOdds.markets.totals1[0] ? matchOdds.markets.totals1[0].under.v : 0,
-                percent: it1U05
-            }
-        }
-        if(el === it1U15) {
-            return {
-                outcomes: 'Ит1 меньше 1.5',
-                odds: matchOdds.markets.totals1[1] ? matchOdds.markets.totals1[1].under.v : 0,
-                percent: it1U15
-            }
-        }
-        if(el === it1U25) {
-            return {
-                outcomes: 'Ит1 меньше 2.5',
-                odds: matchOdds.markets.totals1[2] ? matchOdds.markets.totals1[2].under.v : 0,
-                percent: it1U25
-            }
-        }
-
-        if(el === it2O05) {
-            return {
-                outcomes: 'Команда 2 забьет',
-                odds: matchOdds.markets.totals2[0] ? matchOdds.markets.totals2[0].over.v : 0,
-                percent: it2O05
-            }
-        }
-        if(el === it2O15) {
-            return {
-                outcomes: 'Ит2 Больше 1.5',
-                odds: matchOdds.markets.totals2[1] ? matchOdds.markets.totals2[1].over.v : 0,
-                percent: it2O15
-            }
-        }
-        if(el === it2O25) {
-            return {
-                outcomes: 'Ит2 Больше 2.5',
-                odds: matchOdds.markets.totals2[2] ? matchOdds.markets.totals2[2].over.v : 0,
-                percent: it2O25
-            }
-        }
-        if(el === it2U05) {
-            return {
-                outcomes: 'Команда 2 не забьет',
-                odds: matchOdds.markets.totals2[0] ? matchOdds.markets.totals2[0].under.v : 0,
-                percent: it2U05
-            }
-        }
-        if(el === it2U15) {
-            return {
-                outcomes: 'Ит2 меньше 1.5',
-                odds: matchOdds.markets.totals2[1] ? matchOdds.markets.totals2[1].under.v : 0,
-                percent: it2U15
-            }
-        }
-        if(el === it2U25) {
-            return {
-                outcomes: 'Ит2 меньше 2.5',
-                odds: matchOdds.markets.totals2[2] ? matchOdds.markets.totals2[2].under.v : 0,
-                percent: it2U25
-            }
-        }
-        if(el === to15) {
-            return {
-                outcomes: 'Тотал больше 1.5',
-                odds: matchOdds.markets.totals[0] ? matchOdds.markets.totals[0].over.v : 0,
-                percent: to15
-            }
-        }
-        if(el === to25) {
-            return {
-                outcomes: 'Тотал больше 2.5',
-                odds: matchOdds.markets.totals[1] ? matchOdds.markets.totals[1].over.v : 0,
-                percent: to25
-            }
-        }
-        if(el === to35) {
-            return {
-                outcomes: 'Тотал больше 3.5',
-                odds: matchOdds.markets.totals[2] ? matchOdds.markets.totals[2].over.v : 0,
-                percent: to35
-            }
-        }
-        if(el === tu15) {
-            return {
-                outcomes: 'Тотал меньше 1.5',
-                odds: matchOdds.markets.totals[0] ? matchOdds.markets.totals[0].under.v : 0,
-                percent: tu15
-            }
-        }
-        if(el === tu25) {
-            return {
-                outcomes: 'Тотал меньше 2.5',
-                odds: matchOdds.markets.totals[1] ? matchOdds.markets.totals[1].under.v : 0,
-                percent: tu25
-            }
-        }
-        if(el === tu35) {
-            return {
-                outcomes: 'Тотал меньше 3.5',
-                odds: matchOdds.markets.totals[2] ? matchOdds.markets.totals[2].under.v : 0,
-                percent: tu35
-            }
-        }
-        if(el === winOrDrawHome) {
-            return {
-                outcomes: '1X',
-                odds: matchOdds.markets.win1X.v,
-                percent: winOrDrawHome
-            }
-        }
-        if(el === winOrdrawAway) {
-            return {
-                outcomes: '2X',
-                odds: matchOdds.markets.winX2.v,
-                percent: winOrdrawAway
-            }
-        }
-        if(el === winnerAway) {
-            return {
-                outcomes: 'Победа 2',
-                odds: matchOdds.markets.win2.v,
-                percent: winnerAway
-            }
-        }
-        if(el === winnerHome) {
-            return {
-                outcomes: 'Победа 1',
-                odds: matchOdds.markets.win1.v,
-                percent: winnerHome
-            }
-        }
-    }
 
     const arrMaxNumber = [max1, max2, max3, max4, max5, max6, max7, max8, max9, max10]
 
     const result = arrMaxNumber.map(el => {
-        const res = findOutcomes(el)
-        return res
+        const res = arrOutcomes.filter(item => item.percent === el)
+        return res[0]
     })
 
     const resultFilter = result.filter(el => el)

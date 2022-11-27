@@ -21,6 +21,10 @@ const Match = () => {
     const [data, setData] = useState({});
     const [form, setForm] = useState('');
     const [correctScore, setCorrectScore] = useState([]);
+    const [moneyWay1X2, setMoneyWay1X2] = useState([]);
+    const [moneyWayOverUnder, setMoneyWayOverUnder] = useState([]);
+    const [droppingOdds1X2, setDroppingOdds1X2] = useState([]);
+    const [droppingOddsOverUnder, setDroppingOddsOverUnder] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
@@ -48,8 +52,23 @@ const Match = () => {
                 const correctScore = await arbworldServices.getcorrectScore()
                 console.log(correctScore.data)
                 setCorrectScore(correctScore.data.moneyWay)
-                // setLineups(matchesLineups.data.lineups[0])
-                setIsLoading(true);
+                const moneyWay1X2 = await arbworldServices.getMoneyWay1x2()
+                console.log(moneyWay1X2.data)
+                setMoneyWay1X2(moneyWay1X2.data.moneyWay)
+                const moneyWayUnderOver = await arbworldServices.getMoneyWayUnderOver()
+                console.log(moneyWayUnderOver.data)
+                setMoneyWayOverUnder(moneyWayUnderOver.data.moneyWay)
+                const droppingOdds1X2 = await arbworldServices.getDroppingOdds1X2()
+                console.log(droppingOdds1X2.data)
+                setDroppingOdds1X2(droppingOdds1X2.data.droppingOdds)
+                const droppingOddsOverUnder = await arbworldServices.getDroppingOddsUnderOver()
+                console.log(droppingOddsOverUnder.data)
+                setDroppingOddsOverUnder(droppingOddsOverUnder.data.droppingOdds)
+                
+
+                setTimeout(() => {
+                    setIsLoading(true);
+                }, 1000);  
             }
             catch (error) {
                 console.log(error)
@@ -138,15 +157,23 @@ const Match = () => {
                             id="uncontrolled-tab-example"
                             className="mb-3"
                         >
-                            <Tab eventKey="predict" title="Статистика">
+                            <Tab 
+                                eventKey="predict" 
+                                title={<p className='p-2 border-2 shadow-lg shadow-cyan-200 border-cyan-600 border-double rounded-md font-mono font-medium text-indigo-900'>Статистика</p>}>
                                 <Form data={form} homeName={data.homeTeam} awayName={data.awayTeam} />
                                 <LastMatches data={form} homeName={data.homeTeam} awayName={data.awayTeam} />
                             </Tab>
-                            <Tab eventKey="bets" title="Ставки и прогнозы">
+                            <Tab 
+                                eventKey="bets" 
+                                title={<p className='p-2 border-2 shadow-lg shadow-cyan-200 border-orange-600 border-double rounded-md font-mono  font-medium text-indigo-900'>Ставки и прогнозы</p>}>
                                 <Bets
                                     data={data.predictions}
                                     form={form}
                                     correctScore={correctScore}
+                                    moneyWay1X2={moneyWay1X2}
+                                    moneyWayOverUnder={moneyWayOverUnder}
+                                    droppingOdds1X2={droppingOdds1X2}
+                                    droppingOddsOverUnder={droppingOddsOverUnder}
                                     homeName={data.homeTeam}
                                     awayName={data.awayTeam} />
                             </Tab>

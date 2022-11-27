@@ -3,160 +3,156 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import findTeam from '../../utils/findTeam';
 
-const DroppingOdds = (props) => {
-    const [droppingOdds1x2, setDroppingOdds1x2] = useState({
-        awayName: "Нет данных",
-        homeName: "Нет данных",
-        oddsAway: [],
-        oddsDraw: [],
-        oddsHome: [],
-    })
-    const [droppingOddsOverUnder, setDroppingOddsOverUnder] = useState({
-        awayName: "Нет данных",
-        homeName: "Нет данных",
-        oddsOver: [],
-        oddsUnder: [],
-    });
+const DroppingOdds = ({droppingOdds1X2, droppingOddsOverUnder, homeName, awayName}) => {
+   
     const state = useSelector(state => state);
+    const [droppingOddsWinner, setDroppingOddsWinner] = useState(
+        {
+            oddsHomeStart: 'нет данных',
+            oddsHomeEnd: 'нет данных',
+            oddsDrawStart: 'нет данных',
+            oddsDrawEnd: 'нет данных',
+            oddsAwayStart: 'нет данных',
+            oddsAwayend: 'нет данных',
+            money: 'нет данных'
+        }
+    )
+    const [droppingOddsTotal, setDroppingOddsTotal] = useState(
+        {
+            oddsUnderStart: 'нет данных',
+            oddsUnderEnd: 'нет данных',
+            oddsOverStart: 'нет данных',
+            oddsOverEnd: 'нет данных',
+            money: 'нет данных'
+        }
+    )
 
     useEffect(() => {
-        // Поиск команд 
-        state.arbworld.droppingOdds1x2.forEach(el => {
-            if (el.homeName.toLowerCase() === props.homeName.toLowerCase()) {
-                setDroppingOdds1x2(el)
-            }
-            if (el.homeName.toLowerCase() === props.awayName.toLowerCase()) {
-                setDroppingOdds1x2(el)
-            }
-            if (el.awayName.toLowerCase() === props.homeName.toLowerCase()) {
-                setDroppingOdds1x2(el)
-            }
-            if (el.awayName.toLowerCase() === props.awayName.toLowerCase()) {
-                setDroppingOdds1x2(el)
-            }
-        });
-        state.arbworld.droppingOddsOverUnder.forEach(el => {
-            if (el.homeName.toLowerCase() === props.homeName.toLowerCase()) {
-                setDroppingOddsOverUnder(el)
-            }
-            if (el.homeName.toLowerCase() === props.awayName.toLowerCase()) {
-                setDroppingOddsOverUnder(el)
-            }
-            if (el.awayName.toLowerCase() === props.homeName.toLowerCase()) {
-                setDroppingOddsOverUnder(el)
-            }
-            if (el.awayName.toLowerCase() === props.awayName.toLowerCase()) {
-                setDroppingOddsOverUnder(el)
-            }
-        });
+        const droppingOdds1x2Filter = droppingOdds1X2.filter(item => findTeam(item.homeName, state.homeNameEng) && findTeam(item.homeAway, state.awayNameEng))
+        const droppingOddsOverUnderFilter = droppingOddsOverUnder.filter(item => findTeam(item.homeName, state.homeNameEng) && findTeam(item.homeAway, state.awayNameEng))
+    
+        console.log(droppingOdds1x2Filter)
+        console.log(droppingOddsOverUnderFilter)
 
-        if (droppingOdds1x2.homeName === "Нет данных") {
-            const el = findTeam(state.arbworld.droppingOdds1x2, props.homeName, 'arb', 'home');
-            if (el) {
-                setDroppingOdds1x2(el)
-            }
-        } else {
-            const el = findTeam(state.arbworld.droppingOdds1x2, props.awayName, 'arb', 'away');
-            if (el) {
-                setDroppingOdds1x2(el)
-            }
+        if(droppingOdds1x2Filter.length > 0) {
+            setDroppingOddsWinner(droppingOdds1x2Filter[0])
         }
-        if (droppingOddsOverUnder.homeName === "Нет данных") {
-            const el = findTeam(state.arbworld.droppingOddsOverUnder, props.homeName, 'arb', 'home');
-            if (el) {
-                setDroppingOddsOverUnder(el)
-            }
-        } else {
-            const el = findTeam(state.arbworld.droppingOddsOverUnder, props.awayName, 'arb', 'away');
-            if (el) {
-                setDroppingOddsOverUnder(el)
-            }
+        if(droppingOddsOverUnderFilter.length > 0) {
+            setDroppingOddsTotal(droppingOddsOverUnderFilter[0])
         }
-    }, [state])
+    
+    }, [])
 
+    
 
     return (
-        <>
+        <div className='container'>
             <div className="flex justify-center py-2">
-                <h2 className='text-xl'>Движение коэфицентов</h2>
+                <h2 className='text-center py-3 font-serif text-2xl font-bold text-slate-600'>Движение коэфицентов</h2>
             </div>
-            <Table striped bordered hover>
+            <Table striped bordered hover responsive variant="dark" >
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Начальный кэф</th>
-                        <th>Конечный кэф</th>
+                        <th>Ставка</th>
+                        <th>Нач. кэф</th>
+                        <th>Конеч. кэф</th>
+                        <th>Деньги</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>П1</td>
                         <td>
-                            <p className={+droppingOdds1x2.oddsHome[0] > +droppingOdds1x2.oddsHome[1] ? 'bg-green-200 flex justify-center' : 'bg-rose-200 flex justify-center'}>
-                                {droppingOdds1x2.oddsHome[0]}
+                            <p className={+droppingOddsWinner.oddsHomeStart > +droppingOddsWinner.oddsHomeEnd ? 'bg-green-400 text-center' : 'bg-rose-400 text-center'}>
+                                {droppingOddsWinner.oddsHomeStart}
                             </p>
                         </td>
                         <td>
-                            <p className={+droppingOdds1x2.oddsHome[1] > +droppingOdds1x2.oddsHome[0] ? 'bg-green-200 flex justify-center' : 'bg-rose-200 flex justify-center'}>
-                                {droppingOdds1x2.oddsHome[1]}
+                            <p className={+droppingOddsWinner.oddsHomeEnd > +droppingOddsWinner.oddsHomeStart ? 'bg-green-400 text-center' : 'bg-rose-400 text-center'}>
+                                {droppingOddsWinner.oddsHomeEnd}
+                            </p>
+                        </td>
+                        <td>
+                            <p className='text-center'>
+                                {droppingOddsWinner.money} $
                             </p>
                         </td>
                     </tr>
                     <tr>
                         <td>X</td>
                         <td>
-                            <p className={+droppingOdds1x2.oddsDraw[0] > +droppingOdds1x2.oddsDraw[1] ? 'bg-green-200 flex justify-center' : 'bg-rose-200 flex justify-center'}>
-                                {droppingOdds1x2.oddsDraw[0]}
+                            <p className={+droppingOddsWinner.oddsDrawStart > +droppingOddsWinner.oddsDrawEnd ? 'bg-green-400 text-center' : 'bg-rose-400 text-center'}>
+                                {droppingOddsWinner.oddsDrawStart}
                             </p>
                         </td>
                         <td>
-                            <p className={+droppingOdds1x2.oddsDraw[1] > +droppingOdds1x2.oddsDraw[0] ? 'bg-green-200 flex justify-center' : 'bg-rose-200 flex justify-center'}>
-                                {droppingOdds1x2.oddsDraw[1]}
+                            <p className={+droppingOddsWinner.oddsDrawEnd > +droppingOddsWinner.oddsDrawStart ? 'bg-green-400 text-center' : 'bg-rose-400 text-center'}>
+                                {droppingOddsWinner.oddsDrawEnd}
+                            </p>
+                        </td>
+                        <td>
+                            <p className='text-center'>
+                                {droppingOddsWinner.money} $
                             </p>
                         </td>
                     </tr>
                     <tr>
                         <td>П2</td>
                         <td>
-                            <p className={+droppingOdds1x2.oddsAway[0] > +droppingOdds1x2.oddsAway[1] ? 'bg-green-200 flex justify-center' : 'bg-rose-200 flex justify-center'}>
-                                {droppingOdds1x2.oddsAway[0]}
+                            <p className={+droppingOddsWinner.oddsAwayStart > +droppingOddsWinner.oddsAwayend ? 'bg-green-400 text-center' : 'bg-rose-400 text-center'}>
+                                {droppingOddsWinner.oddsAwayStart}
                             </p>
                         </td>
                         <td>
-                            <p className={+droppingOdds1x2.oddsAway[1] > +droppingOdds1x2.oddsAway[0] ? 'bg-green-200 flex justify-center' : 'bg-rose-200 flex justify-center'}>
-                                {droppingOdds1x2.oddsAway[1]}
-                            </p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Больше 2.5</td>
-                        <td>
-                            <p className={+droppingOddsOverUnder.oddsOver[0] > +droppingOddsOverUnder.oddsOver[1] ? 'bg-green-200 flex justify-center' : 'bg-rose-200 flex justify-center'}>
-                                {droppingOddsOverUnder.oddsOver[0]}
+                            <p className={+droppingOddsWinner.oddsAwayend > +droppingOddsWinner.oddsAwayStart ? 'bg-green-400 text-center' : 'bg-rose-400 text-center'}>
+                                {droppingOddsWinner.oddsAwayend}
                             </p>
                         </td>
                         <td>
-                            <p className={+droppingOddsOverUnder.oddsOver[1] > +droppingOddsOverUnder.oddsOver[0] ? 'bg-green-200 flex justify-center' : 'bg-rose-200 flex justify-center'}>
-                                {droppingOddsOverUnder.oddsOver[1]}
+                            <p className='text-center'>
+                                {droppingOddsWinner.money} $
                             </p>
                         </td>
                     </tr>
                     <tr>
-                        <td>Меньше 2.5</td>
+                        <td>ТБ 2.5</td>
                         <td>
-                            <p className={+droppingOddsOverUnder.oddsUnder[0] > +droppingOddsOverUnder.oddsUnder[1] ? 'bg-green-200 flex justify-center' : 'bg-rose-200 flex justify-center'}>
-                                {droppingOddsOverUnder.oddsUnder[0]}
+                            <p className={+droppingOddsTotal.oddsOverStart > +droppingOddsTotal.oddsOverEnd ? 'bg-green-400 text-center' : 'bg-rose-400 text-center'}>
+                                {droppingOddsTotal.oddsOverStart}
                             </p>
                         </td>
                         <td>
-                            <p className={+droppingOddsOverUnder.oddsUnder[1] > +droppingOddsOverUnder.oddsUnder[0] ? 'bg-green-200 flex justify-center' : 'bg-rose-200 flex justify-center'}>
-                                {droppingOddsOverUnder.oddsUnder[1]}
+                            <p className={+droppingOddsTotal.oddsOverEnd > +droppingOddsTotal.oddsOverStart ? 'bg-green-400 text-center' : 'bg-rose-400 text-center'}>
+                                {droppingOddsTotal.oddsOverEnd}
+                            </p>
+                        </td>
+                        <td>
+                            <p className='text-center'>
+                                {droppingOddsTotal.money} $
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>ТМ 2.5</td>
+                        <td>
+                            <p className={+droppingOddsTotal.oddsUnderStart > +droppingOddsTotal.oddsUnderEnd ? 'bg-green-400 flex text-center' : 'bg-rose-400 text-center'}>
+                                {droppingOddsTotal.oddsUnderStart}
+                            </p>
+                        </td>
+                        <td>
+                            <p className={+droppingOddsTotal.oddsUnderEnd > +droppingOddsTotal.oddsUnderStart ? 'bg-green-400 text-center' : 'bg-rose-400 text-center'}>
+                                {droppingOddsTotal.oddsUnderEnd}
+                            </p>
+                        </td>
+                        <td>
+                            <p className='text-center'>
+                                {droppingOddsTotal.money} $
                             </p>
                         </td>
                     </tr>
                 </tbody>
             </Table>
-        </>
+        </div>
     )
 }
 

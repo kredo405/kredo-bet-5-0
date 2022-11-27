@@ -4,15 +4,18 @@ import { calPercentForMatches } from '../../utils/calcPercentForMatches';
 import { calcPoisonWithScore } from '../../utils/calcPoisonWithScore';
 import ToolsPrediction from '../ToolsPrediction/ToolsPrediction';
 import Comment from '../Comment/Comment';
+import DroppingOdds from '../DroppingOdds/DroppingOdds';
+import MoneyWay from '../MoneyWay/MoneyWay';
 import { calcCorrectScore } from '../../utils/calcCorrectScore';
-import Predictions from '../Predictions/Predictions';
 
-const Bets = (props) => {
 
-    const percentOutcomes = calcPoisonDestribution(props.form)
-    const percentMatches = calPercentForMatches(props.form.matchesHome, props.form.matchesAway, props.homeName, props.awayName)
-    const percentWithScore = calcPoisonWithScore(props.data)
-    const correctScoreFilter = props.correctScore.map(el => {
+
+const Bets = ({ data, form, correctScore, moneyWay1X2, moneyWayOverUnder, droppingOdds1X2, droppingOddsOverUnder, homeName, awayName }) => {
+
+    const percentOutcomes = calcPoisonDestribution(form)
+    const percentMatches = calPercentForMatches(form.matchesHome, form.matchesAway, homeName, awayName)
+    const percentWithScore = calcPoisonWithScore(data)
+    const correctScoreFilter = correctScore.map(el => {
         const pos = el.teamName.indexOf('vs')
         const homeName = el.teamName.slice(0, pos)
         const awayName = el.teamName.slice(pos + 2)
@@ -23,8 +26,8 @@ const Bets = (props) => {
 
             elements.forEach(element => {
                 if (item[element]) {
-                    const pos = item[element].indexOf('%')
-                    item[element] = +item[element].slice(0, pos)
+                    const pos = item[element].percent.indexOf('%')
+                    item[element].percent = +item[element].percent.slice(0, pos)
                 }
             })
 
@@ -57,10 +60,20 @@ const Bets = (props) => {
                         percentMatches={percentMatches}
                         percentWithScore={percentWithScore}
                         correctScore={correctScoreFilter}
-                        homeName={props.homeName}
-                        awayName={props.awayName}
+                        homeName={homeName}
+                        awayName={awayName}
                     />
-                    <Comment data={props.data} />
+                    <MoneyWay
+                        moneyWay1X2={moneyWay1X2}
+                        moneyWayOverUnder={moneyWayOverUnder}
+                    />
+                    <DroppingOdds
+                        droppingOdds1X2={droppingOdds1X2}
+                        droppingOddsOverUnder={droppingOddsOverUnder}
+                        homeName={homeName}
+                        awayName={awayName}
+                    />
+                    <Comment data={data} />
                 </div>
             </div>
         </>

@@ -1,11 +1,12 @@
 import { Table } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import findTeam from '../../utils/findTeam';
-import DroppingOdds from '../DroppingOdds/DroppingOdds';
 import { useSelector, useDispatch } from "react-redux";
-import { arbworldServices } from '../../services/arbworld';
+
 
 const MoneyWay = (props) => {
+
+    const state = useSelector(state => state);
     const [moneyWay1X2, setMoneyWay1X2] = useState({
         awayName: "",
         homeName: "",
@@ -29,40 +30,40 @@ const MoneyWay = (props) => {
 
 
     useEffect(() => {
+        const getData = async () => {
 
-        try {
-            const getData = async () => {
-                const moneyWay1x2 = await arbworldServices.getMoneyWay1x2()
-                const moneyWayOverUnder = await arbworldServices.getMoneyWayUnderOver()
+            try {
+                const moneyWay1X2Element = props.moneyWay1X2.filter(item => findTeam(item.homeName, state.homeNameEng) && findTeam(item.homeAway, state.awayNameEng))
+                const moneyWayOverUnderElement = props.moneyWayOverUnder.filter(item => findTeam(item.homeName, state.homeNameEng) && findTeam(item.homeAway, state.awayNameEng))
 
-                console.log(props)
+                if (moneyWay1X2Element.length > 0) {
+                    const posPercentHome = moneyWay1X2Element[0].percentHome.indexOf('%')
+                    const posPercentDraw = moneyWay1X2Element[0].percentDraw.indexOf('%')
+                    const posPercentAway = moneyWay1X2Element[0].percentAway.indexOf('%')
 
-                const moneyWay1X2Element = moneyWay1x2.data.moneyWay.find(el => el.homeName.toLowerCase() === props.homeName.toLowerCase() && el.homeAway.toLowerCase() === props.awayName.toLowerCase())
-                const moneyWayOverUnderElement = moneyWayOverUnder.data.moneyWay.find(el => el.homeName.toLowerCase() === props.homeName.toLowerCase() && el.homeAway.toLowerCase() === props.awayName.toLowerCase())
+                    moneyWay1X2Element[0].percentHome = +moneyWay1X2Element[0].percentHome.slice(0, posPercentHome)
+                    moneyWay1X2Element[0].percentDraw = +moneyWay1X2Element[0].percentDraw.slice(0, posPercentDraw)
+                    moneyWay1X2Element[0].percentAway = +moneyWay1X2Element[0].percentAway.slice(0, posPercentAway)
 
-                const posPercentOver = moneyWayOverUnderElement.percentOver.indexOf('%')
-                const posPercentUnder = moneyWayOverUnderElement.percentUnder.indexOf('%')
-                const posPercentHome = moneyWay1X2Element.percentHome.indexOf('%')
-                const posPercentDraw = moneyWay1X2Element.percentDraw.indexOf('%')
-                const posPercentAway = moneyWay1X2Element.percentAway.indexOf('%')
+                    setMoneyWay1X2(moneyWay1X2Element[0])
+                }
 
-                moneyWay1X2Element.percentHome = +moneyWay1X2Element.percentHome.slice(0, posPercentHome)
-                moneyWay1X2Element.percentDraw = +moneyWay1X2Element.percentDraw.slice(0, posPercentDraw)
-                moneyWay1X2Element.percentAway = +moneyWay1X2Element.percentAway.slice(0, posPercentAway)
-                moneyWayOverUnderElement.percentOver = +moneyWayOverUnderElement.percentOver.slice(0, posPercentOver)
-                moneyWayOverUnderElement.percentUnder = +moneyWayOverUnderElement.percentUnder.slice(0, posPercentUnder)
+                if (moneyWayOverUnderElement.length > 0) {
+                    const posPercentOver = moneyWayOverUnderElement[0].percentOver.indexOf('%')
+                    const posPercentUnder = moneyWayOverUnderElement[0].percentUnder.indexOf('%')
 
-                setMoneyWay1X2(moneyWay1X2Element)
-                setMoneyWayOverUnder(moneyWayOverUnderElement)
+                    moneyWayOverUnderElement[0].percentOver = +moneyWayOverUnderElement[0].percentOver.slice(0, posPercentOver)
+                    moneyWayOverUnderElement[0].percentUnder = +moneyWayOverUnderElement[0].percentUnder.slice(0, posPercentUnder)
+
+                    setMoneyWayOverUnder(moneyWayOverUnderElement[0])
+                }
             }
-
-            getData()
-        }
-        catch (error) {
-            console.log(error)
+            catch (error) {
+                console.log(error)
+            }
         }
 
-
+        getData()
 
     }, []);
 
@@ -70,65 +71,65 @@ const MoneyWay = (props) => {
     return (
         <>
             <div className="flex justify-center py-2">
-                <h2 className='text-xl'>Денежные потоки</h2>
+                <h2 className='text-center py-3 font-serif text-2xl font-bold text-slate-600'>Денежные потоки</h2>
             </div>
-            <Table striped bordered hover>
+            <Table striped bordered hover variant="dark">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Кэф</th>
-                        <th>%</th>
-                        <th>Деньги</th>
+                        <th><p className='text-center'>Ставка</p></th>
+                        <th><p className='text-center'>Кэф</p></th>
+                        <th><p className='text-center'>%</p></th>
+                        <th><p className='text-center'>Деньги</p></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><p className='text-center text-sky-900 font-mono font-semibold'>П1</p></td>
-                        <td><p className='text-center text-sky-600 font-mono font-semibold'>{moneyWay1X2.oddsHome}</p></td>
-                        <td><p className='text-center text-sky-600 font-mono font-semibold'>
+                        <td><p className='text-center font-mono font-semibold'>П1</p></td>
+                        <td><p className='text-center text-sky-200 font-mono font-semibold'>{moneyWay1X2.oddsHome}</p></td>
+                        <td><p className='text-center text-sky-200 font-mono font-semibold'>
                             {moneyWay1X2.percentHome}</p>
                         </td>
-                        <td><p className='text-center text-sky-600 font-mono font-semibold'>{+moneyWay1X2.money * +moneyWay1X2.percentHome / 100}$</p></td>
+                        <td><p className='text-center text-sky-200 font-mono font-semibold'>{moneyWay1X2.moneyHome}</p></td>
                     </tr>
                     <tr>
-                        <td>X</td>
-                        <td><p className='text-center text-sky-600 font-mono font-semibold'>{moneyWay1X2.oddsDraw}</p></td>
+                        <td><p className='text-center font-mono font-semibold'>Х</p></td>
+                        <td><p className='text-center text-sky-200 font-mono font-semibold'>{moneyWay1X2.oddsDraw}</p></td>
                         <td>
-                            <p className='text-center text-sky-600 font-mono font-semibold'>
+                            <p className='text-center text-sky-200 font-mono font-semibold'>
                                 {moneyWay1X2.percentDraw}
                             </p>
                         </td>
-                        <td><p className='text-center text-sky-600 font-mono font-semibold'>{+moneyWay1X2.money * moneyWay1X2.percentDraw / 100}$</p></td>
+                        <td><p className='text-center text-sky-200 font-mono font-semibold'>{moneyWay1X2.moneyDraw}</p></td>
                     </tr>
                     <tr>
-                        <td>П2</td>
-                        <td><p className='text-center text-sky-600 font-mono font-semibold'>{moneyWay1X2.oddsAway}</p></td>
+                        <td><p className='text-center font-mono font-semibold'>П2</p></td>
+                        <td><p className='text-center text-sky-200 font-mono font-semibold'>{moneyWay1X2.oddsAway}</p></td>
                         <td>
-                            <p className='text-center text-sky-600 font-mono font-semibold'>
+                            <p className='text-center text-sky-200 font-mono font-semibold'>
                                 {moneyWay1X2.percentAway}
                             </p>
                         </td>
-                        <td><p className='text-center text-sky-600 font-mono font-semibold'>{+moneyWay1X2.money * moneyWay1X2.percentAway / 100}$</p></td>
+                        <td><p className='text-center text-sky-200 font-mono font-semibold'>{moneyWay1X2.moneyAway}</p></td>
                     </tr>
                     <tr>
-                        <td>Больше 2.5</td>
-                        <td><p className='text-center text-sky-600 font-mono font-semibold'>{moneyWayOverUnder.oddsOver}</p></td>
+                        <td><p className='text-center font-mono font-semibold'>ТБ 2.5</p></td>
+                        <td><p className='text-center text-sky-200 font-mono font-semibold'>{moneyWayOverUnder.oddsOver}</p></td>
                         <td>
-                            <p className='text-center text-sky-600 font-mono font-semibold'>
+                            <p className='text-center text-sky-200 font-mono font-semibold'>
                                 {moneyWayOverUnder.percentOver}
                             </p>
                         </td>
-                        <td><p className='text-center text-sky-600 font-mono font-semibold'>{+moneyWayOverUnder.money * +moneyWayOverUnder.percentOver / 100}$</p></td>
+                        <td><p className='text-center text-sky-200 font-mono font-semibold'>{moneyWayOverUnder.moneyOver}</p></td>
                     </tr>
                     <tr>
-                        <td>Меньше 2.5</td>
-                        <td><p className='text-center text-sky-600 font-mono font-semibold'>{moneyWayOverUnder.oddsUnder}</p></td>
+                        <td><p className='text-center font-mono font-semibold'>ТМ 2.5</p></td>
+                        <td><p className='text-center text-sky-200 font-mono font-semibold'>{moneyWayOverUnder.oddsUnder}</p></td>
                         <td>
-                            <p className='text-center text-sky-600 font-mono font-semibold'>
+                            <p className='text-center text-sky-200 font-mono font-semibold'>
                                 {moneyWayOverUnder.percentUnder}
                             </p>
                         </td>
-                        <td><p className='text-center text-sky-600 font-mono font-semibold'>{+moneyWayOverUnder.money * +moneyWayOverUnder.percentUnder / 100}$</p></td>
+                        <td><p className='text-center text-sky-200 font-mono font-semibold'>{moneyWayOverUnder.moneyUnder}</p></td>
                     </tr>
                 </tbody>
             </Table>

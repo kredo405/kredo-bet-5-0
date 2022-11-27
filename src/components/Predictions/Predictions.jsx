@@ -8,13 +8,21 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import UserVotes from '../UserVotes/UserVotes';
-import { Spin } from 'antd';
+import { Spin, Empty } from 'antd';
 
 
 const Predictions = (props) => {
     const state = useSelector(state => state);
     const dispatch = useDispatch();
-    const [data, setData] = useState(<p className='text-center font-mono text-lg font-semibold text-red-700'>На этом матч не нашлось прогнозов</p>)
+    const [data, setData] = useState(
+        <Empty
+            description={
+                <span className="font-mono text-lg font-medium text-gray-700">
+                    На данный момент нет прогнозов
+                </span>
+            }
+        />
+    )
     const [percent, setPercent] = useState({
         btsNo: '',
         btsYes: '',

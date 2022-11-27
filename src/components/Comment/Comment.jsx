@@ -19,7 +19,14 @@ const Comment = (props) => {
             <div>
                 <h2 className="text-center py-3 font-serif text-2xl font-bold text-slate-600">Комментарии</h2>
                 <ul className="h-96 mb-36 lg:px-60">
-                    {elements.length !== 0 ? elements : <Empty />}
+                    {elements.length !== 0 ? elements :
+                        <Empty
+                            description={
+                                <span className="font-mono text-lg font-medium text-gray-700">
+                                    На данный момент нет комментариев
+                                </span>
+                            }
+                        />}
                 </ul>
             </div>
         </>

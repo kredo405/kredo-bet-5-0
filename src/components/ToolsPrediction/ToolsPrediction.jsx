@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Table } from 'react-bootstrap';
-import { arbworldServices } from "../../services/arbworld";
-import { calcCorrectScore } from "../../utils/calcCorrectScore";
 import Predictions from "../Predictions/Predictions";
 import { Modal } from 'antd';
 import findTeam from "../../utils/findTeam";
 import { calcBigPercent } from "../../utils/calcBigPercent";
 import { percentObj } from "../../utils/percentObj";
+import Scores from "../scores/Scores";
 
 const errorModal = (message) => {
     Modal.error({
@@ -23,6 +22,14 @@ const ToolsPrediction = (props) => {
         odds: 0,
         percent: 0
     }])
+    const [correctScoreMatch, setCorrectScoreMatch] = useState([
+        {score0_0: 0}, {score0_1: 0}, {score0_2: 0}, 
+        {score0_3: 0}, {score1_0: 0}, {score1_1: 0},
+        {score1_2: 0}, {score1_3: 0}, {score2_0: 0}, 
+        {score2_1: 0}, {score2_2: 0}, {score2_3: 0},
+        {score3_0: 0}, {score3_1: 0}, {score3_2: 0},  
+        {score3_3: 0}
+    ])
     const matchOdds = {
         date_start: '',
         team1_rus: '',
@@ -118,7 +125,6 @@ const ToolsPrediction = (props) => {
                     })
                     console.log(objOdds)
                     return objOdds
-                 
                 }
             }
         })
@@ -128,7 +134,10 @@ const ToolsPrediction = (props) => {
         const correctScoreMatch = correctScore.filter(item => findTeam(item.homeName, state.homeNameEng) && findTeam(item.awayName, state.awayNameEng))
 
         console.log(correctScoreMatch)
-
+        if(correctScoreMatch.length > 0) {
+            setCorrectScoreMatch(correctScoreMatch[0].scores)
+        }
+      
         // Вычисляем самые большие вероятности
         const outcomesBigPercent = calcBigPercent(percentPoison, percentMatches, percentWithScore,
             correctScoreMatch.length !== 0 ? correctScoreMatch[0].percentOutcomes : percentObj, odds.length !== 0 ? odds[0] : matchOdds)
@@ -166,6 +175,7 @@ const ToolsPrediction = (props) => {
                     </tbody>
                 </Table>
                 <Predictions homeName={props.homeName} awayName={props.awayName} />
+                <Scores homeName={props.homeName} awayName={props.awayName} correctScoreMatch={correctScoreMatch}/>
             </div>
         </>
     )

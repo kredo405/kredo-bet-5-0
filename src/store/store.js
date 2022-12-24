@@ -6,40 +6,9 @@ const initialState = {
         scores: [],
         percent: {},
     },
-    odds: [
-        {
-            date_start: '',
-            team1_rus: '',
-            team2_rus: '',
-            markets: {
-                bothToScore: {
-                    no: { v: '...' },
-                    yes: { v: '...' },
-                },
-                handicaps1: [{ type: -1.5, v: '...' }, { type: 1.5, v: '...' }],
-                handicaps2: [{ type: -1.5, v: '...' }, { type: 1.5, v: '...' }],
-                totals: [
-                    { over: { v: '...' }, type: 1.5, under: { v: '...' } },
-                    { over: { v: '...' }, type: 2.5, under: { v: '...' } },
-                    { over: { v: '...' }, type: 3.5, under: { v: '...' } },
-                ],
-                totals1: [
-                    { type: 0.5, over: { v: '...' }, under: { v: '...' } },
-                    { type: 1.5, over: { v: '...' }, under: { v: '...' } },
-                    { type: 2.5, over: { v: '...' }, under: { v: '...' } },
-                ],
-                totals2: [
-                    { type: 0.5, over: { v: '...' }, under: { v: '...' } },
-                    { type: 1.5, over: { v: '...' }, under: { v: '...' } },
-                    { type: 2.5, over: { v: '...' }, under: { v: '...' } },
-                ],
-                win1: { v: '...' },
-                win1X: { v: '...' },
-                win2: { v: '...' },
-                winX: { v: '...' },
-                winX2: { v: '...' },
-            }
-        }
+    app: '',
+    allMatches: [
+        
     ],
     token: '',
     homeNameEng: '',
@@ -52,7 +21,47 @@ const initialState = {
     stavkiprognozy: [{link:'',homeName:'',awayName:''}],
     oddsRu: [{link:'',homeName:'',awayName:''}],
     isLoading: false,
-    correctScore: {}
+    correctScore: [],
+    moneyWay1x2: {
+        awayName: "",
+        homeName: "",
+        money: "Нет данных",
+        oddsAway: "Нет данных",
+        oddsDraw: "Нет данных",
+        oddsHome: "Нет данных",
+        percentAway: "Нет данных",
+        percentDraw: "Нет данных",
+        percentHome: "Нет данных",
+    },
+    moneyWayOverUnder: {
+        awayName: "",
+        homeName: "",
+        money: "Нет данных",
+        oddsOver: "Нет данных",
+        oddsUnder: "Нет данных",
+        percentOver: "Нет данных",
+        percentUnder: "Нет данных",
+    },
+    droppingOdds1x2: {
+        oddsHomeStart: 'нет данных',
+        oddsHomeEnd: 'нет данных',
+        oddsDrawStart: 'нет данных',
+        oddsDrawEnd: 'нет данных',
+        oddsAwayStart: 'нет данных',
+        oddsAwayend: 'нет данных',
+        money: 'нет данных'
+    },
+    droppingOddsOverUnder: {
+        oddsUnderStart: 'нет данных',
+        oddsUnderEnd: 'нет данных',
+        oddsOverStart: 'нет данных',
+        oddsOverEnd: 'нет данных',
+        money: 'нет данных'
+    },
+    statistics: {},
+    homeTeam: '',
+    awayTeam: '',
+
 }
 
 const reducer = (state = initialState, action) => {
@@ -66,17 +75,17 @@ const reducer = (state = initialState, action) => {
                     scores: action.payload.scores,
                     percent: action.payload.percent,
                 }
-            };
-        case 'CORRECTSCORE':
+            }; 
+        case 'ALLMATCHES':
             return {
                 ...state,
-                correctScore: action.payload
+                allMatches: action.payload
+            };
+        case 'APP':
+            return {
+                ...state,
+                app: action.payload
             };    
-        case 'ODDS':
-            return {
-                ...state,
-                odds: action.payload
-            };
         case 'TOKEN':
             return {
                 ...state,
@@ -127,11 +136,51 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 oddsRu: action.payload
             };    
+        case 'MONEYWAY1X2':
+            return {
+                ...state,
+                moneyWay1x2: action.payload
+            };    
+        case 'MONEYWAYOVERUNDER':
+            return {
+                ...state,
+                moneyWayOverUnder: action.payload
+            };   
+        case 'DROPPINGODDS1X2':
+            return {
+                ...state,
+                droppingOdds1x2: action.payload
+            };   
+        case 'DROPPINGODDSOVERUNDER':
+            return {
+                ...state,
+                droppingOddsOverUnder: action.payload
+            };   
+        case 'CORRECTSCORE':
+            return {
+                ...state,
+                correctScore: action.payload
+            };                       
         case 'ISLOADING':
             return {
                 ...state,
                 isLoading: action.payload
-            };        
+            };     
+        case 'STATISTICS':
+            return {
+                ...state,
+                statistics: action.payload
+            };  
+        case 'HOMETEAM':
+            return {
+                ...state,
+                homeTeam: action.payload
+            };      
+        case 'AWAYTEAM':
+            return {
+                ...state,
+                awayTeam: action.payload
+            };                           
         default:
             return state;
     }

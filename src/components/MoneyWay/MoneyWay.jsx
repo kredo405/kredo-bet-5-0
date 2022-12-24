@@ -1,6 +1,7 @@
 import { Table } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import findTeam from '../../utils/findTeam';
+import { arbworldServices } from '../../services/arbworld';
 import { useSelector, useDispatch } from "react-redux";
 
 
@@ -33,30 +34,19 @@ const MoneyWay = (props) => {
         const getData = async () => {
 
             try {
-                const moneyWay1X2Element = props.moneyWay1X2.filter(item => findTeam(item.homeName, state.homeNameEng) && findTeam(item.homeAway, state.awayNameEng))
-                const moneyWayOverUnderElement = props.moneyWayOverUnder.filter(item => findTeam(item.homeName, state.homeNameEng) && findTeam(item.homeAway, state.awayNameEng))
+                const moneyWay1X2 = await arbworldServices.getMoneyWay1x2()
+                const moneyWayUnderOver = await arbworldServices.getMoneyWayUnderOver()
+                const correctScore = await arbworldServices.getcorrectScore()
+                const droppingOdds1X2 = await arbworldServices.getDroppingOdds1X2()
+                const droppingOddsUnderOver = await arbworldServices.getDroppingOddsUnderOver()
 
-                if (moneyWay1X2Element.length > 0) {
-                    const posPercentHome = moneyWay1X2Element[0].percentHome.indexOf('%')
-                    const posPercentDraw = moneyWay1X2Element[0].percentDraw.indexOf('%')
-                    const posPercentAway = moneyWay1X2Element[0].percentAway.indexOf('%')
-
-                    moneyWay1X2Element[0].percentHome = +moneyWay1X2Element[0].percentHome.slice(0, posPercentHome)
-                    moneyWay1X2Element[0].percentDraw = +moneyWay1X2Element[0].percentDraw.slice(0, posPercentDraw)
-                    moneyWay1X2Element[0].percentAway = +moneyWay1X2Element[0].percentAway.slice(0, posPercentAway)
-
-                    setMoneyWay1X2(moneyWay1X2Element[0])
-                }
-
-                if (moneyWayOverUnderElement.length > 0) {
-                    const posPercentOver = moneyWayOverUnderElement[0].percentOver.indexOf('%')
-                    const posPercentUnder = moneyWayOverUnderElement[0].percentUnder.indexOf('%')
-
-                    moneyWayOverUnderElement[0].percentOver = +moneyWayOverUnderElement[0].percentOver.slice(0, posPercentOver)
-                    moneyWayOverUnderElement[0].percentUnder = +moneyWayOverUnderElement[0].percentUnder.slice(0, posPercentUnder)
-
-                    setMoneyWayOverUnder(moneyWayOverUnderElement[0])
-                }
+                console.log(moneyWay1X2.data.moneyWay)
+                console.log(moneyWayUnderOver.data.moneyWay)
+                console.log(correctScore.data.moneyWay)
+                console.log(droppingOdds1X2.data.droppingOdds)
+                console.log(droppingOddsUnderOver.data.droppingOdds)
+       
+                
             }
             catch (error) {
                 console.log(error)

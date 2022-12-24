@@ -2,6 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Soccer365Services } from "../../services/soccer365";
+import { nbbetServices } from "../../services/nbbet";
 import { Empty, BackTop, Spin, Modal, Button } from 'antd';
 
 const errorModal = (message) => {
@@ -14,15 +15,16 @@ const Matches = () => {
     const [arrMatches, setArrayMatches] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const state = useSelector(state => state);
+    const dispatch = useDispatch();
     const history = useNavigate();
 
     const onClick = () => {
-        history('/live')
+        history('/live');
     }
 
     useEffect(() => {
         if (state.token === '') {
-            history('/')
+            history('/');
         }
 
         const getData = async () => {
@@ -34,38 +36,46 @@ const Matches = () => {
             { league: 'Чемпионат мира', country: '' }, { league: 'Серия B', country: 'Italy' }, { league: 'Суперлига', country: 'Turkey' },
             { league: 'Бундеслига 2', country: 'Germany' }, { league: 'Премьер-Лига', country: 'Ukraine' }, { league: 'Сегунда', country: 'Spain' },
             { league: 'Чемпионат Европы', country: '' }, { league: 'Первая лига', country: 'England' }, { league: 'Про-Лига', country: 'Belgium' }, { league: 'Экстракласса', country: 'Poland' },
-            { league: 'Серия A', country: 'Brazil' }, { league: 'Лига 2', country: 'France' },{ league: 'МЛС', country: 'United States of America' },
-             { league: 'Премьершип', country: 'Scotland' }, { league: 'Вторая лига', country: 'England' }, { league: 'Элитсерия', country: 'Norway' },
+            { league: 'Серия A', country: 'Brazil' }, { league: 'Лига 2', country: 'France' }, { league: 'МЛС', country: 'United States of America' },
+            { league: 'Премьершип', country: 'Scotland' }, { league: 'Вторая лига', country: 'England' }, { league: 'Элитсерия', country: 'Norway' },
             { league: 'Суперлига', country: 'Switzerland' }, { league: 'Суперлига', country: 'Greece' }, { league: 'Аллсвенскан', country: 'Sweden' },
             { league: 'Суперлига', country: 'Denmark' }, { league: 'Суперкубок', country: 'England' }, { league: 'Суперкубок УЕФА', country: '' },
             { league: 'Суперлига', country: 'Serbia' }, { league: 'Бундеслига', country: 'Austria' },
             { league: 'ПФГ А', country: 'Bulgaria' }, { league: 'Высшая лига', country: 'Georgia' },
             { league: 'Лига I', country: 'Romania' }, { league: 'Премьер-Лига', country: 'Israel' }, { league: 'J1 Лига', country: 'Japan' },
             { league: 'НБ I', country: 'Hungary' }, { league: 'Премьер-Лига', country: 'Azerbaijan' }, { league: 'Высшая лига', country: 'Latvia' },
-            { league: 'Премьер-Лига', country: 'Egypt' }, { league: 'Серия B', country: 'Brazil' }, { league: '1. ХФЛ', country: 'Croatia' }, 
+            { league: 'Премьер-Лига', country: 'Egypt' }, { league: 'Серия B', country: 'Brazil' }, { league: '1. ХФЛ', country: 'Croatia' },
             { league: 'Высший дивизион', country: 'Ireland' }, { league: 'Эрстедивизи', country: 'Netherlands' },
             { league: 'Премьер-Лига', country: 'Armenia' }, { league: 'Лига МХ', country: 'Mexico' }, { league: 'Примера А', country: 'Colombia' },
             { league: 'Примера Дивизион', country: 'Uruguay' }, { league: 'Вейккауслиига', country: 'Finland' }, { league: 'Премьершип', country: 'Northern%20Ireland' },
-            { league: 'Премьер-Лига', country: 'Saudi%20Arabia' }]
+            { league: 'Премьер-Лига', country: 'Saudi%20Arabia' }];
 
             try {
-                const matches = await Soccer365Services.getAllMatches()
-                console.log(matches)
-                const matchesFilter = []
+                const matches = await Soccer365Services.getAllMatches();
+                console.log(matches);
+                const matchesFilter = [];
 
                 matches.data.matches.forEach(el => {
                     leagues.forEach(item => {
                         if (el.leagueName === item.league && el.country === item.country) {
-                            matchesFilter.push(el) 
+                            matchesFilter.push(el);
                         }
                         if (el.leagueName === item.league && item.country === '') {
-                            matchesFilter.push(el) 
+                            matchesFilter.push(el);
                         }
                     })
 
                 })
-                setArrayMatches(matchesFilter)
-                setIsLoading(true)
+                setArrayMatches(matches.data.matches);
+
+                const allMatches = await nbbetServices.getAllMatches();
+
+                dispatch({
+                    type: 'ALLMATCHES',
+                    payload: allMatches.data.matches.data.leagues
+                });
+
+                setIsLoading(true);
             }
             catch (error) {
                 console.error(error)
@@ -81,7 +91,7 @@ const Matches = () => {
 
     if (arrMatches.length !== 0) {
         elements = arrMatches.map((el, i) => {
-            const matchElementFilter = el.matches.filter(item => item.date.length > 4 && item.date !== 'Завершен' && item.date !== 'Перерыв')
+            const matchElementFilter = el.matches.filter(item => item.date.length > 4)
             let matchElements = matchElementFilter.map((item, i) => {
                 return (
                     <div key={item.id} onClick={() => {
@@ -140,8 +150,6 @@ const Matches = () => {
         </div>
 
     }
-
-
 
     return (
         <div className="container lg:px-44 mt-20">

@@ -9,7 +9,11 @@ const findTeam = (name1, name2) => {
     if (name1.toLowerCase() === name2.toLowerCase()) {
         return true
     }
-
+    if (arrTeamNameSpace1.length === 2 && arrTeamNameSpace2.length === 3) {
+        if (arrTeamNameSpace1[0].toLowerCase() === arrTeamNameSpace2[0].toLowerCase() && arrTeamNameSpace1[1].toLowerCase() === arrTeamNameSpace2[1].toLowerCase()) {
+            return true
+        }
+    }
     if (arrTeamNameSpace1.length > 1 && arrTeamNameSpace2.length > 1) {
         if (arrTeamNameSpace1[0].toLowerCase() === arrTeamNameSpace2[0].toLowerCase() && arrTeamNameSpace1[1].toLowerCase() === arrTeamNameSpace2[1].toLowerCase()) {
             return true

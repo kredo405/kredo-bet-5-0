@@ -1,6 +1,5 @@
 import Home from './pages/home/Home';
 import Velcome from './pages/velcome/Velcome';
-import Live from './pages/live/Live';
 import Matches from './components/matches/Matches';
 import Authorization from './pages/authorization/Authorization';
 import Registration from './pages/registration/Registration';
@@ -16,18 +15,17 @@ function App(props) {
   dispatch({
     type: 'APP',
     payload: app,
-});
+  });
+
   return (
     <div className="app">
       <Routes>
         <Route path="/" element={<Velcome />} />
         <Route path="/auth" element={<Authorization />} />
-        <Route path="/registration" element={<Registration app={app}/>} />
+        <Route path="/registration" element={<Registration app={app} />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/live" element={<Live />} />
-        <Route path="/match" element={<Match />} />  
-        <Route path="/collectiveMind" element={<CollectiveMind />} />  
-        <Route path="/collectiveMindMatch" element={<CollectiveMindMatch />} />  
+        <Route path="/match" element={<Match />} />
+        <Route path="/collectiveMind" element={<CollectiveMind />} />
       </Routes>
     </div>
   );

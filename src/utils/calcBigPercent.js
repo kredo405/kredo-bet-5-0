@@ -1,78 +1,51 @@
-export const calcBigPercent = (percentPoison, percentMatches, percentWithScore, correctScore, matchOdds) => {
+export const calcBigPercent = (percentPoison, percentWithScore, matchOdds) => {
 
-    const calcPercent = (percentPoison, percentMatches, percentWithScore, correctScore) => {
-        if (percentPoison !== 0 && percentMatches !== 0 && percentWithScore !== 0 && correctScore !== 0) {
-            let result = (percentPoison + percentMatches + percentWithScore + correctScore) / 4
-            return result
-        }
-        if (percentPoison !== 0 && percentMatches === 0 && percentWithScore === 0 && correctScore === 0) {
-            let result = (percentPoison + percentMatches + percentWithScore + correctScore) / 4
-            return result
-        }
-        if (percentPoison !== 0 && percentMatches === 0 && percentWithScore === 0 && correctScore !== 0) {
-            let result = (percentPoison + percentMatches + percentWithScore + correctScore) / 4
-            return result
-        }
-        if (percentPoison !== 0 && percentMatches === 0 && percentWithScore !== 0 && correctScore === 0) {
-            let result = (percentPoison + percentMatches + percentWithScore + correctScore) / 4
-            return result
-        }
-        if (percentPoison !== 0 && percentMatches !== 0 && percentWithScore !== 0 && correctScore === 0) {
-            let result = (percentPoison + percentMatches + percentWithScore) / 3
-            return result
-        }
-        if (percentPoison !== 0 && percentMatches !== 0 && percentWithScore === 0 && correctScore === 0) {
-            let result = (percentPoison + percentMatches) / 2
-            return result
-        }
-        if (percentPoison !== 0 && percentMatches === 0 && percentWithScore !== 0 && correctScore !== 0) {
-            let result = (percentPoison + percentWithScore + correctScore) / 3
-            return result
-        }
-        if (percentPoison !== 0 && percentMatches === 0 && percentWithScore === 0 && correctScore !== 0) {
-            let result = (percentPoison + correctScore) / 2
-            return result
-        }
-        if (percentPoison !== 0 && percentMatches === 0 && percentWithScore !== 0 && correctScore === 0) {
+    const calcPercent = (percentPoison, percentWithScore) => {
+        if (percentPoison !== 0  && percentWithScore !== 0) {
             let result = (percentPoison + percentWithScore) / 2
             return result
         }
-        if (percentPoison !== 0 && percentMatches !== 0 && percentWithScore === 0 && correctScore !== 0) {
-            let result = (percentPoison + percentMatches + correctScore) / 3
+        if (percentPoison !== 0 && percentWithScore === 0) {
+            let result = percentPoison
             return result
         }
+        if (percentPoison === 0 && percentWithScore !== 0) {
+            let result = percentWithScore
+            return result
+        }
+
         return 0
     }
 
-    let btsNo = calcPercent(percentPoison.btsNo, percentMatches.btsNo, percentWithScore.btsNo, correctScore.btsNo)
-    let btsYes = calcPercent(percentPoison.btsYes, percentMatches.btsYes, percentWithScore.btsYes, correctScore.btsYes)
-    let draw = calcPercent(percentPoison.draw, percentMatches.draw, percentWithScore.draw, correctScore.draw)
-    let foraAwayMinus15 = calcPercent(percentPoison.foraAwayMinus15, percentMatches.foraAwayMinus15, percentWithScore.foraAwayMinus15, correctScore.foraAwayMinus15)
-    let foraAwayPlus15 = calcPercent(percentPoison.foraAwayPlus15, percentMatches.foraAwayPlus15, percentWithScore.foraAwayPlus15, correctScore.foraAwayPlus15)
-    let foraHomeMinus15 = calcPercent(percentPoison.foraHomeMinus15, percentMatches.foraHomeMinus15, percentWithScore.foraHomeMinus15, correctScore.foraHomeMinus15)
-    let foraHomePlus15 = calcPercent(percentPoison.foraHomePlus15, percentMatches.foraHomePlus15, percentWithScore.foraHomePlus15, correctScore.foraHomePlus15)
-    let it1O05 = calcPercent(percentPoison.it1O05, percentMatches.it1O05, percentWithScore.it1O05, correctScore.it1O05)
-    let it1O15 = calcPercent(percentPoison.it1O15, percentMatches.it1O15, percentWithScore.it1O15, correctScore.it1O15)
-    let it1O25 = calcPercent(percentPoison.it1O25, percentMatches.it1O25, percentWithScore.it1O25, correctScore.it1O25)
-    let it1U05 = calcPercent(percentPoison.it1U05, percentMatches.it1U05, percentWithScore.it1U05, correctScore.it1U05)
-    let it1U15 = calcPercent(percentPoison.it1U15, percentMatches.it1U15, percentWithScore.it1U15, correctScore.it1U15)
-    let it1U25 = calcPercent(percentPoison.it1U25, percentMatches.it1U25, percentWithScore.it1U25, correctScore.it1U25)
-    let it2O05 = calcPercent(percentPoison.it2O05, percentMatches.it2O05, percentWithScore.it2O05, correctScore.it2O05)
-    let it2O15 = calcPercent(percentPoison.it2O15, percentMatches.it2O15, percentWithScore.it2O15, correctScore.it2O15)
-    let it2O25 = calcPercent(percentPoison.it2O25, percentMatches.it2O25, percentWithScore.it2O25, correctScore.it2O25)
-    let it2U05 = calcPercent(percentPoison.it2U05, percentMatches.it2U05, percentWithScore.it2U05, correctScore.it2U05)
-    let it2U15 = calcPercent(percentPoison.it2U15, percentMatches.it2U15, percentWithScore.it2U15, correctScore.it2U15)
-    let it2U25 = calcPercent(percentPoison.it2U25, percentMatches.it2U25, percentWithScore.it2U25, correctScore.it2U25)
-    let to15 = calcPercent(percentPoison.to15, percentMatches.to15, percentWithScore.to15, correctScore.to15)
-    let to25 = calcPercent(percentPoison.to25, percentMatches.to25, percentWithScore.to25, correctScore.to25)
-    let to35 = calcPercent(percentPoison.to35, percentMatches.to35, percentWithScore.to35, correctScore.to35)
-    let tu15 = calcPercent(percentPoison.tu15, percentMatches.tu15, percentWithScore.tu15, correctScore.tu15)
-    let tu25 = calcPercent(percentPoison.tu25, percentMatches.tu25, percentWithScore.tu25, correctScore.tu25)
-    let tu35 = calcPercent(percentPoison.tu35, percentMatches.tu35, percentWithScore.tu35, correctScore.tu35)
-    let winOrDrawHome = calcPercent(percentPoison.winOrDrawHome, percentMatches.winOrDrawHome, percentWithScore.winOrDrawHome, correctScore.winOrDrawHome)
-    let winOrdrawAway = calcPercent(percentPoison.winOrdrawAway, percentMatches.winOrdrawAway, percentWithScore.winOrdrawAway, correctScore.winOrdrawAway)
-    let winnerAway = calcPercent(percentPoison.winnerAway, percentMatches.winnerAway, percentWithScore.winnerAway, correctScore.winnerAway)
-    let winnerHome = calcPercent(percentPoison.winnerHome, percentMatches.winnerHome, percentWithScore.winnerHome, correctScore.winnerHome)
+    let btsNo = calcPercent(percentPoison.btsNo,  percentWithScore.btsNo)
+    let btsYes = calcPercent(percentPoison.btsYes,  percentWithScore.btsYes)
+    let draw = calcPercent(percentPoison.draw, percentWithScore.draw)
+    let foraAwayMinus15 = calcPercent(percentPoison.foraAwayMinus15, percentWithScore.foraAwayMinus15)
+    let foraAwayPlus15 = calcPercent(percentPoison.foraAwayPlus15, percentWithScore.foraAwayPlus15)
+    let foraHomeMinus15 = calcPercent(percentPoison.foraHomeMinus15, percentWithScore.foraHomeMinus15)
+    let foraHomePlus15 = calcPercent(percentPoison.foraHomePlus15, percentWithScore.foraHomePlus15)
+    let it1O05 = calcPercent(percentPoison.it1O05, percentWithScore.it1O05)
+    let it1O15 = calcPercent(percentPoison.it1O15, percentWithScore.it1O15)
+    let it1O25 = calcPercent(percentPoison.it1O25, percentWithScore.it1O25)
+    let it1U05 = calcPercent(percentPoison.it1U05, percentWithScore.it1U05)
+    let it1U15 = calcPercent(percentPoison.it1U15, percentWithScore.it1U15)
+    let it1U25 = calcPercent(percentPoison.it1U25, percentWithScore.it1U25)
+    let it2O05 = calcPercent(percentPoison.it2O05, percentWithScore.it2O05)
+    let it2O15 = calcPercent(percentPoison.it2O15, percentWithScore.it2O15)
+    let it2O25 = calcPercent(percentPoison.it2O25, percentWithScore.it2O25)
+    let it2U05 = calcPercent(percentPoison.it2U05, percentWithScore.it2U05)
+    let it2U15 = calcPercent(percentPoison.it2U15, percentWithScore.it2U15)
+    let it2U25 = calcPercent(percentPoison.it2U25, percentWithScore.it2U25)
+    let to15 = calcPercent(percentPoison.to15, percentWithScore.to15)
+    let to25 = calcPercent(percentPoison.to25, percentWithScore.to25)
+    let to35 = calcPercent(percentPoison.to35, percentWithScore.to35)
+    let tu15 = calcPercent(percentPoison.tu15, percentWithScore.tu15)
+    let tu25 = calcPercent(percentPoison.tu25, percentWithScore.tu25)
+    let tu35 = calcPercent(percentPoison.tu35, percentWithScore.tu35)
+    let winOrDrawHome = calcPercent(percentPoison.winOrDrawHome, percentWithScore.winOrDrawHome)
+    let winOrdrawAway = calcPercent(percentPoison.winOrdrawAway, percentWithScore.winOrdrawAway)
+    let winnerAway = calcPercent(percentPoison.winnerAway, percentWithScore.winnerAway)
+    let winnerHome = calcPercent(percentPoison.winnerHome, percentWithScore.winnerHome)
 
     const arrOutcomes = []
 

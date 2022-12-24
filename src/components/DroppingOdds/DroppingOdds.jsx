@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import findTeam from '../../utils/findTeam';
 
-const DroppingOdds = ({droppingOdds1X2, droppingOddsOverUnder, homeName, awayName}) => {
+const DroppingOdds = ({homeName, awayName}) => {
    
     const state = useSelector(state => state);
     const [droppingOddsWinner, setDroppingOddsWinner] = useState(
@@ -28,8 +28,8 @@ const DroppingOdds = ({droppingOdds1X2, droppingOddsOverUnder, homeName, awayNam
     )
 
     useEffect(() => {
-        const droppingOdds1x2Filter = droppingOdds1X2.filter(item => findTeam(item.homeName, state.homeNameEng) && findTeam(item.homeAway, state.awayNameEng))
-        const droppingOddsOverUnderFilter = droppingOddsOverUnder.filter(item => findTeam(item.homeName, state.homeNameEng) && findTeam(item.homeAway, state.awayNameEng))
+        const droppingOdds1x2Filter = state.droppingOdds1x2.filter(item => findTeam(item.homeName, state.homeNameEng) && findTeam(item.homeAway, state.awayNameEng))
+        const droppingOddsOverUnderFilter = state.droppingOddsOverUnder.filter(item => findTeam(item.homeName, state.homeNameEng) && findTeam(item.homeAway, state.awayNameEng))
     
         console.log(droppingOdds1x2Filter)
         console.log(droppingOddsOverUnderFilter)
@@ -44,7 +44,6 @@ const DroppingOdds = ({droppingOdds1X2, droppingOddsOverUnder, homeName, awayNam
     }, [])
 
     
-
     return (
         <div className='container'>
             <div className="flex justify-center py-2">

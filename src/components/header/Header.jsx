@@ -3,12 +3,20 @@ import logo from './kredi-logo.png'
 import { Link } from 'react-router-dom';
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
+import { MenuIcon, XIcon } from '@heroicons/react/outline'
 
 const navigation = [
   { name: 'Матчи', href: '/home', current: true },
-  { name: 'Live', href: '/live', current: false },
 ]
+
+const changeCurrent = (e) => {
+  navigation.forEach(el => {
+    el.current = false
+    if(el.name === e.target.name) {
+      el.current = !el.current
+    }
+  })
+}
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -61,6 +69,8 @@ const Header = (props) => {
                         <Link
                           key={item.name}
                           to={item.href}
+                          name={item.name}
+                          onClick={changeCurrent}
                           className={classNames(
                             item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                             'px-3 py-2 rounded-md text-sm font-medium'

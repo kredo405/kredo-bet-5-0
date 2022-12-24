@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 import { Popover } from '@headlessui/react'
-import { oddsServices } from '../../services/odds';
+import { nbbetServices } from '../../services/nbbet';
 import { predictionsServices } from '../../services/predctions';
+import { arbworldServices } from '../../services/arbworld';
 import { useEffect } from 'react';
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Modal } from 'antd';
-import moment from 'moment';
 import logo from './Kredo-bet.png';
 import fon2 from './fon2.png';
 
@@ -18,48 +18,43 @@ const errorModal = (message) => {
 export default function Velcome() {
 
   const dispatch = useDispatch();
-
+  
   useEffect(() => {
     const getInfo = async () => {
-      try {
-        const odds = await oddsServices.getAllOdds()
+      try {     
         const euroFootball = await predictionsServices.getEuroFootball()
         const betzona = await predictionsServices.getBetzona()
         const legalbet = await predictionsServices.getLegalbet()
         const liveresult = await predictionsServices.getLiveresult()
         const stavkiprognozy = await predictionsServices.getStavkiprognozy()
         const oddsRu = await predictionsServices.getOddsRu()
+        const correctScore = await arbworldServices.getcorrectScore()
+        const moneyWay1X2 = await arbworldServices.getMoneyWay1x2()
+        const moneyWayUnderOver = await arbworldServices.getMoneyWayUnderOver()
+        const droppingOdds1X2 = await arbworldServices.getDroppingOdds1X2()
+        const droppingOddsOverUnder = await arbworldServices.getDroppingOddsUnderOver()
 
-        const arrOdds = odds.data.filter(el => moment().format("YYYY-MM-DD") === el.date_start.slice(0, 10))
-
-        const arrData = arrOdds.map(el => {
-          return {
-            date_start: el.date_start,
-            team1: el.team1,
-            team2: el.team2,
-            team1_rus: el.team1_rus,
-            team2_rus: el.team2_rus,
-            markets: {
-              bothToScore: el.markets.bothToScore,
-              handicaps1: el.markets.handicaps1,
-              handicaps2: el.markets.handicaps2,
-              totals: el.markets.totals,
-              totals1: el.markets.totals1,
-              totals2: el.markets.totals2,
-              win1: el.markets.win1,
-              win1X: el.markets.win1X,
-              win2: el.markets.win2,
-              winX: el.markets.winX,
-              winX2: el.markets.winX2,
-            }
-          }
-        })
-
-        console.log(arrData)
         dispatch({
-          type: 'ODDS',
-          payload: arrData
+          type: 'CORRECTSCORE',
+          payload: correctScore.data.moneyWay
         });
+        dispatch({
+          type: 'MONEYWAY1X2',
+          payload: moneyWay1X2.data.moneyWay
+        });
+        dispatch({
+          type: 'MONEYWAYOVERUNDER',
+          payload: moneyWayUnderOver.data.moneyWay
+        });
+        dispatch({
+          type: 'DROPPINGODDS1X2',
+          payload: droppingOdds1X2.data.droppingOdds
+        });
+        dispatch({
+          type: 'DROPPINGODDSOVERUNDER',
+          payload: droppingOddsOverUnder.data.droppingOdds
+        });
+
         dispatch({
           type: 'BETZONA',
           payload: betzona.data.predicitons
@@ -84,7 +79,6 @@ export default function Velcome() {
           type: 'ODDSRU',
           payload: oddsRu.data.predicitons
         });
-
       }
       catch (error) {
         console.log(error)

@@ -22,14 +22,14 @@ const ToolsPrediction = (props) => {
         odds: 0,
         percent: 0
     }])
-    const [correctScoreMatch, setCorrectScoreMatch] = useState([
-        {score0_0: 0}, {score0_1: 0}, {score0_2: 0}, 
-        {score0_3: 0}, {score1_0: 0}, {score1_1: 0},
-        {score1_2: 0}, {score1_3: 0}, {score2_0: 0}, 
-        {score2_1: 0}, {score2_2: 0}, {score2_3: 0},
-        {score3_0: 0}, {score3_1: 0}, {score3_2: 0},  
-        {score3_3: 0}
-    ])
+    // const [correctScoreMatch, setCorrectScoreMatch] = useState([
+    //     {score0_0: 0}, {score0_1: 0}, {score0_2: 0}, 
+    //     {score0_3: 0}, {score1_0: 0}, {score1_1: 0},
+    //     {score1_2: 0}, {score1_3: 0}, {score2_0: 0}, 
+    //     {score2_1: 0}, {score2_2: 0}, {score2_3: 0},
+    //     {score3_0: 0}, {score3_1: 0}, {score3_2: 0},  
+    //     {score3_3: 0}
+    // ])
     const matchOdds = {
         date_start: '',
         team1_rus: '',
@@ -66,81 +66,10 @@ const ToolsPrediction = (props) => {
     const { percentPoison, percentMatches, percentWithScore, correctScore, homeName, awayName } = props;
 
     useEffect(() => {
-        const odds = state.odds.filter(el => {
-            if (el.team1_rus && el.team2_rus) {
-                if (findTeam(el.team1_rus, homeName) && findTeam(el.team2_rus, awayName)) {
-
-                    const totals = el.markets.totals.filter(bet => bet.type === 1.5 || bet.type === 2.5 || bet.type === 3.5)
-                    const totals1 = el.markets.totals1.filter(bet => bet.type === 0.5 || bet.type === 1.5 || bet.type === 2.5)
-                    const totals2 = el.markets.totals2.filter(bet => bet.type === 0.5 || bet.type === 1.5 || bet.type === 2.5)
-                    const handicap1 = el.markets.handicaps1.filter(bet => bet.type === 1.5 || bet.type === -1.5)
-                    const handicap2 = el.markets.handicaps2.filter(bet => bet.type === 1.5 || bet.type === -1.5)
-
-                    const objOdds = {
-                        date_start: el.date_start,
-                        team1_rus: el.team1_rus,
-                        team2_rus: el.team2_rus,
-                        team1: el.team1,
-                        team2: el.team2,
-                        markets: {
-                            bothToScore: el.markets.bothToScore,
-                            handicaps1: [
-                                handicap1.find(item => item.type === 1.5),
-                                handicap1.find(item => item.type === -1.5),
-                            ],
-                            handicaps2: [
-                                handicap2.find(item => item.type === 1.5),
-                                handicap2.find(item => item.type === -1.5),
-                            ],
-                            totals: [
-                                totals.find(item => item.type === 1.5),
-                                totals.find(item => item.type === 2.5),
-                                totals.find(item => item.type === 3.5),
-                            ],
-                            totals1: [
-                                totals1.find(item => item.type === 0.5),
-                                totals1.find(item => item.type === 1.5),
-                                totals1.find(item => item.type === 2.5),
-                            ],
-                            totals2: [
-                                totals2.find(item => item.type === 0.5),
-                                totals2.find(item => item.type === 1.5),
-                                totals2.find(item => item.type === 2.5),
-                            ],
-                            win1: el.markets.win1,
-                            win1X: el.markets.win1X,
-                            win2: el.markets.win2,
-                            winX: el.markets.winX,
-                            winX2: el.markets.winX2,
-                        }
-                    }
-                    dispatch({
-                        type: 'HOMENAMEENG',
-                        payload: el.team1
-                    })
-
-                    dispatch({
-                        type: 'AWAYNAMEENG',
-                        payload: el.team2
-                    })
-                    console.log(objOdds)
-                    return objOdds
-                }
-            }
-        })
-
-        console.log(odds)
-
-        const correctScoreMatch = correctScore.filter(item => findTeam(item.homeName, state.homeNameEng) && findTeam(item.awayName, state.awayNameEng))
-
-        console.log(correctScoreMatch)
-        if(correctScoreMatch.length > 0) {
-            setCorrectScoreMatch(correctScoreMatch[0].scores)
-        }
-      
+     
         // Вычисляем самые большие вероятности
-        const outcomesBigPercent = calcBigPercent(percentPoison, percentMatches, percentWithScore,
-            correctScoreMatch.length !== 0 ? correctScoreMatch[0].percentOutcomes : percentObj, odds.length !== 0 ? odds[0] : matchOdds)
+
+        const outcomesBigPercent = calcBigPercent(percentPoison, percentWithScore, matchOdds)
 
         setElementsPropobility(outcomesBigPercent)
     }, [state.odds])
@@ -154,7 +83,7 @@ const ToolsPrediction = (props) => {
             <tr key={i}>
                 <td><p className="font-medium font-sans text-orange-900">{el.outcomes}</p></td>
                 <td><p className={el.percent >= 65 ? green : el.percent < 65 && el.percent >= 50 ? blue : rose}>{el.percent.toFixed(0)}</p></td>
-                <td><p className="font-medium font-sans text-orange-900">{`${el.odds.toFixed(2)} (${(100 / +el.odds).toFixed(0)}%)`}</p></td>
+                <td><p className="font-medium font-sans text-orange-900">{`${el.odds.toFixed(2)} (${el.odds ? (100 / +el.odds).toFixed(0) : 0}%)`}</p></td>
             </tr>
         )
     })
@@ -175,7 +104,7 @@ const ToolsPrediction = (props) => {
                     </tbody>
                 </Table>
                 <Predictions homeName={props.homeName} awayName={props.awayName} />
-                <Scores homeName={props.homeName} awayName={props.awayName} correctScoreMatch={correctScoreMatch}/>
+                {/* <Scores homeName={props.homeName} awayName={props.awayName} correctScoreMatch={correctScoreMatch}/> */}
             </div>
         </>
     )

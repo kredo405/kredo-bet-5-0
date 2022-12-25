@@ -61,6 +61,7 @@ const Match = () => {
                 console.log(matchNbbet)
                 sessionStorage.setItem('link', matchNbbet[3]);
                 const matchesInfoNbbet = await nbbetServices.getMatchInfo();
+                console.log(matchesInfoNbbet)
                 setInfo(matchesInfoNbbet.data.match.data.match)
 
                 setTimeout(() => {

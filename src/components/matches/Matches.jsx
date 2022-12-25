@@ -65,8 +65,9 @@ const Matches = () => {
                         }
                     })
 
-                })
-                setArrayMatches(matches.data.matches);
+                });
+
+                setArrayMatches(matchesFilter);
 
                 const allMatches = await nbbetServices.getAllMatches();
 
@@ -91,7 +92,7 @@ const Matches = () => {
 
     if (arrMatches.length !== 0) {
         elements = arrMatches.map((el, i) => {
-            const matchElementFilter = el.matches.filter(item => item.date.length > 4)
+            const matchElementFilter = el.matches.filter(item => item.date.length > 4 && item.date !== 'Перерыв' && item.date !== 'Завершен')
             let matchElements = matchElementFilter.map((item, i) => {
                 return (
                     <div key={item.id} onClick={() => {

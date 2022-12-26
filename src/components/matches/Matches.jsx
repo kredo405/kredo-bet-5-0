@@ -67,7 +67,7 @@ const Matches = () => {
 
                 });
 
-                setArrayMatches(matchesFilter);
+                setArrayMatches(matches.data.matches);
 
                 const allMatches = await nbbetServices.getAllMatches();
 

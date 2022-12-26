@@ -4,10 +4,21 @@ import Motivation from "../Motivation/Motivation";
 import InjuredPlayers from "../InjuredPlyers/InjuredPlayers";
 import FieldFactor from "../FieldFactor/FieldFactor";
 import Calendar from "../Calendar/Calendar";
+import Facts from "../Facts/Facts";
+import Trends from "../Trends/Trends";
+import MoneyWay from "../MoneyWay/MoneyWay";
+import Standings from "../Standings/Standings";
 
 const Analitics = (props) => {
     const { data, form, info, homeName, awayName } = props;
-    const relevanceTeam = relevance(info.teams_form.home.matches, info.teams_form.away.matches)
+    let relevanceTeam = {
+        percentHome: 50,
+        percentAway: 50
+    };
+    if(info.teams_form.home) {
+       relevanceTeam = relevance(info.teams_form.home.matches, info.teams_form.away.matches)
+    }
+    
 
     return (
         <>
@@ -48,6 +59,16 @@ const Analitics = (props) => {
                     form={form}
                     info={info}
                 />
+                <Facts
+                    info={info}
+                />
+                <Standings
+                    info={info}
+                />
+                <Trends
+                    info={info}
+                />
+                <MoneyWay />
             </div>
         </>
     )

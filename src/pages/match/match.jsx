@@ -22,6 +22,7 @@ const Match = () => {
     const [data, setData] = useState({});
     const [form, setForm] = useState('');
     const [info, setInfo] = useState({});
+    const [predictions, setPredictions] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const state = useSelector(state => state);
 
@@ -62,7 +63,10 @@ const Match = () => {
                 sessionStorage.setItem('link', matchNbbet[3]);
                 const matchesInfoNbbet = await nbbetServices.getMatchInfo();
                 console.log(matchesInfoNbbet)
-                setInfo(matchesInfoNbbet.data.match.data.match)
+                setInfo(matchesInfoNbbet.data.match.data.match);
+                const matchesPredictionsNbbet = await nbbetServices.getMatchPredictions();
+                console.log(matchesPredictionsNbbet);
+                setPredictions(matchesPredictionsNbbet.data.match.data)
 
                 setTimeout(() => {
                     setIsLoading(true);
@@ -200,6 +204,7 @@ const Match = () => {
                                     data={data.predictions}
                                     form={form}
                                     info={info}
+                                    predictions={predictions}
                                     homeName={data.homeTeam}
                                     awayName={data.awayTeam}
                                 />

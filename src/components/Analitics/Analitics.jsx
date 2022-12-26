@@ -8,9 +8,10 @@ import Facts from "../Facts/Facts";
 import Trends from "../Trends/Trends";
 import MoneyWay from "../MoneyWay/MoneyWay";
 import Standings from "../Standings/Standings";
+import PredicitonsNbBet from "../PredicitonsNbBet/PredicitionsNbBet";
 
 const Analitics = (props) => {
-    const { data, form, info, homeName, awayName } = props;
+    const { data, form, info, predictions, homeName, awayName } = props;
     let relevanceTeam = {
         percentHome: 50,
         percentAway: 50
@@ -67,6 +68,9 @@ const Analitics = (props) => {
                 />
                 <Trends
                     info={info}
+                />
+                <PredicitonsNbBet 
+                    predictions={predictions}
                 />
                 <MoneyWay />
             </div>

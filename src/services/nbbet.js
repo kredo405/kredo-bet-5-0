@@ -31,4 +31,16 @@ export const nbbetServices = {
 
         return axios.request(options);
     },
+
+    async getMatchPredictions() {
+        const options = {
+            method: 'GET',
+            url: 'https://node-api-ochre.vercel.app/nbbetPredict',
+            params: {
+                link: `${sessionStorage.getItem('link')}`
+            }
+        };
+
+        return axios.request(options);
+    },
 }

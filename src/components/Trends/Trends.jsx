@@ -16,7 +16,7 @@ const Trends = ({ info }) => {
                         <span className="font-bold text-orange-600">10/13</span>
                     </div>
                 </li>
-    )
+    );
 
     useEffect(() => {
         const getDataOdds = async () => {
@@ -87,7 +87,7 @@ const Trends = ({ info }) => {
         });
 
         setElements(elements)
-    }, [odds])
+    }, [odds]);
 
 
     return (

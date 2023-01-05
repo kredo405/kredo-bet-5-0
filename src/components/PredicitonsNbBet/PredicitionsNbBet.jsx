@@ -63,7 +63,7 @@ const PredicitonsNbBet = ({ predictions }) => {
 
         const elements = newArr.map((el, i) => {
             return (
-                <li className="flex justify-around border-y-2 border-gray-100 border-solid py-3">
+                <li key={i} className="flex justify-around border-y-2 border-gray-100 border-solid py-3">
                     <div className="font-semibold flex justify-center w-3/12">
                         <p className="text-center">{el.rank}</p>
                     </div>
@@ -102,7 +102,7 @@ const PredicitonsNbBet = ({ predictions }) => {
                     Прибыль
                 </div>
             </div>
-            <ul className="flex flex-col overflow-y-scroll h-56 px-3">
+            <ul className="flex flex-col overflow-y-scroll h-96 px-3">
                 {elements}
             </ul>
         </>

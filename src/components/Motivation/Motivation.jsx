@@ -5,7 +5,7 @@ const Motivation = (props) => {
     const pos = props.info.motivation[0].current_match_text.indexOf('</strong>')
     return (
         <>
-            <div className="flex justify-center mb-3">
+            <div className="flex justify-center mt-2 mb-3">
                 <h2 className='text-center py-3 font-serif text-xl font-bold text-slate-600'>Мотивация</h2>
             </div>
             <div className="flex justify-evenly">

@@ -51,14 +51,14 @@ const Calendar = ({ form, info }) => {
                 </ProgressBar>
             </div>
             <div>
-                <h3 className='text-center font-bold my-3'>Следующая игра</h3>
+                <h3 className='text-center font-bold my-5'>Следующая игра</h3>
                 <div className="flex justify-between mb-2">
                     <span className='font-semibold'>{info.motivation[0].next_match.text.slice(posHome)}</span>
                     <span className='font-semibold'>{info.motivation[1].next_match.text.slice(posAway)}</span>
                 </div>
                 <div className="flex justify-between mb-2">
-                    <span className='text-xs'>{`${info.motivation[0].next_match.team1_name}-${info.motivation[0].next_match.team2_name}`}</span>
-                    <span className='text-xs'>{`${info.motivation[1].next_match.team1_name}-${info.motivation[1].next_match.team2_name}`}</span>
+                    <div className='flex justify-start'><span className='text-xs text-center'>{`${info.motivation[0].next_match.team1_name}-${info.motivation[0].next_match.team2_name}`}</span></div>
+                    <div className='flex justify-start'><span className='text-xs text-center'>{`${info.motivation[1].next_match.team1_name}-${info.motivation[1].next_match.team2_name}`}</span></div>
                 </div>
             </div>
         </>

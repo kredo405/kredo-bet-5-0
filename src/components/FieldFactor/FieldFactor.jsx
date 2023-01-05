@@ -61,7 +61,7 @@ const FieldFactor = ({ info }) => {
             <div className="flex justify-center mb-3">
                 <h2 className='text-center py-3 font-serif text-xl font-bold text-slate-600'>Фактор поля</h2>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between md:justify-around lg:justify-evenly">
                 <div className='flex flex-col'>
                     <h3 className='text-center mb-3 font-bold'>{info.team1_name}</h3>
                     <div className="flex">

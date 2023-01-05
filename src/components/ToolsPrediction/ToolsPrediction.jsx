@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { Table } from 'react-bootstrap';
 import Predictions from "../Predictions/Predictions";
 import { Modal } from 'antd';
-import findTeam from "../../utils/findTeam";
 import { calcBigPercent } from "../../utils/calcBigPercent";
-import { percentObj } from "../../utils/percentObj";
-import Scores from "../scores/Scores";
+
 
 const errorModal = (message) => {
     Modal.error({
@@ -21,58 +20,38 @@ const ToolsPrediction = (props) => {
         outcomes: '',
         odds: 0,
         percent: 0
-    }])
-    // const [correctScoreMatch, setCorrectScoreMatch] = useState([
-    //     {score0_0: 0}, {score0_1: 0}, {score0_2: 0}, 
-    //     {score0_3: 0}, {score1_0: 0}, {score1_1: 0},
-    //     {score1_2: 0}, {score1_3: 0}, {score2_0: 0}, 
-    //     {score2_1: 0}, {score2_2: 0}, {score2_3: 0},
-    //     {score3_0: 0}, {score3_1: 0}, {score3_2: 0},  
-    //     {score3_3: 0}
-    // ])
-    const matchOdds = {
-        date_start: '',
-        team1_rus: '',
-        team2_rus: '',
-        markets: {
-            bothToScore: {
-                no: { v: 0 },
-                yes: { v: 0 },
-            },
-            handicaps1: [{ type: -1.5, v: 0 }, { type: 1.5, v: 0 }],
-            handicaps2: [{ type: -1.5, v: 0 }, { type: 1.5, v: 0 }],
-            totals: [
-                { over: { v: 0 }, type: 1.5, under: { v: 0 } },
-                { over: { v: 0 }, type: 2.5, under: { v: 0 } },
-                { over: { v: 0 }, type: 3.5, under: { v: 0 } },
-            ],
-            totals1: [
-                { type: 0.5, over: { v: 0 }, under: { v: 0 } },
-                { type: 1.5, over: { v: 0 }, under: { v: 0 } },
-                { type: 2.5, over: { v: 0 }, under: { v: 0 } },
-            ],
-            totals2: [
-                { type: 0.5, over: { v: 0 }, under: { v: 0 } },
-                { type: 1.5, over: { v: 0 }, under: { v: 0 } },
-                { type: 2.5, over: { v: 0 }, under: { v: 0 } },
-            ],
-            win1: { v: 0 },
-            win1X: { v: 0 },
-            win2: { v: 0 },
-            winX: { v: 0 },
-            winX2: { v: 0 },
+    }]);
+    const [odds, setOdds] = useState({ odds: [{ name: "Победа 1", odd: "1" }] });
+
+    const { percentPoison, percentWithScore, info} = props;
+
+    useEffect(() => {
+        const getDataOdds = async () => {
+            const db = getFirestore(state.app);
+            const docRef = doc(db, "decodingOdds", "odds");
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                console.log(docSnap.data());
+                setOdds(docSnap.data());
+            } else {
+                console.log("No such document!");
+            }
         }
-    }
-    const { percentPoison, percentMatches, percentWithScore, correctScore, homeName, awayName } = props;
+
+        getDataOdds();
+    }, [])
 
     useEffect(() => {
      
-        // Вычисляем самые большие вероятности
+        const outcomesBigPercent = calcBigPercent(percentPoison, percentWithScore, odds.odds, info.current_odds);
 
-        const outcomesBigPercent = calcBigPercent(percentPoison, percentWithScore, matchOdds)
-
-        setElementsPropobility(outcomesBigPercent)
-    }, [state.odds])
+        dispatch({
+            type: 'OUTCOMES',
+            payload: outcomesBigPercent.arrOutcomesForPredictions
+        })
+        setElementsPropobility(outcomesBigPercent.arrOutcomes);
+    }, [odds]);
 
     const green = 'bg-green-200 flex justify-center font-mono';
     const rose = 'bg-rose-200 flex justify-center font-mono';
@@ -82,7 +61,7 @@ const ToolsPrediction = (props) => {
         return (
             <tr key={i}>
                 <td><p className="font-medium font-sans text-orange-900">{el.outcomes}</p></td>
-                <td><p className={el.percent >= 65 ? green : el.percent < 65 && el.percent >= 50 ? blue : rose}>{el.percent.toFixed(0)}</p></td>
+                <td><p className={el.percent >= 65 ? green : el.percent < 65 && el.percent >= 50 ? blue : rose}>{el.percent.toFixed(0)}%</p></td>
                 <td><p className="font-medium font-sans text-orange-900">{`${el.odds.toFixed(2)} (${el.odds ? (100 / +el.odds).toFixed(0) : 0}%)`}</p></td>
             </tr>
         )
@@ -104,7 +83,6 @@ const ToolsPrediction = (props) => {
                     </tbody>
                 </Table>
                 <Predictions homeName={props.homeName} awayName={props.awayName} />
-                {/* <Scores homeName={props.homeName} awayName={props.awayName} correctScoreMatch={correctScoreMatch}/> */}
             </div>
         </>
     )

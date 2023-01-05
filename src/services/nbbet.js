@@ -26,6 +26,7 @@ export const nbbetServices = {
             url: 'https://node-api-ochre.vercel.app/nbbetMatch',
             params: {
                 link: `${sessionStorage.getItem('link')}`
+                // link: '862150-manchester-yunayted-bornmut-prognoz-na-match'
             }
         };
 
@@ -38,6 +39,7 @@ export const nbbetServices = {
             url: 'https://node-api-ochre.vercel.app/nbbetPredict',
             params: {
                 link: `${sessionStorage.getItem('link')}`
+                // link: '862150-manchester-yunayted-bornmut-prognoz-na-match'
             }
         };
 

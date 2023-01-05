@@ -1,48 +1,88 @@
 import { Avatar, List } from 'antd';
+import { doc, getDoc, getFirestore } from "firebase/firestore";
+import { useState } from "react";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const Facts = ({ info }) => {
+    const [odds, setOdds] = useState({ odds: [{ name: "Победа 1", odd: "1" }] });
+    const [elements, setElements] = useState([['Загрузка...', '...']]);
+    const state = useSelector(state => state);
 
-    const newArrFacts = info.facts.map(el => {
-        const arr1 = el[0].split('>');
-        const arr2 = arr1.map(item => {
-            if (item === '<strong') {
-                return '';
-            }
-            const pos1 = item.indexOf('<strong');
-            let str1 = '';
+    useEffect(() => {
+        const getDataOdds = async () => {
+            const db = getFirestore(state.app);
+            const docRef = doc(db, "decodingOdds", "odds");
+            const docSnap = await getDoc(docRef);
 
-            if (pos1 !== -1) {
-                str1 = item.slice(0, pos1);
-            };
+            if (docSnap.exists()) {
+                console.log(docSnap.data());
+                setOdds(docSnap.data());
 
-            if (str1 === '') {
-                return item
-            }
-            if (str1 !== '') {
-                return str1
-            }
-        });
-        const arr3 = arr2.map(item => {
-            if (item === '</strong') {
-                return '';
-            }
-            const pos1 = item.indexOf('</strong');
-            let str1 = '';
+                const newArrFacts = info.facts.map(el => {
+                    const arr1 = el[0].split('>');
+                    const arr2 = arr1.map(item => {
+                        if (item === '<strong') {
+                            return '';
+                        }
+                        const pos1 = item.indexOf('<strong');
+                        let str1 = '';
+            
+                        if (pos1 !== -1) {
+                            str1 = item.slice(0, pos1);
+                        };
+            
+                        if (str1 === '') {
+                            return item
+                        }
+                        if (str1 !== '') {
+                            return str1
+                        }
+                    });
+                    const arr3 = arr2.map(item => {
+                        if (item === '</strong') {
+                            return '';
+                        }
+                        const pos1 = item.indexOf('</strong');
+                        let str1 = '';
+            
+                        if (pos1 !== -1) {
+                            str1 = item.slice(0, pos1);
+                        };
+            
+                        if (str1 === '') {
+                            return item
+                        }
+                        if (str1 !== '') {
+                            return str1
+                        }
+                    });
+            
+                    return [arr3.join(' '), el[1]];
+                });
+            
+                const elements = newArrFacts.map(el => {
+                    const arr = [];
+                    docSnap.data().odds.forEach(element => {
+                        if(+element.odd === el[1]) {
+                            arr.push(el[0]);
+                            arr.push(element.name);
+                        }
+                    });
 
-            if (pos1 !== -1) {
-                str1 = item.slice(0, pos1);
-            };
+                    return arr;
+                });
+                console.log(elements)
 
-            if (str1 === '') {
-                return item
+                setElements(elements);
+            } else {
+                console.log("No such document!");
             }
-            if (str1 !== '') {
-                return str1
-            }
-        });
+        }
 
-        return [arr3.join(' '), el[1]];
-    })
+        getDataOdds();
+
+    }, []);
 
     return (
         <>
@@ -52,7 +92,7 @@ const Facts = ({ info }) => {
             <div>
                 <List
                     itemLayout="horizontal"
-                    dataSource={newArrFacts}
+                    dataSource={elements}
                     renderItem={(item) => (
                         <List.Item>
                             <List.Item.Meta

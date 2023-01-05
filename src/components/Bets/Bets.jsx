@@ -60,7 +60,7 @@ const Bets = ({ data, form, info, homeName, awayName }) => {
         <>
             <div className="constainer">
                 <div className="flex justify-center mb-3">
-                    <h1 className='text-center py-3 font-serif text-2xl font-bold text-slate-600'>Ставки с найбольшей вероятностью прохода</h1>
+                    <h1 className='text-center py-3 font-serif text-2xl font-bold text-slate-600'>Вероятность прохода</h1>
                 </div>
                 <div>
                     <ToolsPrediction
@@ -68,6 +68,7 @@ const Bets = ({ data, form, info, homeName, awayName }) => {
                         percentMatches={percentMatches}
                         percentWithScore={percentWithScore}
                         correctScore={correctScoreFilter}
+                        info={info}
                         homeName={homeName}
                         awayName={awayName}
                     />

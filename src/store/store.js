@@ -1,18 +1,10 @@
 import { createStore } from 'redux';
 const initialState = {
-    match: {
-        homeName: '',
-        awayName: '',
-        scores: [],
-        percent: {},
-    },
     app: '',
     allMatches: [
         
     ],
     token: '',
-    homeNameEng: '',
-    awayNameEng: '',
     betzona: [{link:'',homeName:'',awayName:''}],
     euroFootball: [{link:'',homeName:'',awayName:''}],
     sportAndBets: [{link:'',homeName:'',awayName:''}],
@@ -20,7 +12,6 @@ const initialState = {
     liveresult: [{link:'',homeName:'',awayName:''}],
     stavkiprognozy: [{link:'',homeName:'',awayName:''}],
     oddsRu: [{link:'',homeName:'',awayName:''}],
-    isLoading: false,
     correctScore: [],
     moneyWay1x2: {
         awayName: "",
@@ -58,23 +49,15 @@ const initialState = {
         oddsOverEnd: 'нет данных',
         money: 'нет данных'
     },
-    statistics: {},
-    homeTeam: '',
-    awayTeam: '',
-
+    outcomes: {}
 }
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case 'MATCH':
+        case 'OUTCOMES':
             return {
                 ...state,
-                match: {
-                    homeName: action.payload.homeName,
-                    awayName: action.payload.awayName,
-                    scores: action.payload.scores,
-                    percent: action.payload.percent,
-                }
+                outcomes: action.payload
             }; 
         case 'ALLMATCHES':
             return {

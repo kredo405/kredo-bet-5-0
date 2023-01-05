@@ -87,7 +87,7 @@ const Match = () => {
             <Header />
             <BackTop />
             {isLoading ?
-                <div className="container lg:px-80 mt-16">
+                <div className="container lg:px-24 mt-16">
                     <div className="flex justify-center mb-8 bg-neutral-50 p-3">
                         <h1 className='text-slate-700 font-mono text-xl text-center'>{data.title.slice(0, -5)}</h1>
                     </div>
@@ -183,13 +183,13 @@ const Match = () => {
                         >
                             <Tab
                                 eventKey="predict"
-                                title={<p className='p-2 border-2 shadow-lg shadow-cyan-200 border-cyan-600 border-double rounded-md font-mono font-medium text-indigo-900'>Статистика</p>}>
+                                title={<p className='p-2 shadow-cyan-200font-mono font-medium text-indigo-900'>Статистика</p>}>
                                 <Form data={form} homeName={data.homeTeam} awayName={data.awayTeam} />
                                 <LastMatches data={form} homeName={data.homeTeam} awayName={data.awayTeam} />
                             </Tab>
                             <Tab
                                 eventKey="bets"
-                                title={<p className='p-2 border-2 shadow-lg shadow-cyan-200 border-orange-600 border-double rounded-md font-mono  font-medium text-indigo-900'>Ставки</p>}>
+                                title={<p className='p-2 font-mono  font-medium text-indigo-900'>Ставки</p>}>
                                 <Bets
                                     data={data.predictions}
                                     form={form}
@@ -199,7 +199,7 @@ const Match = () => {
                             </Tab>
                             <Tab
                                 eventKey="analitic"
-                                title={<p className='p-2 border-2 shadow-lg shadow-cyan-200 border-orange-600 border-double rounded-md font-mono  font-medium text-indigo-900'>Аналитика</p>}>
+                                title={<p className='p-2 font-mono font-medium text-indigo-900'>Аналитика</p>}>
                                 <Analitics
                                     data={data.predictions}
                                     form={form}

@@ -153,13 +153,15 @@ const MoneyWay = (props) => {
                 <h2 className='text-center py-3 font-serif text-2xl font-bold text-slate-600'>Денежные потоки</h2>
             </div>
             <div className='flex justify-center mb-3'>
-                <SplitButton
-                    id={`dropdown-split-variants-Info`}
-                    variant='info'
-                    title='Денежные потоки 1Х2'
-                >
-                    {elemets1x2}
-                </SplitButton>
+                <Dropdown>
+                    <Dropdown.Toggle variant="info" id="dropdown-basic">
+                        Денежные потоки 1Х2
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu className='h-56 overflow-scroll mt-2'>
+                        {elemets1x2}
+                    </Dropdown.Menu>
+                </Dropdown>
             </div>
             {show1X2 ?
                 <Table striped bordered hover variant="dark" className='mt-5'>
@@ -203,13 +205,15 @@ const MoneyWay = (props) => {
                 null
             }
             <div className='flex justify-center mb-3'>
-                <SplitButton
-                    id={`dropdown-split-variants-Info`}
-                    variant='info'
-                    title='Денежные потоки Б/М'
-                >
-                    {elemetsUnderOver}
-                </SplitButton>
+                <Dropdown>
+                    <Dropdown.Toggle variant="info" id="dropdown-basic">
+                        Денежные потоки Б/М
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu className='h-56 overflow-scroll mt-2'>
+                        {elemetsUnderOver}
+                    </Dropdown.Menu>
+                </Dropdown>
             </div>
             {showUnderOver ?
                 <Table striped bordered hover variant="dark">
@@ -244,13 +248,15 @@ const MoneyWay = (props) => {
                 null
             }
             <div className='flex justify-center mb-3'>
-                <SplitButton
-                    id={`dropdown-split-variants-Info`}
-                    variant='info'
-                    title='Денежные потоки ТС'
-                >
-                    {elemetsScore}
-                </SplitButton>
+                <Dropdown>
+                    <Dropdown.Toggle variant="info" id="dropdown-basic">
+                        Денежные потоки ТС
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu className='h-56 overflow-scroll mt-2'>
+                        {elemetsScore}
+                    </Dropdown.Menu>
+                </Dropdown>
             </div>
 
             {showScore ?

@@ -9,6 +9,7 @@ import Trends from "../Trends/Trends";
 import MoneyWay from "../MoneyWay/MoneyWay";
 import Standings from "../Standings/Standings";
 import PredicitonsNbBet from "../PredicitonsNbBet/PredicitionsNbBet";
+import Predict from "../Predict/Predict";
 
 const Analitics = (props) => {
     const { data, form, info, predictions, homeName, awayName } = props;
@@ -66,13 +67,15 @@ const Analitics = (props) => {
                 <Standings
                     info={info}
                 />
-                <Trends
-                    info={info}
-                />
                 <PredicitonsNbBet 
                     predictions={predictions}
                 />
                 <MoneyWay />
+                <Predict 
+                    form={form}
+                    info={info}
+                    predictions={predictions}
+                />
             </div>
         </>
     )

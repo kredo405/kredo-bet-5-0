@@ -12,7 +12,7 @@ const PredicitonsNbBet = ({ predictions }) => {
             <div className="font-semibold flex justify-center w-3/12">
                 <p className="text-center">Загрузка...</p>
             </div>
-            <div className="font-semibold flex justify-center w-3/12 text-amber-700">
+            <div className="font-semibold flex justify-center w-3/12 text-amber-900">
                 <p className="text-center">Загрузка...</p>
             </div>
             <div className="font-semibold flex justify-center w-3/12 text-indigo-600">
@@ -76,7 +76,7 @@ const PredicitonsNbBet = ({ predictions }) => {
                     <div className="font-semibold flex justify-center w-3/12">
                         <p className="text-center">{el.rank}</p>
                     </div>
-                    <div className="font-semibold flex justify-center w-3/12 text-amber-700">
+                    <div className="font-semibold flex justify-center w-3/12 text-amber-900">
                         <p className="text-center">{el.predict}</p>
                     </div>
                     <div className="font-semibold flex justify-center w-3/12 text-indigo-600">

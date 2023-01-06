@@ -53,8 +53,8 @@ const Calendar = ({ form, info }) => {
             <div>
                 <h3 className='text-center font-bold my-5'>Следующая игра</h3>
                 <div className="flex justify-between mb-2">
-                    <span className='font-semibold'>{info.motivation[0].next_match.text.slice(posHome)}</span>
-                    <span className='font-semibold'>{info.motivation[1].next_match.text.slice(posAway)}</span>
+                    <span className='font-semibold w-6/12'>{info.motivation[0].next_match.text.slice(posHome)}</span>
+                    <span className='font-semibold w-6/12'>{info.motivation[1].next_match.text.slice(posAway)}</span>
                 </div>
                 <div className="flex justify-between mb-2">
                     <div className='flex justify-start'><span className='text-xs text-center'>{`${info.motivation[0].next_match.team1_name}-${info.motivation[0].next_match.team2_name}`}</span></div>

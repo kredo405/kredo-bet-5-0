@@ -183,13 +183,13 @@ const Match = () => {
                         >
                             <Tab
                                 eventKey="predict"
-                                title={<p className='p-2 shadow-cyan-200font-mono font-medium text-indigo-900'>Статистика</p>}>
+                                title={<p className='shadow-cyan-200font-mono font-medium text-indigo-900'>Статистика</p>}>
                                 <Form data={form} homeName={data.homeTeam} awayName={data.awayTeam} />
                                 <LastMatches data={form} homeName={data.homeTeam} awayName={data.awayTeam} />
                             </Tab>
                             <Tab
                                 eventKey="bets"
-                                title={<p className='p-2 font-mono  font-medium text-indigo-900'>Ставки</p>}>
+                                title={<p className='font-mono  font-medium text-indigo-900'>Ставки</p>}>
                                 <Bets
                                     data={data.predictions}
                                     form={form}
@@ -199,7 +199,7 @@ const Match = () => {
                             </Tab>
                             <Tab
                                 eventKey="analitic"
-                                title={<p className='p-2 font-mono font-medium text-indigo-900'>Аналитика</p>}>
+                                title={<p className='font-mono font-medium text-indigo-900'>Аналитика</p>}>
                                 <Analitics
                                     data={data.predictions}
                                     form={form}

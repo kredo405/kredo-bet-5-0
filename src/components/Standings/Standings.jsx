@@ -28,7 +28,7 @@ const Standings = ({ info }) => {
         return {
             key: i,
             rank: i + 1,
-            team: <div className='flex justify-start items-center'><img className='w-1/12' src={el[3]} alt="logo" /><span className='pl-3'>{el[2]}</span></div>,
+            team: <div className='flex justify-start items-center'><img className='w-3/12 sm:w-2/12 md:w-1/12' src={el[3]} alt="logo" /><span className='pl-3'>{el[2]}</span></div>,
             goals: `${el[10]}/${el[11]}`,
             points: el[14],
         }

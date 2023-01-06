@@ -1,6 +1,6 @@
 import { relevance } from "./relevence";
 
-export const calcPredictions = (valueClass, info, form, predictions, outcomes) => {
+export const calcPredictions = (valueClass, info, form, predictions, outcomes, moneyWay1x2, moneyWayOverUnder, correctScore) => {
   const bets = Object.assign({}, outcomes);
 
   // Рассчитываем метод монтекарло по мотивации
@@ -320,17 +320,6 @@ export const calcPredictions = (valueClass, info, form, predictions, outcomes) =
           bets.draw.percent -= 2;
           break;
       }
-    }
-    if (motivationHomeOdd === motivationAwayOdd) {
-      bets.btsYes.percent += 3;
-      bets.btsNo.percent -= 3;
-      bets.draw.percent += 3;
-      bets.to15.percent += 3;
-      bets.to25.percent += 3;
-      bets.to35.percent += 3;
-      bets.tu15.percent -= 3;
-      bets.tu25.percent -= 3;
-      bets.tu35.percent -= 3;
     }
   }
   // новый объект с пересчитанными значениями иходов

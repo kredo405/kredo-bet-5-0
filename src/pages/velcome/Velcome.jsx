@@ -28,26 +28,7 @@ export default function Velcome() {
         const liveresult = await predictionsServices.getLiveresult();
         const stavkiprognozy = await predictionsServices.getStavkiprognozy();
         const oddsRu = await predictionsServices.getOddsRu();
-        const correctScore = await arbworldServices.getcorrectScore();
-        const moneyWay1X2 = await arbworldServices.getMoneyWay1x2();
-        const moneyWayUnderOver = await arbworldServices.getMoneyWayUnderOver();
 
-
-
-      console.log(correctScore)
-
-        dispatch({
-          type: 'CORRECTSCORE',
-          payload: correctScore.data.moneyWay
-        });
-        dispatch({
-          type: 'MONEYWAY1X2',
-          payload: moneyWay1X2.data.moneyWay
-        });
-        dispatch({
-          type: 'MONEYWAYOVERUNDER',
-          payload: moneyWayUnderOver.data.moneyWay
-        });
         dispatch({
           type: 'BETZONA',
           payload: betzona.data.predicitons

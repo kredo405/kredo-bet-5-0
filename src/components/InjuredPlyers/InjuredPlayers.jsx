@@ -5,9 +5,9 @@ const InjuredPlayers = (props) => {
         return (
             <tr key={el[2]}>
                 <td><p className='text-center font-bold text-sky-700'>{el[2]}</p></td>
-                <td><p className='text-center font-bold text-orange-500'>{el[3]}</p></td>
-                <td><p className='text-center font-bold text-orange-500'>{el[1]}</p></td>
-                <td><p className='text-center font-bold text-orange-500'>{el[5]}</p></td>
+                <td><p className='text-center font-bold text-orange-900'>{el[3]}</p></td>
+                <td><p className='text-center font-bold text-orange-900'>{el[1]}</p></td>
+                <td><p className='text-center font-bold text-orange-900'>{el[5]}</p></td>
             </tr>
         )
     });
@@ -16,9 +16,9 @@ const InjuredPlayers = (props) => {
         return (
             <tr key={el[2]}>
                 <td><p className='text-center font-bold text-sky-700'>{el[2]}</p></td>
-                <td><p className='text-center font-bold text-orange-500'>{el[3]}</p></td>
-                <td><p className='text-center font-bold text-orange-500'>{el[1]}</p></td>
-                <td><p className='text-center font-bold text-orange-500'>{el[5]}</p></td>
+                <td><p className='text-center font-bold text-orange-900'>{el[3]}</p></td>
+                <td><p className='text-center font-bold text-orange-900'>{el[1]}</p></td>
+                <td><p className='text-center font-bold text-orange-900'>{el[5]}</p></td>
             </tr>
         )
     });

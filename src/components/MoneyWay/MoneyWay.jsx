@@ -7,9 +7,8 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import SplitButton from 'react-bootstrap/SplitButton';
 
 
-const MoneyWay = (props) => {
-
-    const state = useSelector(state => state);
+const MoneyWay = () => {
+    const dispatch = useDispatch();
     const [moneyWay1X2, setMoneyWay1X2] = useState([{
         homeAway: "",
         homeName: "",
@@ -81,7 +80,9 @@ const MoneyWay = (props) => {
 
                 setMoneyWay1X2(moneyWay1X2.data.moneyWay);
                 setMoneyWayOverUnder(moneyWayUnderOver.data.moneyWay);
-                setCorrectScore(correctScoreFixTeamName)
+                setCorrectScore(correctScoreFixTeamName);
+
+
             }
             catch (error) {
                 console.log(error)
@@ -94,17 +95,29 @@ const MoneyWay = (props) => {
 
     const handleClick1X2 = (e) => {
         const element = moneyWay1X2.filter(el => el.homeName === e.target.name);
+        dispatch({
+            type: 'MONEYWAY1X2',
+            payload: element[0],
+        })
         setElement1X2(element[0]);
         setShow1X2(true)
     }
 
     const handleClickUnderOver = (e) => {
         const element = moneyWayOverUnder.filter(el => el.homeName === e.target.name);
+        dispatch({
+            type: 'MONEYWAYOVERUNDER',
+            payload: element[0],
+        })
         setElementOverUnder(element[0]);
         setShowUnderOver(true)
     }
     const handleClickScores = (e) => {
         const element = correctScore.filter(el => el.homeName === e.target.name);
+        dispatch({
+            type: 'CORRECTSCORE',
+            payload: element[0],
+        })
         setElementCorrectScore(element[0]);
         setShowScore(true)
     }
@@ -158,7 +171,7 @@ const MoneyWay = (props) => {
                         Денежные потоки 1Х2
                     </Dropdown.Toggle>
 
-                    <Dropdown.Menu className='h-56 overflow-scroll mt-2'>
+                    <Dropdown.Menu className='h-56 overflow-scroll'>
                         {elemets1x2}
                     </Dropdown.Menu>
                 </Dropdown>
@@ -210,7 +223,7 @@ const MoneyWay = (props) => {
                         Денежные потоки Б/М
                     </Dropdown.Toggle>
 
-                    <Dropdown.Menu className='h-56 overflow-scroll mt-2'>
+                    <Dropdown.Menu className='h-56 overflow-scroll'>
                         {elemetsUnderOver}
                     </Dropdown.Menu>
                 </Dropdown>
@@ -253,7 +266,7 @@ const MoneyWay = (props) => {
                         Денежные потоки ТС
                     </Dropdown.Toggle>
 
-                    <Dropdown.Menu className='h-56 overflow-scroll mt-2'>
+                    <Dropdown.Menu className='h-56 overflow-scroll'>
                         {elemetsScore}
                     </Dropdown.Menu>
                 </Dropdown>

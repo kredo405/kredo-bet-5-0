@@ -13,42 +13,8 @@ const initialState = {
     stavkiprognozy: [{link:'',homeName:'',awayName:''}],
     oddsRu: [{link:'',homeName:'',awayName:''}],
     correctScore: [],
-    moneyWay1x2: {
-        awayName: "",
-        homeName: "",
-        money: "Нет данных",
-        oddsAway: "Нет данных",
-        oddsDraw: "Нет данных",
-        oddsHome: "Нет данных",
-        percentAway: "Нет данных",
-        percentDraw: "Нет данных",
-        percentHome: "Нет данных",
-    },
-    moneyWayOverUnder: {
-        awayName: "",
-        homeName: "",
-        money: "Нет данных",
-        oddsOver: "Нет данных",
-        oddsUnder: "Нет данных",
-        percentOver: "Нет данных",
-        percentUnder: "Нет данных",
-    },
-    droppingOdds1x2: {
-        oddsHomeStart: 'нет данных',
-        oddsHomeEnd: 'нет данных',
-        oddsDrawStart: 'нет данных',
-        oddsDrawEnd: 'нет данных',
-        oddsAwayStart: 'нет данных',
-        oddsAwayend: 'нет данных',
-        money: 'нет данных'
-    },
-    droppingOddsOverUnder: {
-        oddsUnderStart: 'нет данных',
-        oddsUnderEnd: 'нет данных',
-        oddsOverStart: 'нет данных',
-        oddsOverEnd: 'нет данных',
-        money: 'нет данных'
-    },
+    moneyWay1x2: {},
+    moneyWayOverUnder: {},
     outcomes: {}
 }
 
@@ -73,16 +39,6 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 token: action.payload
-            };
-        case 'HOMENAMEENG':
-            return {
-                ...state,
-                homeNameEng: action.payload
-            };
-        case 'AWAYNAMEENG':
-            return {
-                ...state,
-                awayNameEng: action.payload
             };
         case 'BETZONA':
             return {
@@ -129,26 +85,11 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 moneyWayOverUnder: action.payload
             };   
-        case 'DROPPINGODDS1X2':
-            return {
-                ...state,
-                droppingOdds1x2: action.payload
-            };   
-        case 'DROPPINGODDSOVERUNDER':
-            return {
-                ...state,
-                droppingOddsOverUnder: action.payload
-            };   
         case 'CORRECTSCORE':
             return {
                 ...state,
                 correctScore: action.payload
-            };                       
-        case 'ISLOADING':
-            return {
-                ...state,
-                isLoading: action.payload
-            };     
+            };                         
         case 'STATISTICS':
             return {
                 ...state,

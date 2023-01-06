@@ -32,6 +32,10 @@ export default function Velcome() {
         const moneyWay1X2 = await arbworldServices.getMoneyWay1x2();
         const moneyWayUnderOver = await arbworldServices.getMoneyWayUnderOver();
 
+
+
+      console.log(correctScore)
+
         dispatch({
           type: 'CORRECTSCORE',
           payload: correctScore.data.moneyWay

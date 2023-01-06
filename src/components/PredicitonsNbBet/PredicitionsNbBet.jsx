@@ -8,12 +8,21 @@ const PredicitonsNbBet = ({ predictions }) => {
     const state = useSelector(state => state);
     const [odds, setOdds] = useState({ odds: [{ name: "Победа 1", odd: "1" }] });
     const [elements, setElements] = useState(<>
-        <td><p className='text-center font-mono font-semibold'>Загрузка...</p></td>
-        <td><p className='text-center font-mono font-semibold'>Загрузка...</p></td>
-        <td><p className='text-center font-mono font-semibold'>Загрузка...</p></td>
-        <td><p className='text-center font-mono font-semibold'>Загрузка...</p></td>
+        <li className="flex justify-around border-y-2 border-gray-100 border-solid py-3">
+            <div className="font-semibold flex justify-center w-3/12">
+                <p className="text-center">Загрузка...</p>
+            </div>
+            <div className="font-semibold flex justify-center w-3/12 text-amber-700">
+                <p className="text-center">Загрузка...</p>
+            </div>
+            <div className="font-semibold flex justify-center w-3/12 text-indigo-600">
+                <p className="text-center">Загрузка...</p>
+            </div>
+            <div className="font-semibold flex justify-center w-3/12">
+                <p className="text-center">Загрузка...</p>
+            </div>
+        </li>
     </>);
-
 
     useEffect(() => {
         const getDataOdds = async () => {

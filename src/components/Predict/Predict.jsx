@@ -43,7 +43,7 @@ const Predict = ({ form, info, predictions }) => {
             </div>
             <div className="flex justify-center">
                 <input className="w-10/12" type="range" name="class" id="class" min="0" max="100" onChange={onChange} value={valueClass} />
-                <label className="pl-3 font-semibold text-lg" for="class">{valueClass}/{100 - +valueClass}</label>
+                <label className="pl-3 font-semibold text-lg" htmlFor="class">{valueClass}/{100 - +valueClass}</label>
             </div>
 
             <div className="flex justify-center mt-5">

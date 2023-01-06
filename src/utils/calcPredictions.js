@@ -1104,6 +1104,359 @@ export const calcPredictions = (valueClass, info, form, predictions, outcomes, m
 
   calcValueForPredictions(predictions);
 
+  const calcValueForMoneyWay1x2 = (moneyWay) => {
+    if (moneyWay.homeName) {
+      const posHome = moneyWay.percentHome.indexOf('%');
+      const posDraw = moneyWay.percentDraw.indexOf('%');
+      const posAway = moneyWay.percentAway.indexOf('%');
+
+      const percentHome = moneyWay.percentHome.slice(0, posHome - 1);
+      const percentDraw = moneyWay.percentDraw.slice(0, posDraw - 1);
+      const percentAway = moneyWay.percentAway.slice(0, posAway - 1);
+
+      const findOutcomes = (property, percent) => {
+        bets[property].bets.forEach(el => {
+          for (let key in bets) {
+            if (String(bets[key].num) === el) {
+              bets[key].percent += (+percent / 10);
+            }
+          }
+        });
+      }
+
+      findOutcomes('winnerHome', percentHome);
+      findOutcomes('winnerAway', percentAway);
+      findOutcomes('draw', percentDraw);
+    }
+  }
+
+  calcValueForMoneyWay1x2(moneyWay1x2);
+
+  const calcValueForMoneyWayOverUnder = (moneyWay) => {
+    if (moneyWay.homeName) {
+      const posOver = moneyWay.percentOver.indexOf('%');
+      const posUnder = moneyWay.percentUnder.indexOf('%');
+
+      const percentOver = moneyWay.percentOver.slice(0, posOver - 1);
+      const percentUnder = moneyWay.percentUnder.slice(0, posUnder - 1);
+
+
+      const findOutcomes = (property, percent) => {
+        bets[property].bets.forEach(el => {
+          for (let key in bets) {
+            if (String(bets[key].num) === el) {
+              bets[key].percent += (+percent / 10);
+            }
+          }
+        });
+      }
+
+      findOutcomes('to35', percentOver);
+      findOutcomes('tu15', percentUnder);
+    }
+  }
+
+  calcValueForMoneyWayOverUnder(moneyWayOverUnder);
+
+
+  const calcValueForCorrectScore = (correctScore) => {
+    if (correctScore.homeName) {
+      const pos0_0 = correctScore.scores[0].score0_0.percent.indexOf('%');
+      const percent0_0 = correctScore.scores[0].score0_0.percent.slice(0, pos0_0);
+      // Приплюсовываем значение к исходам подходящим под счет 0:0
+      bets.draw.percent += +percent0_0;
+      bets.winOrDrawHome.percent += +percent0_0;
+      bets.winOrdrawAway.percent += +percent0_0;
+      bets.foraHomePlus15.percent += +percent0_0;
+      bets.foraAwayPlus15.percent += +percent0_0;
+      bets.tu15.percent += +percent0_0;
+      bets.tu25.percent += +percent0_0;
+      bets.tu35.percent += +percent0_0;
+      bets.btsNo.percent += +percent0_0;
+      bets.it1U05.percent += +percent0_0;
+      bets.it1U15.percent += +percent0_0;
+      bets.it1U25.percent += +percent0_0;
+      bets.it2U05.percent += +percent0_0;
+      bets.it2U15.percent += +percent0_0;
+      bets.it2U25.percent += +percent0_0;
+
+      const pos0_1 = correctScore.scores[1].score0_1.percent.indexOf('%');
+      const percent0_1 = correctScore.scores[1].score0_1.percent.slice(0, pos0_1);
+      // Приплюсовываем значение к исходам подходящим под счет 0:1
+      bets.winnerAway.percent += +percent0_1;
+      bets.winOrdrawAway.percent += +percent0_1;
+      bets.foraHomePlus15.percent += +percent0_1;
+      bets.foraAwayPlus15.percent += +percent0_1;
+      bets.tu15.percent += +percent0_1;
+      bets.tu25.percent += +percent0_1;
+      bets.tu35.percent += +percent0_1;
+      bets.btsNo.percent += +percent0_1;
+      bets.it1U05.percent += +percent0_1;
+      bets.it1U15.percent += +percent0_1;
+      bets.it1U25.percent += +percent0_1;
+      bets.it2O05.percent += +percent0_1;
+      bets.it2U15.percent += +percent0_1;
+      bets.it2U25.percent += +percent0_1;
+
+      const pos0_2 = correctScore.scores[2].score0_2.percent.indexOf('%');
+      const percent0_2 = correctScore.scores[2].score0_2.percent.slice(0, pos0_2);
+      // Приплюсовываем значение к исходам подходящим под счет 0:2
+      bets.winnerAway.percent += +percent0_2;
+      bets.winOrdrawAway.percent += +percent0_2;
+      bets.foraAwayMinus15.percent += +percent0_2;
+      bets.foraAwayPlus15.percent += +percent0_2;
+      bets.to15.percent += +percent0_2;
+      bets.tu25.percent += +percent0_2;
+      bets.tu35.percent += +percent0_2;
+      bets.btsNo.percent += +percent0_2;
+      bets.it1U05.percent += +percent0_2;
+      bets.it1U15.percent += +percent0_2;
+      bets.it1U25.percent += +percent0_2;
+      bets.it2O05.percent += +percent0_2;
+      bets.it2O15.percent += +percent0_2;
+      bets.it2U25.percent += +percent0_2;
+
+      const pos0_3 = correctScore.scores[3].score0_3.percent.indexOf('%');
+      const percent0_3 = correctScore.scores[3].score0_3.percent.slice(0, pos0_3);
+      // Приплюсовываем значение к исходам подходящим под счет 0:3
+      bets.winnerAway.percent += +percent0_3;
+      bets.winOrdrawAway.percent += +percent0_3;
+      bets.foraAwayMinus15.percent += +percent0_3;
+      bets.foraAwayPlus15.percent += +percent0_3;
+      bets.to15.percent += +percent0_3;
+      bets.to25.percent += +percent0_3;
+      bets.tu35.percent += +percent0_3;
+      bets.btsNo.percent += +percent0_3;
+      bets.it1U05.percent += +percent0_3;
+      bets.it1U15.percent += +percent0_3;
+      bets.it1U25.percent += +percent0_3;
+      bets.it2O05.percent += +percent0_3;
+      bets.it2O15.percent += +percent0_3;
+      bets.it2O25.percent += +percent0_3;
+
+      const pos1_0 = correctScore.scores[4].score1_0.percent.indexOf('%');
+      const percent1_0 = correctScore.scores[4].score1_0.percent.slice(0, pos1_0);
+      // Приплюсовываем значение к исходам подходящим под счет 1:0
+      bets.winnerHome.percent += +percent1_0;
+      bets.winOrDrawHome.percent += +percent1_0;
+      bets.foraHomePlus15.percent += +percent1_0;
+      bets.foraAwayPlus15.percent += +percent1_0;
+      bets.tu15.percent += +percent1_0;
+      bets.tu25.percent += +percent1_0;
+      bets.tu35.percent += +percent1_0;
+      bets.btsNo.percent += +percent1_0;
+      bets.it1O05.percent += +percent1_0;
+      bets.it1U15.percent += +percent1_0;
+      bets.it1U25.percent += +percent1_0;
+      bets.it2U05.percent += +percent1_0;
+      bets.it2U15.percent += +percent1_0;
+      bets.it2U25.percent += +percent1_0;
+
+      const pos1_1 = correctScore.scores[5].score1_1.percent.indexOf('%');
+      const percent1_1 = correctScore.scores[5].score1_1.percent.slice(0, pos1_1);
+      // Приплюсовываем значение к исходам подходящим под счет 1:1
+      bets.draw.percent += +percent1_1;
+      bets.winOrDrawHome.percent += +percent1_1;
+      bets.winOrdrawAway.percent += +percent1_1;
+      bets.foraHomePlus15.percent += +percent1_1;
+      bets.foraAwayPlus15.percent += +percent1_1;
+      bets.to15.percent += +percent1_1;
+      bets.tu25.percent += +percent1_1;
+      bets.tu35.percent += +percent1_1;
+      bets.btsYes.percent += +percent1_1;
+      bets.it1O05.percent += +percent1_1;
+      bets.it1U15.percent += +percent1_1;
+      bets.it1U25.percent += +percent1_1;
+      bets.it2O05.percent += +percent1_1;
+      bets.it2U15.percent += +percent1_1;
+      bets.it2U25.percent += +percent1_1;
+
+      const pos1_2 = correctScore.scores[6].score1_2.percent.indexOf('%');
+      const percent1_2 = correctScore.scores[6].score1_2.percent.slice(0, pos1_2);
+      // Приплюсовываем значение к исходам подходящим под счет 1:2
+      bets.winnerAway.percent += +percent1_2;
+      bets.winOrdrawAway.percent += +percent1_2;
+      bets.foraHomePlus15.percent += +percent1_2;
+      bets.foraAwayPlus15.percent += +percent1_2;
+      bets.to15.percent += +percent1_2;
+      bets.to25.percent += +percent1_2;
+      bets.tu35.percent += +percent1_2;
+      bets.btsYes.percent += +percent1_2;
+      bets.it1O05.percent += +percent1_2;
+      bets.it1U15.percent += +percent1_2;
+      bets.it1U25.percent += +percent1_2;
+      bets.it2O05.percent += +percent1_2;
+      bets.it2O15.percent += +percent1_2;
+      bets.it2U25.percent += +percent1_2;
+
+      const pos1_3 = correctScore.scores[7].score1_3.percent.indexOf('%');
+      const percent1_3 = correctScore.scores[7].score1_3.percent.slice(0, pos1_3);
+      // Приплюсовываем значение к исходам подходящим под счет 1:3
+      bets.winnerAway.percent += +percent1_3;
+      bets.winOrdrawAway.percent += +percent1_3;
+      bets.foraAwayMinus15.percent += +percent1_3;
+      bets.foraAwayPlus15.percent += +percent1_3;
+      bets.to15.percent += +percent1_3;
+      bets.to25.percent += +percent1_3;
+      bets.to35.percent += +percent1_3;
+      bets.btsYes.percent += +percent1_3;
+      bets.it1O05.percent += +percent1_3;
+      bets.it1U15.percent += +percent1_3;
+      bets.it1U25.percent += +percent1_3;
+      bets.it2O05.percent += +percent1_3;
+      bets.it2O15.percent += +percent1_3;
+      bets.it2O25.percent += +percent1_3;
+
+      const pos2_0 = correctScore.scores[8].score2_0.percent.indexOf('%');
+      const percent2_0 = correctScore.scores[8].score2_0.percent.slice(0, pos2_0);
+      // Приплюсовываем значение к исходам подходящим под счет 2:0
+      bets.winnerHome.percent += +percent2_0;
+      bets.winOrDrawHome.percent += +percent2_0;
+      bets.foraHomeMinus15.percent += +percent2_0;
+      bets.foraHomePlus15.percent += +percent2_0;
+      bets.to15.percent += +percent2_0;
+      bets.tu25.percent += +percent2_0;
+      bets.tu35.percent += +percent2_0;
+      bets.btsNo.percent += +percent2_0;
+      bets.it1O05.percent += +percent2_0;
+      bets.it1O15.percent += +percent2_0;
+      bets.it1U25.percent += +percent2_0;
+      bets.it2U05.percent += +percent2_0;
+      bets.it2U15.percent += +percent2_0;
+      bets.it2U25.percent += +percent2_0;
+
+      const pos2_1 = correctScore.scores[9].score2_1.percent.indexOf('%');
+      const percent2_1 = correctScore.scores[9].score2_1.percent.slice(0, pos2_1);
+      // Приплюсовываем значение к исходам подходящим под счет 2:1
+      bets.winnerHome.percent += +percent2_1;
+      bets.winOrDrawHome.percent += +percent2_1;
+      bets.foraAwayPlus15.percent += +percent2_1;
+      bets.foraHomePlus15.percent += +percent2_1;
+      bets.to15.percent += +percent2_1;
+      bets.to25.percent += +percent2_1;
+      bets.tu35.percent += +percent2_1;
+      bets.btsYes.percent += +percent2_1;
+      bets.it1O05.percent += +percent2_1;
+      bets.it1O15.percent += +percent2_1;
+      bets.it1U25.percent += +percent2_1;
+      bets.it2O05.percent += +percent2_1;
+      bets.it2U15.percent += +percent2_1;
+      bets.it2U25.percent += +percent2_1;
+
+      const pos2_2 = correctScore.scores[10].score2_2.percent.indexOf('%');
+      const percent2_2 = correctScore.scores[10].score2_2.percent.slice(0, pos2_2);
+      // Приплюсовываем значение к исходам подходящим под счет 2:2
+      bets.draw.percent += +percent2_2;
+      bets.winOrDrawHome.percent += +percent2_2;
+      bets.winOrdrawAway.percent += +percent2_2;
+      bets.foraAwayPlus15.percent += +percent2_2;
+      bets.foraHomePlus15.percent += +percent2_2;
+      bets.to15.percent += +percent2_2;
+      bets.to25.percent += +percent2_2;
+      bets.to35.percent += +percent2_2;
+      bets.btsYes.percent += +percent2_2;
+      bets.it1O05.percent += +percent2_2;
+      bets.it1O15.percent += +percent2_2;
+      bets.it1U25.percent += +percent2_2;
+      bets.it2O05.percent += +percent2_2;
+      bets.it2O15.percent += +percent2_2;
+      bets.it2U25.percent += +percent2_2;
+
+      const pos2_3 = correctScore.scores[11].score2_3.percent.indexOf('%');
+      const percent2_3 = correctScore.scores[11].score2_3.percent.slice(0, pos2_3);
+      // Приплюсовываем значение к исходам подходящим под счет 2:3
+      bets.winnerAway.percent += +percent2_3;
+      bets.winOrdrawAway.percent += +percent2_3;
+      bets.foraAwayPlus15.percent += +percent2_3;
+      bets.foraHomePlus15.percent += +percent2_3;
+      bets.to15.percent += +percent2_3;
+      bets.to25.percent += +percent2_3;
+      bets.to35.percent += +percent2_3;
+      bets.btsYes.percent += +percent2_3;
+      bets.it1O05.percent += +percent2_3;
+      bets.it1O15.percent += +percent2_3;
+      bets.it1U25.percent += +percent2_3;
+      bets.it2O05.percent += +percent2_3;
+      bets.it2O15.percent += +percent2_3;
+      bets.it2O25.percent += +percent2_3;
+
+      const pos3_0 = correctScore.scores[12].score3_0.percent.indexOf('%');
+      const percent3_0 = correctScore.scores[12].score3_0.percent.slice(0, pos3_0);
+      // Приплюсовываем значение к исходам подходящим под счет 3:0
+      bets.winnerHome.percent += +percent3_0;
+      bets.winOrDrawHome.percent += +percent3_0;
+      bets.foraHomeMinus15.percent += +percent3_0;
+      bets.foraHomePlus15.percent += +percent3_0;
+      bets.to15.percent += +percent3_0;
+      bets.to25.percent += +percent3_0;
+      bets.tu35.percent += +percent3_0;
+      bets.btsNo.percent += +percent3_0;
+      bets.it1O05.percent += +percent3_0;
+      bets.it1O15.percent += +percent3_0;
+      bets.it1O25.percent += +percent3_0;
+      bets.it2U05.percent += +percent3_0;
+      bets.it2U15.percent += +percent3_0;
+      bets.it2U25.percent += +percent3_0;
+
+      const pos3_1 = correctScore.scores[13].score3_1.percent.indexOf('%');
+      const percent3_1 = correctScore.scores[13].score3_1.percent.slice(0, pos3_1);
+      // Приплюсовываем значение к исходам подходящим под счет 3:1
+      bets.winnerHome.percent += +percent3_1;
+      bets.winOrDrawHome.percent += +percent3_1;
+      bets.foraHomeMinus15.percent += +percent3_1;
+      bets.foraHomePlus15.percent += +percent3_1;
+      bets.to15.percent += +percent3_1;
+      bets.to25.percent += +percent3_1;
+      bets.to35.percent += +percent3_1;
+      bets.btsYes.percent += +percent3_1;
+      bets.it1O05.percent += +percent3_1;
+      bets.it1O15.percent += +percent3_1;
+      bets.it1O25.percent += +percent3_1;
+      bets.it2O05.percent += +percent3_1;
+      bets.it2U15.percent += +percent3_1;
+      bets.it2U25.percent += +percent3_1;
+
+      const pos3_2 = correctScore.scores[14].score3_2.percent.indexOf('%');
+      const percent3_2 = correctScore.scores[14].score3_2.percent.slice(0, pos3_2);
+      // Приплюсовываем значение к исходам подходящим под счет 3:2
+      bets.winnerHome.percent += +percent3_2;
+      bets.winOrDrawHome.percent += +percent3_2;
+      bets.foraAwayPlus15.percent += +percent3_2;
+      bets.foraHomePlus15.percent += +percent3_2;
+      bets.to15.percent += +percent3_2;
+      bets.to25.percent += +percent3_2;
+      bets.to35.percent += +percent3_2;
+      bets.btsYes.percent += +percent3_2;
+      bets.it1O05.percent += +percent3_2;
+      bets.it1O15.percent += +percent3_2;
+      bets.it1O25.percent += +percent3_2;
+      bets.it2O05.percent += +percent3_2;
+      bets.it2O15.percent += +percent3_2;
+      bets.it2U25.percent += +percent3_2;
+
+      const pos3_3 = correctScore.scores[15].score3_3.percent.indexOf('%');
+      const percent3_3 = correctScore.scores[15].score3_3.percent.slice(0, pos3_3);
+      // Приплюсовываем значение к исходам подходящим под счет 3:3
+      bets.draw.percent += +percent3_3;
+      bets.winOrDrawHome.percent += +percent3_3;
+      bets.winOrdrawAway.percent += +percent3_3;
+      bets.foraAwayPlus15.percent += +percent3_3;
+      bets.foraHomePlus15.percent += +percent3_3;
+      bets.to15.percent += +percent3_3;
+      bets.to25.percent += +percent3_3;
+      bets.to35.percent += +percent3_3;
+      bets.btsYes.percent += +percent3_3;
+      bets.it1O05.percent += +percent3_3;
+      bets.it1O15.percent += +percent3_3;
+      bets.it1O25.percent += +percent3_3;
+      bets.it2O05.percent += +percent3_3;
+      bets.it2O15.percent += +percent3_3;
+      bets.it2O25.percent += +percent3_3;
+    }
+  }
+
+  calcValueForCorrectScore(correctScore)
+
   const arrOutcomes = [];
 
   for (let key in bets) {
@@ -1123,6 +1476,6 @@ export const calcPredictions = (valueClass, info, form, predictions, outcomes, m
 
   const newArr = getArrLargestValues(arrOutcomes);
 
-  return [newArr[0], newArr[1], newArr[2], newArr[3]]
+  return [newArr[0], newArr[1], newArr[2], newArr[3]];
 
 }

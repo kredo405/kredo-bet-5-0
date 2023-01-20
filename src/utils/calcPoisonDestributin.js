@@ -1,36 +1,41 @@
 export const calcPoisonDestribution = (data) => {
 
-    let expectedGoalsHome = 0
-    let expectedGoalsAway = 0
+    let expectedGoalsHome = 0;
+    let expectedGoalsAway = 0;
 
-    if(data.possesionHome !== '0' && data.possesionAway !== '0') {
-        // Рассчитываем владение мячом
-    const posessionHome = (+data.possesionHome + +data.possesionVsAway) / 2
-    const possesionAway = (+data.possesionAway + +data.possesionVsHome) / 2
+    if(data.summary[0][0]['71'] !== '0' && data.summary[0][1]['71'] !== '0') {
+
+    // Рассчитываем владение мячом
+    const posessionHome = (data.summary[0][0]['71'] + data.summary[0][1]['72']) / 2;
+    const possesionAway = (data.summary[0][1]['71'] + data.summary[0][0]['72']) / 2;
+
     // Рассчитываем Удары Взависимости от владения
-    const shotsHome = posessionHome * +data.shotsHome / +data.possesionHome 
-    const shotsVsHome = posessionHome * +data.shotsVsHome / +data.possesionHome 
-    const shotsAway = possesionAway * +data.shotsAway / +data.possesionAway 
-    const shotsVsAway = possesionAway * +data.shotsVsAway / +data.possesionAway 
-    const goalsHome = possesionAway * +data.goalsForAvgHome / +data.possesionAway 
-    const goalsVsHome = possesionAway * +data.goalsAgainstAvgHome / +data.possesionAway 
-    const goalsAway = possesionAway * +data.goalsForAvgAway / +data.possesionAway 
-    const goalsVsAway = possesionAway * +data.goalsAgainstAvgAway / +data.possesionAway 
+    const shotsHome = posessionHome * data.summary[0][0]['32'] / data.summary[0][0]['71'] ;
+    const shotsVsHome = posessionHome * data.summary[0][0]['33'] / data.summary[0][0]['71'];
+    const shotsAway = possesionAway * data.summary[0][1]['32'] / data.summary[0][1]['71'] ;
+    const shotsVsAway = possesionAway * data.summary[0][1]['33'] / data.summary[0][1]['71'];
+    const goalsHome = possesionAway * data.summary[0][0]['8'] / data.summary[0][0]['71'];
+    const goalsVsHome = possesionAway * data.summary[0][0]['9'] /data.summary[0][0]['71']; 
+    const goalsAway = possesionAway * data.summary[0][1]['8'] / data.summary[0][1]['71']; 
+    const goalsVsAway = possesionAway * data.summary[0][1]['9'] / data.summary[0][1]['71']; 
+
     // Рассчитываем индивидуальный тотал команд
-    const expectedShotsHome = (shotsHome + shotsVsAway) / 2
-    const expectedShotsAway = (shotsAway + shotsVsHome) / 2
-    const goalsPerShotsHome = +data.goalsForAvgHome / +data.shotsHome
-    const goalsPerShotsAway = +data.goalsForAvgAway / +data.shotsAway
-    expectedGoalsHome = (((expectedShotsHome * goalsPerShotsHome) + ((goalsHome + goalsVsAway) / 2)) / 2) + 0.2
-    expectedGoalsAway = ((expectedShotsAway * goalsPerShotsAway) + ((goalsAway + goalsVsHome) / 2)) / 2
+    const expectedShotsHome = (shotsHome + shotsVsAway) / 2;
+    const expectedShotsAway = (shotsAway + shotsVsHome) / 2;
+    const goalsPerShotsHome = data.summary[0][0]['8'] / data.summary[0][0]['32'];
+    const goalsPerShotsAway = data.summary[0][1]['8'] / data.summary[0][1]['32'];
+    expectedGoalsHome = (((expectedShotsHome * goalsPerShotsHome) + ((goalsHome + goalsVsAway) / 2)) / 2) + 0.2;
+    expectedGoalsAway = ((expectedShotsAway * goalsPerShotsAway) + ((goalsAway + goalsVsHome) / 2)) / 2;
+
     } else {
+
     // Рассчитываем индивидуальный тотал команд
-    const expectedShotsHome = (+data.shotsHome + +data.shotsVsAway) / 2
-    const expectedShotsAway = (+data.shotsAway + +data.shotsVsHome) / 2
-    const goalsPerShotsHome = +data.goalsForAvgHome / +data.shotsHome
-    const goalsPerShotsAway = +data.goalsForAvgAway / +data.shotsAway
-    expectedGoalsHome = (((expectedShotsHome * goalsPerShotsHome) + ((+data.goalsForAvgHome + +data.goalsAgainstAvgAway) / 2)) / 2) + 0.2
-    expectedGoalsAway = ((expectedShotsAway * goalsPerShotsAway) + ((+data.goalsForAvgAway + +data.goalsAgainstAvgHome) / 2)) / 2
+    const expectedShotsHome = (data.summary[0][0]['32'] + data.summary[0][1]['33']) / 2;
+    const expectedShotsAway = (data.summary[0][1]['32'] + data.summary[0][0]['33']) / 2;
+    const goalsPerShotsHome = data.summary[0][0]['8'] / data.summary[0][0]['32'];
+    const goalsPerShotsAway = data.summary[0][1]['8'] / data.summary[0][1]['32'];
+    expectedGoalsHome = (((expectedShotsHome * goalsPerShotsHome) + ((+data.goalsForAvgHome + +data.goalsAgainstAvgAway) / 2)) / 2) + 0.2;
+    expectedGoalsAway = ((expectedShotsAway * goalsPerShotsAway) + ((+data.goalsForAvgAway + +data.goalsAgainstAvgHome) / 2)) / 2;
     }
 
 
@@ -278,45 +283,3 @@ export const calcPoisonDestribution = (data) => {
 
     return percentOutcomes;
 }
-
-
-
-
-
-// <div>
-//                 <div className='flex border-b-2 border-solid justify-between items-center py-3'>
-//                     <h5 className='text-cyan-800 text-2xl w-6/12'>Победа 1</h5>
-//                     <Progress type="circle" percent={percentOutcomes.p1.toFixed(0)} />
-//                     <p className='text-rose-600 text-2xl'>{(100 / percentOutcomes.p1).toFixed(2)}</p>
-//                 </div>
-//                 <div className='flex border-b-2 border-solid justify-between items-center py-3'>
-//                     <h5 className='text-cyan-800 text-2xl w-6/12'>Победа 2</h5>
-//                     <Progress type="circle" percent={percentOutcomes.p2.toFixed(0)} />
-//                     <p className='text-rose-600 text-2xl'>{(100 / percentOutcomes.p2).toFixed(2)}</p>
-//                 </div>
-//                 <div className='flex border-b-2 border-solid justify-between items-center py-3'>
-//                     <h5 className='text-cyan-800 text-2xl w-6/12'>Тотал больше 2.5</h5>
-//                     <Progress type="circle" percent={percentOutcomes.to25.toFixed(0)} />
-//                     <p className='text-rose-600 text-2xl'>{(100 / percentOutcomes.to25).toFixed(2)}</p>
-//                 </div>
-//                 <div className='flex border-b-2 border-solid justify-between items-center py-3'>
-//                     <h5 className='text-cyan-800 text-2xl w-6/12'>Тотал меньше 2.5</h5>
-//                     <Progress type="circle" percent={percentOutcomes.tu25.toFixed(0)} />
-//                     <p className='text-rose-600 text-2xl'>{(100 / percentOutcomes.tu25).toFixed(2)}</p>
-//                 </div>
-//                 <div className='flex border-b-2 border-solid justify-between items-center py-3'>
-//                     <h5 className='text-cyan-800 text-2xl w-6/12'>Обе забьют</h5>
-//                     <Progress type="circle" percent={percentOutcomes.bts.toFixed(0)} />
-//                     <p className='text-rose-600 text-2xl'>{(100 / percentOutcomes.bts).toFixed(2)}</p>
-//                 </div>
-//                 <div className='flex border-b-2 border-solid justify-between items-center py-3'>
-//                     <h5 className='text-cyan-800 text-2xl w-6/12'>ИТ1 больше 1.5</h5>
-//                     <Progress type="circle" percent={percentOutcomes.it1O1.toFixed(0)} />
-//                     <p className='text-rose-600 text-2xl'>{(100 / percentOutcomes.it1O1).toFixed(2)}</p>
-//                 </div>
-//                 <div className='flex border-b-2 border-solid justify-between items-center py-3'>
-//                     <h5 className='text-cyan-800 text-2xl w-6/12'>ИТ2 больше 1.5</h5>
-//                     <Progress type="circle" percent={percentOutcomes.it2O1.toFixed(0)} />
-//                     <p className='text-rose-600 text-2xl'>{(100 / percentOutcomes.it2O1).toFixed(2)}</p>
-//                 </div>
-//             </div>

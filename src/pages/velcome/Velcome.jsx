@@ -22,7 +22,6 @@ export default function Velcome() {
   useEffect(() => {
     const getInfo = async () => {
       try {
-        const euroFootball = await predictionsServices.getEuroFootball();
         const betzona = await predictionsServices.getBetzona();
         const legalbet = await predictionsServices.getLegalbet();
         const liveresult = await predictionsServices.getLiveresult();
@@ -32,10 +31,6 @@ export default function Velcome() {
         dispatch({
           type: 'BETZONA',
           payload: betzona.data.predicitons
-        });
-        dispatch({
-          type: 'EUROFOOTBALL',
-          payload: euroFootball.data.predicitons
         });
         dispatch({
           type: 'LEGALBET',

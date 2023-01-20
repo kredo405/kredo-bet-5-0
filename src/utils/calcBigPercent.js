@@ -54,203 +54,203 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             percent: winnerHome,
             odds: odds['1'],
             num: 1,
-            bets: ['1', '4', '29', '33', '37', '76', '77']
+            bets: ['1', '4', '79', '77', '31', '35', '39', '41', '75', '81', '143', '181', '183', '231']
         },
         winnerAway: {
             outcomes: 'Победа 2',
             percent: winnerAway,
             odds: odds['2'],
             num: 2,
-            bets: ['2', '5', '51', '55', '59', '89', '90']
+            bets: ['2', '5', '51', '53', '55', '57', '59', '88', '90', '92', '94', '144', '186', '188', '232']
         },
         draw: {
             outcomes: 'Ничья',
             percent: draw,
             odds: odds['3'],
             num: 3,
-            bets: ['3', '4', '5']
+            bets: ['3', '4', '5', '73', '74', '86', '87', '101']
         },
         winOrDrawHome: {
             outcomes: '1X',
             percent: winOrDrawHome,
             odds: odds['4'],
             num: 4,
-            bets: ['4', '3']
+            bets: ['4', '3', '73', '74', '1']
         },
         winOrdrawAway: {
             outcomes: '2X',
             percent: winOrdrawAway,
             odds: odds['5'],
             num: 5,
-            bets: ['5', '3']
+            bets: ['5', '3', '2', '86', '87']
         },
         foraHomeMinus15: {
             outcomes: 'Фора 1 -1.5',
             percent: foraHomeMinus15,
             odds: odds['77'],
             num: 77,
-            bets: ['77', '1', '4', '29', '33', '37', '76']
+            bets: ['77', '33', '35', '37', '79', '81']
         },
         foraHomePlus15: {
             outcomes: 'Фора 1 +1.5',
             percent: foraHomePlus15,
             odds: odds['76'],
             num: 76,
-            bets: ['76']
+            bets: ['76', '1', '4', '79', '77', '31', '35', '39', '41', '73', '74', '75', '81', '143', '181', '183', '231']
         },
         foraAwayMinus15: {
             outcomes: 'Фора 2 -1.5',
             percent: foraAwayMinus15,
             odds: odds['90'],
             num: 90,
-            bets: ['90', '2', '5', '51', '55', '59', '89']
+            bets: ['90', '55', '57', '59', '92', '94']
         },
         foraAwayPlus15: {
             outcomes: 'Фора 2 +1.5',
             percent: foraAwayPlus15,
             odds: odds['89'],
             num: 89,
-            bets: ['89']
+            bets: ['89', '2', '5', '51', '53', '55', '57', '59', '88', '90', '92', '94', '144', '186', '188', '232', '86', '87']
         },
         to15: {
             outcomes: 'Тотал больше 1.5',
             percent: to15,
             odds: odds['11'],
             num: 11,
-            bets: ['11']
+            bets: ['11', '13', '15', '17', '19', '21', '23', '25', '27']
         },
         tu15: {
             outcomes: 'Тотал меньше 1.5',
             percent: tu15,
             odds: odds['12'],
             num: 12,
-            bets: ['12', '16', '20']
+            bets: ['12', '14', '16', '18', '20', '22', '24', '26', '28']
         },
         to25: {
             outcomes: 'Тотал больше 2.5',
             percent: to25,
             odds: odds['15'],
             num: 15,
-            bets: ['15', '11']
+            bets: ['15', '17', '19', '21', '23', '25', '27']
         },
         tu25: {
             outcomes: 'Тотал меньше 2.5',
             percent: tu25,
             odds: odds['16'],
             num: 16,
-            bets: ['16', '20']
+            bets: ['16', '18', '20', '22', '24', '26', '28']
         },
         to35: {
             outcomes: 'Тотал больше 3.5',
             percent: to35,
             odds: odds['19'],
             num: 19,
-            bets: ['19', '15', '11']
+            bets: ['19', '21', '23', '25', '27']
         },
         tu35: {
             outcomes: 'Тотал меньше 3.5',
             percent: tu35,
             odds: odds['20'],
-            num: 20, 
-            bets: ['20']
+            num: 20,
+            bets: ['20', '22', '24', '26', '28']
         },
         btsYes: {
             outcomes: 'Обе забьют ДА',
             percent: btsYes,
             odds: odds['99'],
             num: 99,
-            bets: ['99', '11']
+            bets: ['99', '16', '19']
         },
         btsNo: {
             outcomes: 'Обе забьют Нет',
             percent: btsNo,
             odds: odds['100'],
             num: 100,
-            bets: ['100']
+            bets: ['100', '12', '30', '52']
         },
         it1O05: {
             outcomes: 'Команда 1 забьет',
             percent: it1O05,
             odds: odds['29'],
             num: 29,
-            bets: ['29']
+            bets: ['29', '31', '33', '35', '37', '39', '41']
         },
         it1O15: {
             outcomes: 'Ит1 больше 1.5',
             percent: it1O15,
             odds: odds['33'],
             num: 33,
-            bets: ['33', '29']
+            bets: ['33', '35', '37', '39', '41']
         },
         it1O25: {
             outcomes: 'Ит1 больше 2.5',
             percent: it1O25,
             odds: odds['37'],
             num: 37,
-            bets: ['37', '33', '29']
+            bets: ['37', '39', '41']
         },
         it1U05: {
             outcomes: 'Команда 1 не забьет',
             percent: it1U05,
             odds: odds['30'],
             num: 30,
-            bets: ['30', '34', '38']
+            bets: ['30', '32', '34', '36', '38', '40', '42']
         },
         it1U15: {
             outcomes: 'Ит1 меньше 1.5',
             percent: it1U15,
             odds: odds['34'],
-            num: 34, 
-            bets: ['34', '38']
+            num: 34,
+            bets: ['34', '36', '38', '40', '42']
         },
         it1U25: {
             outcomes: 'Ит1 меньше 2.5',
             percent: it1U25,
             odds: odds['38'],
             num: 38,
-            bets: ['38']
+            bets: ['38', '40', '42']
         },
         it2O05: {
             outcomes: 'Команда 2 забьет',
             percent: it2O05,
             odds: odds['51'],
             num: 51,
-            bets: ['51']
+            bets: ['51', '53', '55', '57', '59', '61', '63']
         },
         it2O15: {
             outcomes: 'Ит2 больше 1.5',
             percent: it2O15,
             odds: odds['55'],
             num: 55,
-            bets: ['55', '51']
+            bets: ['55', '57', '59', '61', '63']
         },
         it2O25: {
             outcomes: 'Ит2 больше 2.5',
             percent: it2O25,
             odds: odds['59'],
             num: 59,
-            bets: ['59', '55', '51']
+            bets: ['59', '61', '63']
         },
         it2U05: {
             outcomes: 'Команда 2 не забьет',
             percent: it2U05,
             odds: odds['52'],
             num: 52,
-            bets: ['52', '56', '60']
+            bets: ['52', '54', '56', '58', '60', '62', '64']
         },
         it2U15: {
             outcomes: 'Ит2 меньше 1.5',
             percent: it2U15,
             odds: odds['56'],
             num: 56,
-            bets: ['56', '60']
+            bets: ['56', '58', '60', '62', '64']
         },
         it2U25: {
             outcomes: 'Ит2 меньше 2.5',
             percent: it2U25,
             odds: odds['60'],
             num: 60,
-            bets: ['60']
+            bets: ['60', '62', '64']
         },
     }
 

@@ -1,7 +1,7 @@
-import { Empty, BackTop, Spin } from 'antd';
+import { Empty } from 'antd';
 
-const Comment = (props) => {
-    const predictions = props.data
+const Comment = ({ data }) => {
+    const predictions = data
     const elements = predictions.map((el, i) => {
         return (
             <li key={i} className="p-3 border-2 border-blue-100 border-double my-4 rounded-lg shadow-lg shadow-cyan-50">
@@ -19,7 +19,7 @@ const Comment = (props) => {
             <div>
                 <h2 className="text-center py-3 font-serif text-2xl font-bold text-slate-600">Комментарии</h2>
                 <ul className="h-96 mb-36 lg:px-22">
-                    {elements.length !== 0 ? elements :
+                    {elements.length > 0 ? elements :
                         <Empty
                             description={
                                 <span className="font-mono text-lg font-medium text-gray-700">

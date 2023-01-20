@@ -86,132 +86,132 @@ export const calPercentForMatches = (matchesHome, matchesAway, homeName, awayNam
     let quntityMatchesAway = 0
 
     matchesHome.forEach(el => {
-        if (el.homeTeam.toLowerCase() === homeName.toLowerCase()) {
+        if (el.team1_name.toLowerCase() === homeName.toLowerCase()) {
 
             quntityMatchesHome++
 
-            if (+el.homeGoals > +el.awayGoals) {
+            if (el[0] + el[2] > el[1] + el[3]) {
                 outcomes['Match Winner'].home++;
             }
-            if (+el.homeGoals === +el.awayGoals) {
+            if (el[0] + el[2] === el[1] + el[3]) {
                 outcomes['Draw'].home++;
             }
-            if (+el.homeGoals - +el.awayGoals > 1) {
+            if (el[0] + el[2] - el[1] + el[3] > 1) {
                 outcomes['Asian Handicap']['handicap -1.5'].home++;
             }
-            if (+el.homeGoals - +el.awayGoals >= 0) {
+            if (el[0] + el[2] - el[1] + el[3] >= 0) {
                 outcomes['Asian Handicap']['handicap +1.5'].home++;
             }
-            if (+el.homeGoals + +el.awayGoals > 1.5) {
+            if (el[0] + el[2] + el[1] + el[3] > 1.5) {
                 outcomes['Goals Over/Under']['Over 1.5'].home++;
             }
-            if (+el.homeGoals + +el.awayGoals > 2.5) {
+            if (el[0] + el[2] + el[1] + el[3] > 2.5) {
                 outcomes['Goals Over/Under']['Over 2.5'].home++;
             }
-            if (+el.homeGoals + +el.awayGoals > 3.5) {
+            if (el[0] + el[2] + el[1] + el[3] > 3.5) {
                 outcomes['Goals Over/Under']['Over 3.5'].home++;
             }
-            if (+el.homeGoals + +el.awayGoals < 1.5) {
+            if (el[0] + el[2] + el[1] + el[3] < 1.5) {
                 outcomes['Goals Over/Under']['Under 1.5'].home++;
             }
-            if (+el.homeGoals + +el.awayGoals < 2.5) {
+            if (el[0] + el[2] + el[1] + el[3] < 2.5) {
                 outcomes['Goals Over/Under']['Under 2.5'].home++;
             }
-            if (+el.homeGoals + +el.awayGoals < 3.5) {
+            if (el[0] + el[2] + el[1] + el[3] < 3.5) {
                 outcomes['Goals Over/Under']['Under 3.5'].home++;
             }
 
-            if (+el.homeGoals > 0 && +el.awayGoals > 0) {
+            if (el[0] + el[2] > 0 && el[1] + el[3] > 0) {
                 outcomes['Both Teams Score'].Yes.home++;
             }
             if (
-                (+el.homeGoals === 0 && +el.awayGoals >= 0) ||
-                (+el.homeGoals >= 0 && +el.awayGoals === 0) ||
-                (+el.homeGoals === 0 && +el.awayGoals === 0)
+                (el[0] + el[2] === 0 && el[1] + el[3] >= 0) ||
+                (el[0] + el[2] >= 0 && el[1] + el[3] === 0) ||
+                (el[0] + el[2] === 0 && el[1] + el[3] === 0)
             ) {
                 outcomes['Both Teams Score'].No.home++;
             }
-            if (+el.homeGoals > 0.5) {
+            if (el[0] + el[2] > 0.5) {
                 outcomes['individualTotal']['Over 0.5'].home++;
             }
-            if (+el.homeGoals > 1.5) {
+            if (el[0] + el[2] > 1.5) {
                 outcomes['individualTotal']['Over 1.5'].home++;
             }
-            if (+el.homeGoals > 2.5) {
+            if (el[0] + el[2] > 2.5) {
                 outcomes['individualTotal']['Over 2.5'].home++;
             }
-            if (+el.homeGoals < 0.5) {
+            if (el[0] + el[2] < 0.5) {
                 outcomes['individualTotal']['Under 0.5'].home++;
-            } if (+el.homeGoals < 1.5) {
+            } if (+el[0] + el[2] < 1.5) {
                 outcomes['individualTotal']['Under 1.5'].home++;
             }
-            if (+el.homeGoals < 2.5) {
+            if (el[0] + el[2] < 2.5) {
                 outcomes['individualTotal']['Under 2.5'].home++;
             }
         }
     })
 
     matchesAway.forEach(el => {
-        if (el.awayTeam.toLowerCase() === awayName.toLowerCase()) {
+        if (el.team2_name.toLowerCase() === awayName.toLowerCase()) {
 
             quntityMatchesAway++
 
-            if (+el.awayGoals > +el.homeGoals) {
+            if (el[1] + el[3] > el[0] + el[2]) {
                 outcomes['Match Winner'].away++;
             }
-            if (+el.homeGoals === +el.awayGoals) {
+            if (el[0] + el[2] === el[1] + el[3]) {
                 outcomes['Draw'].away++;
             }
-            if (+el.awayGoals - +el.homeGoals > 1) {
+            if (el[1] + el[3] - el[0] + el[2] > 1) {
                 outcomes['Asian Handicap']['handicap -1.5'].away++;
             }
-            if (+el.awayGoals - +el.homeGoals >= 0) {
+            if (el[1] + el[3] - el[0] + el[2] >= 0) {
                 outcomes['Asian Handicap']['handicap +1.5'].away++;
             }
-            if (+el.awayGoals + +el.homeGoals > 1.5) {
+            if (el[1] + el[3] + el[0] + el[2] > 1.5) {
                 outcomes['Goals Over/Under']['Over 1.5'].away++;
             }
-            if (+el.awayGoals + +el.homeGoals > 2.5) {
+            if (el[1] + el[3] + el[0] + el[2] > 2.5) {
                 outcomes['Goals Over/Under']['Over 2.5'].away++;
             }
-            if (+el.awayGoals + +el.homeGoals > 3.5) {
+            if (el[1] + el[3] + el[0] + el[2] > 3.5) {
                 outcomes['Goals Over/Under']['Over 3.5'].away++;
             }
-            if (+el.awayGoals + +el.homeGoals < 1.5) {
+            if (el[1] + el[3] + el[0] + el[2] < 1.5) {
                 outcomes['Goals Over/Under']['Under 1.5'].away++;
             }
-            if (+el.awayGoals + +el.homeGoals < 2.5) {
+            if (el[1] + el[3] + el[0] + el[2] < 2.5) {
                 outcomes['Goals Over/Under']['Under 2.5'].away++;
             }
-            if (+el.awayGoals + +el.homeGoals < 3.5) {
+            if (el[1] + el[3] + el[0] + el[2] < 3.5) {
                 outcomes['Goals Over/Under']['Under 3.5'].away++;
             }
 
-            if (+el.awayGoals > 0 && +el.homeGoals > 0) {
+            if (+el[1] + el[3] > 0 && +el[0] + el[2] > 0) {
                 outcomes['Both Teams Score'].Yes.away++;
             }
             if (
-                (+el.awayGoals === 0 && +el.homeGoals >= 0) ||
-                (+el.awayGoals >= 0 && +el.homeGoals === 0) ||
-                (+el.awayGoals === 0 && +el.homeGoals === 0)
+                (el[1] + el[3] === 0 && el[0] + el[2] >= 0) ||
+                (el[1] + el[3] >= 0 && el[0] + el[2] === 0) ||
+                (el[1] + el[3] === 0 && el[0] + el[2] === 0)
             ) {
                 outcomes['Both Teams Score'].No.away++;
             }
-            if (+el.awayGoals > 0.5) {
+            if (el[1] + el[3] > 0.5) {
                 outcomes['individualTotal']['Over 0.5'].away++;
             }
-            if (+el.awayGoals > 1.5) {
+            if (el[1] + el[3] > 1.5) {
                 outcomes['individualTotal']['Over 1.5'].away++;
             }
-            if (+el.awayGoals > 2.5) {
+            if (el[1] + el[3] > 2.5) {
                 outcomes['individualTotal']['Over 2.5'].away++;
             }
-            if (+el.awayGoals < 0.5) {
+            if (el[1] + el[3] < 0.5) {
                 outcomes['individualTotal']['Under 0.5'].away++;
-            } if (+el.awayGoals < 1.5) {
+            } if (el[1] + el[3] < 1.5) {
                 outcomes['individualTotal']['Under 1.5'].away++;
             }
-            if (+el.awayGoals < 2.5) {
+            if (el[1] + el[3] < 2.5) {
                 outcomes['individualTotal']['Under 2.5'].away++;
             }
         }
@@ -285,7 +285,7 @@ export const calPercentForMatches = (matchesHome, matchesAway, homeName, awayNam
         winnerAway: outcomes['Match Winner'].away,
         winnerHome: outcomes['Match Winner'].home,
     }
-    
+
     return matchesPercent
 }
 

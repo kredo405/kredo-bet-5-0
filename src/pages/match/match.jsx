@@ -19,58 +19,48 @@ const errorModal = (message) => {
 };
 
 const Match = () => {
-    const [data, setData] = useState({});
-    const [form, setForm] = useState('');
+    const [coments, setComents] = useState([]);
     const [info, setInfo] = useState({});
     const [predictions, setPredictions] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const state = useSelector(state => state);
 
     useEffect(() => {
 
         const getInfo = async () => {
             try {
-                const matchesInfo = await Soccer365Services.getMatchInfo();
+                const matchesInfo = await Soccer365Services.getAllMatches();
                 console.log(matchesInfo.data)
-                const posHome = matchesInfo.data.match[0].percentOutcomes.home ? matchesInfo.data.match[0].percentOutcomes.home.indexOf('%') : 0;
-                const posDraw = matchesInfo.data.match[0].percentOutcomes.draw ? matchesInfo.data.match[0].percentOutcomes.draw.indexOf('%') : 0;
-                const posAway = matchesInfo.data.match[0].percentOutcomes.away ? matchesInfo.data.match[0].percentOutcomes.away.indexOf('%') : 0;
 
-                matchesInfo.data.match[0].percentOutcomes.home = matchesInfo.data.match[0].percentOutcomes.home ?
-                    matchesInfo.data.match[0].percentOutcomes.home.slice(0, posHome) : 0;
-                matchesInfo.data.match[0].percentOutcomes.draw = matchesInfo.data.match[0].percentOutcomes.draw ?
-                    matchesInfo.data.match[0].percentOutcomes.draw.slice(0, posDraw) : 0;
-                matchesInfo.data.match[0].percentOutcomes.away = matchesInfo.data.match[0].percentOutcomes.away ?
-                    matchesInfo.data.match[0].percentOutcomes.away.slice(0, posAway) : 0;
-
-                setData(matchesInfo.data.match[0]);
-                const matchesForm = await Soccer365Services.getForm();
-                console.log(matchesForm.data);
-                setForm(matchesForm.data.form[0]);
-                const matchesLineups = await Soccer365Services.getLineups();
-                console.log(matchesLineups.data);
-
-                let matchNbbet;
-
-                state.allMatches.forEach(item => {
-                    const match = item[4].filter(el => findTeam(matchesInfo.data.match[0].homeTeam, el[7]) && findTeam(matchesInfo.data.match[0].awayTeam, el[15]));
-                    if (match.length !== 0) {
-                        matchNbbet = match[0]
-                    }
-                })
-
-                console.log(matchNbbet)
-                sessionStorage.setItem('link', matchNbbet[3]);
+                // Получаем информация о матче с сайта nbbet
                 const matchesInfoNbbet = await nbbetServices.getMatchInfo();
                 console.log(matchesInfoNbbet)
                 setInfo(matchesInfoNbbet.data.match.data.match);
+
+                // получаем прогнозы с сайта nbbet
                 const matchesPredictionsNbbet = await nbbetServices.getMatchPredictions();
                 console.log(matchesPredictionsNbbet);
-                setPredictions(matchesPredictionsNbbet.data.match.data)
+                setPredictions(matchesPredictionsNbbet.data.match.data.tips);
 
-                setTimeout(() => {
-                    setIsLoading(true);
-                }, 1000);
+                // Ищем такой же матч в апи soccer365
+                let matchSoccer365;
+
+                matchesInfo.data.matches.forEach(item => {
+                    const match = item.matches.filter(el => findTeam(matchesInfoNbbet.data.match.data.match.team1_name, el.homeTeam ? el.homeTeam  : '') && findTeam(matchesInfoNbbet.data.match.data.match.team2_name, el.awayTeam ? el.awayTeam : ''));
+                    if (match.length > 0) {
+                        matchSoccer365 = match[0];
+                    }
+                });
+
+                console.log(matchSoccer365)
+                // получаем коментарии к матчу
+                if (matchSoccer365) {
+                    const match = await Soccer365Services.getMatchInfo(matchSoccer365.id);
+                    console.log(match.data.match[0].predictions);
+                    setComents(match.data.match[0].predictions);
+                }
+
+                setIsLoading(true);
+
             }
             catch (error) {
                 console.log(error)
@@ -87,70 +77,66 @@ const Match = () => {
             <Header />
             <BackTop />
             {isLoading ?
-                <div className="container lg:px-24 mt-16">
+                <div className="container lg:px-52 mt-16">
                     <div className="flex justify-center mb-8 bg-neutral-50 p-3">
-                        <h1 className='text-slate-700 font-mono text-xl text-center'>{data.title.slice(0, -5)}</h1>
+                        <h1 className='text-slate-700 font-mono text-xl text-center'>{info.tournament_name}</h1>
                     </div>
 
                     <div className="flex justify-evenly item-center">
                         <div className="flex flex-col items-center w-5/12">
-                            <img src={data.homeLogo} alt="логотип" />
-                            <span className="py-3 text-center font-mono text-clip text-lg font-medium text-teal-900">{data.homeTeam}</span>
+                            <img className='w-6/12' src={info.team1_logo} alt="логотип" />
+                            <span className="py-3 text-center font-mono text-clip text-lg font-medium text-teal-900">{info.team1_name}</span>
                         </div>
-                        <div className="flex justify-center items-center w-2/12">
-                            <span className='text-2xl'>{data.homeGoal}:{data.awayGoal}</span>
+                        <div className="flex justify-center items-center w-2/12 mb-10">
+                            <span className='text-2xl'>{info.goals.lenght > 0 ? info.goals[0] : '-'}:{info.goals.lenght > 0 ? info.goals[1] : '-'}</span>
                         </div>
                         <div className="flex flex-col items-center w-5/12 ">
-                            <img src={data.awayLogo} alt="логотип" />
-                            <span className="py-3 text-center font-mono text-lg font-medium text-teal-900">{data.awayTeam}</span>
+                            <img className='w-6/12' src={info.team2_logo} alt="логотип" />
+                            <span className="py-3 text-center font-mono text-lg font-medium text-teal-900">{info.team2_name}</span>
                         </div>
                     </div>
-                    {data.odds ?
-                        <div className="flex flex-wrap justify-center">
-                            <div className="flex px-3 border-2 border-slate-400 border-solid m-2 items-center">
-                                <span className="pr-2">П1</span>
-                                <span className="text-pink-500">{data.odds.oddHomeWin}</span>
-                            </div>
-                            <div className="flex px-3 border-2 border-slate-400 border-solid m-2 items-center">
-                                <span className="pr-2">Х</span>
-                                <span className="text-pink-500">{data.odds.oddDraw}</span>
-                            </div>
-                            <div className="flex px-3 border-2 border-slate-400 border-solid m-2 items-center">
-                                <span className="pr-2">П2</span>
-                                <span className="text-pink-500">{data.odds.oddAwayWin}</span>
-                            </div>
-                            <div className="flex px-3 border-2 border-slate-400 border-solid m-2 items-center">
-                                <span className="pr-2">ТБ2.5</span>
-                                <span className="text-pink-500">{data.odds.oddTotalO25}</span>
-                            </div>
-                            <div className="flex px-3 border-2 border-slate-400 border-solid m-2 items-center">
-                                <span className="pr-2">ТМ2.5</span>
-                                <span className="text-pink-500">{data.odds.oddTotalU25}</span>
-                            </div>
-                            <div className="flex px-3 border-2 border-slate-400 border-solid m-2 items-center">
-                                <span className="pr-2">ОЗ ДА</span>
-                                <span className="text-pink-500">{data.odds.oddBtsYes}</span>
-                            </div>
-                            <div className="flex px-3 border-2 border-slate-400 border-solid m-2 items-center">
-                                <span className="pr-2">ОЗ Нет</span>
-                                <span className="text-pink-500">{data.odds.oddBtsNo}</span>
-                            </div>
+                    <div className="flex flex-wrap justify-center">
+                        <div className="flex px-3 border-2 border-slate-400 border-solid m-2 items-center">
+                            <span className="pr-2">П1</span>
+                            <span className="text-pink-500">{info.current_odds['1']}</span>
                         </div>
-                        :
-                        null}
-
+                        <div className="flex px-3 border-2 border-slate-400 border-solid m-2 items-center">
+                            <span className="pr-2">Х</span>
+                            <span className="text-pink-500">{info.current_odds['3']}</span>
+                        </div>
+                        <div className="flex px-3 border-2 border-slate-400 border-solid m-2 items-center">
+                            <span className="pr-2">П2</span>
+                            <span className="text-pink-500">{info.current_odds['2']}</span>
+                        </div>
+                        <div className="flex px-3 border-2 border-slate-400 border-solid m-2 items-center">
+                            <span className="pr-2">ТБ2.5</span>
+                            <span className="text-pink-500">{info.current_odds['15']}</span>
+                        </div>
+                        <div className="flex px-3 border-2 border-slate-400 border-solid m-2 items-center">
+                            <span className="pr-2">ТМ2.5</span>
+                            <span className="text-pink-500">{info.current_odds['16']}</span>
+                        </div>
+                        <div className="flex px-3 border-2 border-slate-400 border-solid m-2 items-center">
+                            <span className="pr-2">ОЗ ДА</span>
+                            <span className="text-pink-500">{info.current_odds['99']}</span>
+                        </div>
+                        <div className="flex px-3 border-2 border-slate-400 border-solid m-2 items-center">
+                            <span className="pr-2">ОЗ Нет</span>
+                            <span className="text-pink-500">{info.current_odds['100']}</span>
+                        </div>
+                    </div>
                     <div className="flex w-full justify-around items-center mt-3 z-0">
                         <div className={`flex flex-col justify-center items-center`}>
                             <span className="p-3 text-xl font-mono">П1</span>
-                            <Progress type="circle" percent={+data.percentOutcomes.home} width={100} />
+                            <Progress type="circle" percent={((100 / (info.current_odds['1'])) - 1).toFixed(0)} width={100} />
                         </div>
                         <div className={`flex flex-col justify-center items-center`}>
                             <span className="p-3 text-xl font-mono">Х</span>
-                            <Progress type="circle" percent={+data.percentOutcomes.draw} width={100} />
+                            <Progress type="circle" percent={((100 / (info.current_odds['3'])) - 1).toFixed(0)} width={100} />
                         </div>
                         <div className={`flex flex-col justify-center items-center`}>
                             <span className="p-3 text-xl font-mono">П2</span>
-                            <Progress type="circle" percent={+data.percentOutcomes.away} width={100} />
+                            <Progress type="circle" percent={((100 / (info.current_odds['2'])) - 1).toFixed(0)} width={100} />
                         </div>
                     </div>
 
@@ -184,29 +170,23 @@ const Match = () => {
                             <Tab
                                 eventKey="predict"
                                 title={<p className='shadow-cyan-200font-mono font-medium text-indigo-900'>Статистика</p>}>
-                                <Form data={form} homeName={data.homeTeam} awayName={data.awayTeam} />
-                                <LastMatches data={form} homeName={data.homeTeam} awayName={data.awayTeam} />
+                                <Form data={info} />
+                                <LastMatches data={info} />
                             </Tab>
                             <Tab
                                 eventKey="bets"
                                 title={<p className='font-mono  font-medium text-indigo-900'>Ставки</p>}>
                                 <Bets
-                                    data={data.predictions}
-                                    form={form}
+                                    data={coments}
                                     info={info}
-                                    homeName={data.homeTeam}
-                                    awayName={data.awayTeam} />
+                                />
                             </Tab>
                             <Tab
                                 eventKey="analitic"
                                 title={<p className='font-mono font-medium text-indigo-900'>Аналитика</p>}>
                                 <Analitics
-                                    data={data.predictions}
-                                    form={form}
                                     info={info}
                                     predictions={predictions}
-                                    homeName={data.homeTeam}
-                                    awayName={data.awayTeam}
                                 />
                             </Tab>
                         </Tabs>

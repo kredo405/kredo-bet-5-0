@@ -3,27 +3,19 @@ import { useSelector, useDispatch } from "react-redux";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { Table } from 'react-bootstrap';
 import Predictions from "../Predictions/Predictions";
-import { Modal } from 'antd';
 import { calcBigPercent } from "../../utils/calcBigPercent";
 
 
-const errorModal = (message) => {
-    Modal.error({
-        title: message
-    });
-};
-
-const ToolsPrediction = (props) => {
+const ToolsPrediction = ({ percentPoison, percentWithScore, info }) => {
     const state = useSelector(state => state);
     const dispatch = useDispatch();
+    const [odds, setOdds] = useState({ odds: [{ name: "Победа 1", odd: "1" }] });
     const [elementsPropobility, setElementsPropobility] = useState([{
         outcomes: '',
         odds: 0,
         percent: 0
     }]);
-    const [odds, setOdds] = useState({ odds: [{ name: "Победа 1", odd: "1" }] });
-
-    const { percentPoison, percentWithScore, info} = props;
+    
 
     useEffect(() => {
         const getDataOdds = async () => {
@@ -51,7 +43,7 @@ const ToolsPrediction = (props) => {
             payload: outcomesBigPercent.arrOutcomesForPredictions
         })
         setElementsPropobility(outcomesBigPercent.arrOutcomes);
-    }, [odds]);
+    }, []);
 
     const green = 'bg-green-200 flex justify-center font-mono';
     const rose = 'bg-rose-200 flex justify-center font-mono';
@@ -82,7 +74,7 @@ const ToolsPrediction = (props) => {
                         {elements}
                     </tbody>
                 </Table>
-                <Predictions homeName={props.homeName} awayName={props.awayName} />
+                <Predictions homeName={info.team1_name} awayName={info.team2_name} />
             </div>
         </>
     )

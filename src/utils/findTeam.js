@@ -7,13 +7,19 @@ const findTeam = (name1, name2) => {
     let arrTeamNameHyphen2 = name2.split('-');
 
     if (name1.toLowerCase() === name2.toLowerCase()) {
-        return true
+        return true;
     }
-    if(arrTeamNameHyphen1[0].toLowerCase() === arrTeamNameSpace2[0].toLowerCase() && arrTeamNameHyphen1[1].toLowerCase() === arrTeamNameSpace2[1].toLowerCase()) {
-        return true
+
+    if(arrTeamNameHyphen1[1] && arrTeamNameSpace2[1]) {
+        if(arrTeamNameHyphen1[0].toLowerCase() === arrTeamNameSpace2[0].toLowerCase() && arrTeamNameHyphen1[1].toLowerCase() === arrTeamNameSpace2[1].toLowerCase()) {
+            return true;
+        } 
     }
-    if(arrTeamNameHyphen2[0].toLowerCase() === arrTeamNameSpace1[0].toLowerCase() && arrTeamNameHyphen2[1].toLowerCase() === arrTeamNameSpace1[1].toLowerCase()) {
-        return true
+
+    if(arrTeamNameHyphen2[1] && arrTeamNameSpace1[1]) {
+        if(arrTeamNameHyphen2[0].toLowerCase() === arrTeamNameSpace1[0].toLowerCase() && arrTeamNameHyphen2[1].toLowerCase() === arrTeamNameSpace1[1].toLowerCase()) {
+            return true;
+        }    
     }
     if (arrTeamNameSpace1.length === 2 && arrTeamNameSpace2.length === 3) {
         if (arrTeamNameSpace1[0].toLowerCase() === arrTeamNameSpace2[0].toLowerCase() && arrTeamNameSpace1[1].toLowerCase() === arrTeamNameSpace2[1].toLowerCase()) {

@@ -1,11 +1,8 @@
 import { Table } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
-import findTeam from '../../utils/findTeam';
 import { arbworldServices } from '../../services/arbworld';
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import Dropdown from 'react-bootstrap/Dropdown';
-import SplitButton from 'react-bootstrap/SplitButton';
-
 
 const MoneyWay = () => {
     const dispatch = useDispatch();
@@ -89,7 +86,7 @@ const MoneyWay = () => {
             }
         }
 
-        getData()
+        getData();
 
     }, []);
 
@@ -100,7 +97,7 @@ const MoneyWay = () => {
             payload: element[0],
         })
         setElement1X2(element[0]);
-        setShow1X2(true)
+        setShow1X2(true);
     }
 
     const handleClickUnderOver = (e) => {
@@ -158,7 +155,6 @@ const MoneyWay = () => {
     }
 
     const scores = correctScoreElementsScores(elemetnCorrectScore);
-
 
     return (
         <>

@@ -5,14 +5,12 @@ import InjuredPlayers from "../InjuredPlyers/InjuredPlayers";
 import FieldFactor from "../FieldFactor/FieldFactor";
 import Calendar from "../Calendar/Calendar";
 import Facts from "../Facts/Facts";
-import Trends from "../Trends/Trends";
 import MoneyWay from "../MoneyWay/MoneyWay";
 import Standings from "../Standings/Standings";
 import PredicitonsNbBet from "../PredicitonsNbBet/PredicitionsNbBet";
 import Predict from "../Predict/Predict";
 
-const Analitics = (props) => {
-    const { data, form, info, predictions, homeName, awayName } = props;
+const Analitics = ({ info, predictions }) => {
     let relevanceTeam = {
         percentHome: 50,
         percentAway: 50
@@ -58,7 +56,6 @@ const Analitics = (props) => {
                     info={info}
                 />
                 <Calendar
-                    form={form}
                     info={info}
                 />
                 <Facts
@@ -72,7 +69,6 @@ const Analitics = (props) => {
                 />
                 <MoneyWay />
                 <Predict 
-                    form={form}
                     info={info}
                     predictions={predictions}
                 />

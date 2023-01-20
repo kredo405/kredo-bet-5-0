@@ -13,7 +13,6 @@ import { Spin, Empty } from 'antd';
 
 const Predictions = (props) => {
     const state = useSelector(state => state);
-    const dispatch = useDispatch();
     const [data, setData] = useState(
         <Empty
             description={
@@ -32,88 +31,65 @@ const Predictions = (props) => {
         winerAway: '',
         winerHome: '',
     });
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const getPredictions = async () => {
             try {
-                const betzonaLinks = state.betzona.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName))
+                // Изем прогнозы на матч в бетзоне
+                const betzonaLinks = state.betzona.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName));
                 let betzona
-
                 if (betzonaLinks.length !== 0) {
-                    const betzonaPredict = await predictionsServices.getBetzonaPredict(betzonaLinks[0].link)
-                    console.log(betzonaPredict)
-                    betzona = betzonaPredict.data.predicitons
+                    const betzonaPredict = await predictionsServices.getBetzonaPredict(betzonaLinks[0].link);
+                    console.log(betzonaPredict);
+                    betzona = betzonaPredict.data.predicitons;
                 }
                 else {
-                    betzona = [{ predict: '', text: '' }]
+                    betzona = [{ predict: '', text: '' }];
                 }
 
-                const oddsRuLinks = state.oddsRu.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName))
+                // Ищем прогнозы на матч на сайте oddsRu
+                const oddsRuLinks = state.oddsRu.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName));
                 let oddsRu
-
                 if (oddsRuLinks.length !== 0) {
-                    const oddsPredict = await predictionsServices.getOddsRuPredict(oddsRuLinks[0].link)
-                    console.log(oddsPredict)
-                    oddsRu = oddsPredict.data.predicitons
+                    const oddsPredict = await predictionsServices.getOddsRuPredict(oddsRuLinks[0].link);
+                    console.log(oddsPredict);
+                    oddsRu = oddsPredict.data.predicitons;
                 }
                 else {
-                    oddsRu = [{ predict: '', text: '' }]
-                }
-                const euroFootballLink = state.euroFootball.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName))
-                let euroFootball
-
-                if (euroFootballLink.length !== 0) {
-                    const euroFootballPredict = await predictionsServices.getEuroFootballPredict(euroFootballLink[0].link)
-                    console.log(euroFootballPredict)
-                    euroFootball = euroFootballPredict.data.predicitons
-                }
-                else {
-                    euroFootball = [{ predict: '', text: '' }]
+                    oddsRu = [{ predict: '', text: '' }];
                 }
 
-                const legalbetlLink = state.legalbet.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName))
+                // Ищем прогнозы на матч на сайте Legalbet
+                const legalbetlLink = state.legalbet.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName));
                 let legalbet
-
                 if (legalbetlLink.length !== 0) {
-                    const legalbetPredict = await predictionsServices.getLeagalbetPredict(legalbetlLink[0].link)
-                    console.log(legalbetPredict)
-                    legalbet = legalbetPredict.data.predicitons
+                    const legalbetPredict = await predictionsServices.getLeagalbetPredict(legalbetlLink[0].link);
+                    console.log(legalbetPredict);
+                    legalbet = legalbetPredict.data.predicitons;
                 }
                 else {
-                    legalbet = [{ predict: '', text: '' }]
+                    legalbet = [{ predict: '', text: '' }];
                 }
 
-                const liveresultFilterOnNull = state.liveresult.filter(el => el.homeName && el.awayName)
-                const liveresultlLink = liveresultFilterOnNull.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName))
-                let liveresult
-
+                // Ищем прогнозы на матч на сайте Liveresult
+                const liveresultFilterOnNull = state.liveresult.filter(el => el.homeName && el.awayName);
+                const liveresultlLink = liveresultFilterOnNull.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName));
+                let liveresult;
                 if (liveresultlLink.length !== 0) {
-                    const liveresultPredict = await predictionsServices.getLiveresultPredict(liveresultlLink[0].link)
-                    console.log(liveresultPredict)
-                    liveresult = liveresultPredict.data.predicitons
-                    setPercent(liveresultPredict.data.predicitons[0].percent)
+                    const liveresultPredict = await predictionsServices.getLiveresultPredict(liveresultlLink[0].link);
+                    console.log(liveresultPredict);
+                    liveresult = liveresultPredict.data.predicitons;
+                    setPercent(liveresultPredict.data.predicitons[0].percent);
                 }
                 else {
-                    liveresult = [{ predict: '', text: '' }]
+                    liveresult = [{ predict: '', text: '' }];
                 }
 
-                // const stavkiprognozylLink = state.stavkiprognozy.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName))
-                // let stavkiprognozy
+                const arrPredictions = [...betzona, ...oddsRu, ...legalbet, ...liveresult,];
+                const arrPredictionsFilter = arrPredictions.filter(el => el.predict !== '' && el.text !== '');
 
-                // if (stavkiprognozylLink.length !== 0) {
-                //     const stavkiprognozyPredict = await predictionsServices.getStavkiprognozyPredict(stavkiprognozylLink[0].link)
-                //     console.log(stavkiprognozyPredict)
-                //     stavkiprognozy = stavkiprognozyPredict.data.predicitons
-                // }
-                // else {
-                //     stavkiprognozy = [{ predict: '', text: '' }]
-                // }
-
-                const arrPredictions = [...betzona, ...oddsRu, ...euroFootball, ...legalbet, ...liveresult,]
-                const arrPredictionsFilter = arrPredictions.filter(el => el.predict !== '' && el.text !== '')
-
-                console.log(arrPredictionsFilter)
+                console.log(arrPredictionsFilter);
 
                 if (arrPredictionsFilter.length > 0) {
                     const arrElements = arrPredictionsFilter.map((el, i) => {
@@ -134,27 +110,26 @@ const Predictions = (props) => {
                                     </AccordionDetails>
                                 </Accordion>
                             </div>
-                        )
-                    })
-                    setData(arrElements)
+                        );
+                    });
+                    setData(arrElements);
                 }
 
                 for (let key in percent) {
-                    let pos = percent[key].indexOf('%')
-                    percent[key] = percent[key].slice(0, pos)
-                    setPercent(percent)
+                    let pos = percent[key].indexOf('%');
+                    percent[key] = percent[key].slice(0, pos);
+                    setPercent(percent);
                 }
-                setIsLoading(true)
+                setIsLoading(true);
             }
             catch (error) {
-                console.log(error)
-                setIsLoading(true)
+                console.log(error);
+                setIsLoading(true);
             }
         }
 
-        getPredictions()
-
-    }, [])
+        getPredictions();
+    }, []);
 
 
     return (
@@ -174,7 +149,6 @@ const Predictions = (props) => {
                     <Spin size="large" />
                 </div>
             }
-
         </>
     )
 }

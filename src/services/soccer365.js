@@ -9,12 +9,12 @@ export const Soccer365Services = {
 
         return axios.request(options);
     },
-    async getMatchInfo() {
+    async getMatchInfo(id) {
         const options = {
             method: 'GET',
             url: 'https://node-api-ochre.vercel.app/matchInfo',
             params: {
-                id: `games/${sessionStorage.getItem('id')}`
+                id: `games/${id}`
               }
         };
 
@@ -31,12 +31,12 @@ export const Soccer365Services = {
 
         return axios.request(options);
     },
-    async getForm() {
+    async getForm(id) {
         const options = {
             method: 'GET',
             url: 'https://node-api-ochre.vercel.app/form',
             params: {
-                id: `games/${sessionStorage.getItem('id')}`
+                id: `games/${id}`
               }
         };
 

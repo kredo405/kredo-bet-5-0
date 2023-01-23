@@ -280,6 +280,7 @@ export const calcPoisonDestribution = (data) => {
         it1U25: poisonGoals0Home + poisonGoals1Home + poisonGoals2Home,
         it2U25: poisonGoals0Away + poisonGoals1Away + poisonGoals2Away,
     }
+    console.log(percentOutcomes)
 
     return percentOutcomes;
 }

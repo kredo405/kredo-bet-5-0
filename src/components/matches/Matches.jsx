@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { nbbetServices } from "../../services/nbbet";
 import { BackTop, Spin, Modal, Empty } from 'antd';
+import { Loading } from "../Loading/Loading";
 
 const errorModal = (message) => {
     Modal.error({
@@ -124,12 +125,7 @@ const Matches = () => {
             <BackTop />
             {isLoading ?
                 elements :
-                <div className="h-screen flex flex-col justify-center items-center">
-                    <div className="mb-4">
-                        <span className="font-mono text-xl font-medium text-sky-600">Собираем информацию</span>
-                    </div>
-                    <Spin size="large" />
-                </div>
+                <Loading />
             }
         </div>
     )

@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { calcPredictions } from "../../utils/calcPredictions";
 import { Spin } from 'antd';
+import * as Scroll from 'react-scroll';
 
 const Predict = ({ info, predictions }) => {
     const state = useSelector(state => state);
@@ -10,6 +11,11 @@ const Predict = ({ info, predictions }) => {
     const [moneyWay1x2, setMoneyWay1x2] = useState({});
     const [moneyWayOverUnder, setMoneyWayOverUnder] = useState({});
     const [correctScore, setCorrectScore] = useState({});
+    const [odd, setOdd] = useState('1.5');
+
+    const handleChange = (e) => {
+        setOdd(e.target.value);
+    }
 
     const handleClick = () => {
         const predictArr = calcPredictions(
@@ -19,8 +25,11 @@ const Predict = ({ info, predictions }) => {
             moneyWay1x2,
             moneyWayOverUnder,
             correctScore,
+            odd
         );
-        setPredictionsElements(<Spin className="my-3" size="large" />)
+
+        setPredictionsElements(<Spin className="my-3 py-10" size="large" />);
+
 
         const elements = predictArr.map((el, i) => {
             return (
@@ -36,8 +45,11 @@ const Predict = ({ info, predictions }) => {
                 <div>
                     {elements}
                 </div>
-            )
-        }, 1500);
+            );
+            Scroll.animateScroll.scrollToBottom();
+        }, 2500);
+
+        Scroll.animateScroll.scrollToBottom();
     }
 
     useEffect(() => {
@@ -51,6 +63,13 @@ const Predict = ({ info, predictions }) => {
         <>
             <div className="flex justify-center mb-3">
                 <h2 className='text-center py-3 font-serif text-2xl font-bold text-slate-600'>Прогноз</h2>
+            </div>
+            <div className="flex justify-center mb-3">
+                <h3 className='text-center py-2 font-serif font-bold text-slate-600'>Выберите минимальный коэфицент прогноза</h3>
+            </div>
+            <div className="flex justify-center flex-col items-center">
+                <input onChange={handleChange} className='w-8/12' type="range" id="odds" name="odds" min="1.1" max="3" value={odd} step={0.05}/>
+                <label className="text-2xl py-3 text-yellow-600 font-bold" htmlFor="odds">{odd}</label>
             </div>
             <div className="flex justify-center my-5">
                 <button

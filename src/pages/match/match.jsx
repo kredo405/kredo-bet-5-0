@@ -6,6 +6,7 @@ import Header from "../../components/header/Header";
 import { Progress, Spin, BackTop, Modal } from 'antd';
 import Bets from "../../components/Bets/Bets";
 import Form from "../../components/Form/Form";
+import { Loading } from '../../components/Loading/Loading';
 import LastMatches from "../../components/lastMatches/LastMatches";
 import { Soccer365Services } from "../../services/soccer365";
 import Analitics from '../../components/Analitics/Analitics';
@@ -150,13 +151,13 @@ const Match = () => {
                         <div className='w-[50%]'>
                             <span className='font-bold mr-3'>Погода</span>
                             <span
-                                className={info.additional_info.temperature.slice(0, 1) === '+' ? +info.additional_info.temperature.slice(1, 1) >= 10 ?
+                                className={info.additional_info?.temperature?.slice(0, 1) === '+' ? +info.additional_info?.temperature?.slice(1, 1) >= 10 ?
                                     'text-orange-500 text-center font-bold' : 'text-cyan-600 text-center font-bold' : 'text-sky-400 text-center font-bold'
                                 }>
-                                {info.additional_info.temperature ? info.additional_info.temperature : 'Нет информации'}
+                                {info.additional_info?.temperature ? info.additional_info?.temperature : 'Нет информации'}
                             </span>
                             <span className='text-teal-900 text-end font-mono pl-3'>
-                                {info.additional_info.weather ? info.additional_info.weather : 'Нет информации'}
+                                {info.additional_info?.weather ? info.additional_info?.weather : 'Нет информации'}
                             </span>
                         </div>
                     </div>
@@ -193,12 +194,7 @@ const Match = () => {
                     </div>
                 </div>
                 :
-                <div className="h-screen flex flex-col justify-center items-center">
-                    <div className="mb-4">
-                        <span className="font-mono text-xl font-medium text-sky-600">Собираем информацию</span>
-                    </div>
-                    <Spin size="large" />
-                </div>
+                <Loading />
             }
         </div>
     )

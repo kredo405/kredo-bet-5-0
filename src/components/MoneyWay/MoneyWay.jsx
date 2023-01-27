@@ -162,8 +162,8 @@ const MoneyWay = () => {
                 <h2 className='text-center py-3 font-serif text-2xl font-bold text-slate-600'>Денежные потоки</h2>
             </div>
             <div className='flex justify-center mb-3'>
-                <Dropdown>
-                    <Dropdown.Toggle variant="info" id="dropdown-basic">
+                <Dropdown className='w-[300px] flex justify-center'>
+                    <Dropdown.Toggle variant="info" id="dropdown-basic" className='w-8/12'>
                         Денежные потоки 1Х2
                     </Dropdown.Toggle>
 
@@ -214,8 +214,8 @@ const MoneyWay = () => {
                 null
             }
             <div className='flex justify-center mb-3'>
-                <Dropdown>
-                    <Dropdown.Toggle variant="info" id="dropdown-basic">
+                <Dropdown className='w-[300px] flex justify-center'>
+                    <Dropdown.Toggle variant="info" id="dropdown-basic" className='w-8/12'>
                         Денежные потоки Б/М
                     </Dropdown.Toggle>
 
@@ -257,8 +257,8 @@ const MoneyWay = () => {
                 null
             }
             <div className='flex justify-center mb-3'>
-                <Dropdown>
-                    <Dropdown.Toggle variant="info" id="dropdown-basic">
+                <Dropdown className='w-[300px] flex justify-center'>
+                    <Dropdown.Toggle variant="info" id="dropdown-basic" className='w-8/12'>
                         Денежные потоки ТС
                     </Dropdown.Toggle>
 

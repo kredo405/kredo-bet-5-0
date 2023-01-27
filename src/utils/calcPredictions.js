@@ -1,9 +1,9 @@
 import { element } from "prop-types";
 import { relevance } from "./relevence";
 
-export const calcPredictions = (info, predictions, outcomes, moneyWay1x2, moneyWayOverUnder, correctScore) => {
+export const calcPredictions = (info, predictions, outcomes, moneyWay1x2, moneyWayOverUnder, correctScore, odd) => {
 
-  const bets = Object.assign({}, outcomes);
+  const bets = JSON.parse(JSON.stringify(outcomes));
 
   const relevanceTeam = relevance(info.teams_form.home ? info.teams_form.home.matches : [1, 1], info.teams_form.away ? info.teams_form.away.matches : [1, 1]);
 
@@ -157,1250 +157,350 @@ export const calcPredictions = (info, predictions, outcomes, moneyWay1x2, moneyW
         const scoreAway = el.score[1] + el.score[3];
 
         if (scoreHome > scoreAway) {
-          bets.winnerHome.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.winnerHome.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.winnerHome.percent += 1;
+          bets.winnerAway.percent -= 1;
         }
         if (scoreHome >= scoreAway) {
-          bets.winOrDrawHome.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          }); 
-          bets.winOrDrawHome.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.winOrDrawHome.percent += 1;
+          bets.winnerAway.percent -= 1;
         }
         if (scoreHome - scoreAway >= -1) {
-          bets.foraHomePlus15.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.foraHomePlus15.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.foraHomePlus15.percent += 1;
+          bets.foraAwayMinus15.percent -= 1;
         }
         if (scoreHome - scoreAway >= 2) {
-          bets.foraHomeMinus15.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.foraHomeMinus15.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.foraHomeMinus15.percent += 1;
+          bets.winnerAway.percent -= 1;
+          bets.winOrdrawAway.percent -= 1;
+          bets.foraAwayMinus15.percent -= 1;
         }
         if (scoreHome > 0) {
-          bets.it1O05.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.it1O05.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.it1O05.percent += 1;
+          bets.it1U05.percent -= 1;
         }
         if (scoreHome > 1) {
-          bets.it1O15.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.it1O15.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.it1O15.percent += 1;
+          bets.it1U15.percent -= 1;
         }
         if (scoreHome > 2) {
-          bets.it1O25.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.it1O25.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.it1O25.percent += 1;
+          bets.it1U25.percent -= 1;
         }
         if (scoreHome < 1) {
-          bets.it1U05.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.it1U05.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.it1U05.percent += 1;
+          bets.it1O05.percent -= 1;
         }
         if (scoreHome < 2) {
-          bets.it1U15.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.it1U15.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.it1U15.percent += 1;
+          bets.it1O15.percent -= 1;
         }
         if (scoreHome < 3) {
-          bets.it1U25.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.it1U25.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.it1U25.percent += 1;
+          bets.it1O25.percent -= 1;
         }
         if (scoreHome + scoreAway > 1) {
-          bets.to15.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.to15.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.to15.percent += 1;
+          bets.tu15.percent -= 1;
         }
         if (scoreHome + scoreAway > 2) {
-          bets.to25.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.to25.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.to25.percent += 1;
+          bets.tu25.percent -= 1;
         }
         if (scoreHome + scoreAway > 3) {
-          bets.to35.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.to35.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.to35.percent += 1;
+          bets.tu35.percent -= 1;
         }
         if (scoreHome + scoreAway < 2) {
-          bets.tu15.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.tu15.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.tu15.percent += 1;
+          bets.to15.percent -= 1;
         }
         if (scoreHome + scoreAway < 3) {
-          bets.tu25.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.tu25.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.tu25.percent += 1;
+          bets.to25.percent -= 1;
         }
         if (scoreHome + scoreAway < 4) {
-          bets.tu35.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.tu35.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.tu35.percent += 1;
+          bets.to35.percent -= 1;
         }
         if (scoreHome > 0 && scoreAway > 0) {
-          bets.btsYes.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.btsYes.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.btsYes.percent += 1;
+          bets.btsNo.percent -= 1;
         }
         if (scoreHome > 0 && scoreAway === 0 || scoreHome === 0 && scoreAway > 0) {
-          bets.btsNo.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.btsNo.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.btsNo.percent += 1;
+          bets.btsYes.percent -= 1;
         }
         if (scoreHome === scoreAway) {
-          bets.draw.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.draw.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.draw.percent += 1;
+          bets.winnerHome.percent -= 1;
+          bets.winnerAway.percent -= 1;
         }
       });
 
-    if (arrMatchesHomeTeamHomeH2h.length > 0) {
-      // Для домашних матчей домашней команды h2h
-      arrMatchesHomeTeamHomeH2h.forEach(el => {
-        const scoreHome = el.score[0] + el.score[2];
-        const scoreAway = el.score[1] + el.score[3];
+      if (arrMatchesHomeTeamHomeH2h.length > 0) {
+        // Для домашних матчей домашней команды h2h
+        arrMatchesHomeTeamHomeH2h.forEach(el => {
+          const scoreHome = el.score[0] + el.score[2];
+          const scoreAway = el.score[1] + el.score[3];
 
-        if (scoreHome > scoreAway) {
-          bets.winnerHome.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.winnerHome.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
-        }
-        if (scoreHome >= scoreAway) {
-          if (bets?.winOrDrawHome?.percent) {
-            bets.winOrDrawHome.bets.forEach(item => {
-              for (let key in bets) {
-                if (+item === bets[key].num) {
-                  bets[key].percent += 1;
-                }
-              }
-            });
-            bets.winOrDrawHome.betsVs.forEach(item => {
-              for (let key in bets) {
-                if (+item === bets[key].num) {
-                  bets[key].percent -= 1;
-                }
-              }
-            });
+          if (scoreHome > scoreAway) {
+            bets.winnerHome.percent += 1;
+            bets.winnerAway.percent -= 1;
           }
-        }
-        if (scoreHome - scoreAway >= -1) {
-          bets.foraHomePlus15.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.foraHomePlus15.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
-        }
-        if (scoreHome - scoreAway >= 2) {
-          bets.foraHomeMinus15.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.foraHomeMinus15.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
-        }
-        if (scoreHome > 0) {
-          bets.it1O05.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.it1O05.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
-        }
-        if (scoreHome > 1) {
-          bets.it1O15.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.it1O15.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
-        }
-        if (scoreHome > 2) {
-          bets.it1O25.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.it1O25.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
-        }
-        if (scoreHome < 1) {
-          bets.it1U05.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.it1U05.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
-        }
-        if (scoreHome < 2) {
-          bets.it1U15.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.it1U15.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
-        }
-        if (scoreHome < 3) {
-          bets.it1U25.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.it1U25.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
-        }
-        if (scoreHome + scoreAway > 1) {
-          bets.to15.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.to15.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
-        }
-        if (scoreHome + scoreAway > 2) {
-          bets.to25.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.to25.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
-        }
-        if (scoreHome + scoreAway > 3) {
-          bets.to35.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.to35.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
-        }
-        if (scoreHome + scoreAway < 2) {
-          bets.tu15.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.tu15.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
-        }
-        if (scoreHome + scoreAway < 3) {
-          bets.tu25.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.tu25.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
-        }
-        if (scoreHome + scoreAway < 4) {
-          bets.tu35.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.tu35.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
-        }
-        if (scoreHome > 0 && scoreAway > 0) {
-          bets.btsYes.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.btsYes.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
-        }
-        if (scoreHome > 0 && scoreAway === 0 || scoreHome === 0 && scoreAway > 0) {
-          bets.btsNo.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.btsNo.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
-        }
-        if (scoreHome === scoreAway) {
-          bets.draw.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.draw.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
-        }
-      });
-    }
+          if (scoreHome >= scoreAway) {
+            bets.winOrDrawHome.percent += 1;
+            bets.winnerAway.percent -= 1;
+          }
+          if (scoreHome - scoreAway >= -1) {
+            bets.foraHomePlus15.percent += 1;
+            bets.foraAwayMinus15.percent -= 1;
+          }
+          if (scoreHome - scoreAway >= 2) {
+            bets.foraHomeMinus15.percent += 1;
+            bets.winnerAway.percent -= 1;
+            bets.winOrdrawAway.percent -= 1;
+            bets.foraAwayMinus15.percent -= 1;
+          }
+          if (scoreHome > 0) {
+            bets.it1O05.percent += 1;
+            bets.it1U05.percent -= 1;
+          }
+          if (scoreHome > 1) {
+            bets.it1O15.percent += 1;
+            bets.it1U15.percent -= 1;
+          }
+          if (scoreHome > 2) {
+            bets.it1O25.percent += 1;
+            bets.it1U25.percent -= 1;
+          }
+          if (scoreHome < 1) {
+            bets.it1U05.percent += 1;
+            bets.it1O05.percent -= 1;
+          }
+          if (scoreHome < 2) {
+            bets.it1U15.percent += 1;
+            bets.it1O15.percent -= 1;
+          }
+          if (scoreHome < 3) {
+            bets.it1U25.percent += 1;
+            bets.it1O25.percent -= 1;
+          }
+          if (scoreHome + scoreAway > 1) {
+            bets.to15.percent += 1;
+            bets.tu15.percent -= 1;
+          }
+          if (scoreHome + scoreAway > 2) {
+            bets.to25.percent += 1;
+            bets.tu25.percent -= 1;
+          }
+          if (scoreHome + scoreAway > 3) {
+            bets.to35.percent += 1;
+            bets.tu35.percent -= 1;
+          }
+          if (scoreHome + scoreAway < 2) {
+            bets.tu15.percent += 1;
+            bets.to15.percent -= 1;
+          }
+          if (scoreHome + scoreAway < 3) {
+            bets.tu25.percent += 1;
+            bets.to25.percent -= 1;
+          }
+          if (scoreHome + scoreAway < 4) {
+            bets.tu35.percent += 1;
+            bets.to35.percent -= 1;
+          }
+          if (scoreHome > 0 && scoreAway > 0) {
+            bets.btsYes.percent += 1;
+            bets.btsNo.percent -= 1;
+          }
+          if (scoreHome > 0 && scoreAway === 0 || scoreHome === 0 && scoreAway > 0) {
+            bets.btsNo.percent += 1;
+            bets.btsYes.percent -= 1;
+          }
+          if (scoreHome === scoreAway) {
+            bets.draw.percent += 1;
+            bets.winnerHome.percent -= 1;
+            bets.winnerAway.percent -= 1;
+          }
+        });
+      }
 
-    // Для гостевых матчей гостевой команды
-    arrMatchesAwayTeamAway.forEach(el => {
-      const scoreHome = el.score[0] + el.score[2];
-      const scoreAway = el.score[1] + el.score[3];
-
-      if (scoreAway > scoreHome) {
-        bets.winnerAway.bets.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent += 1;
-            }
-          }
-        });
-        bets.winnerAway.betsVs.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent -= 1;
-            }
-          }
-        });
-      }
-      if (scoreAway >= scoreHome) {
-        bets.winOrdrawAway.bets.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent += 1;
-            }
-          }
-        });
-        bets.winOrdrawAway.betsVs.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent -= 1;
-            }
-          }
-        });
-      }
-      if (scoreAway - scoreHome >= -1) {
-        bets.foraAwayPlus15.bets.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent += 1;
-            }
-          }
-        });
-        bets.foraAwayPlus15.betsVs.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent -= 1;
-            }
-          }
-        });
-      }
-      if (scoreAway - scoreHome >= 2) {
-        bets.foraAwayMinus15.bets.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent += 1;
-            }
-          }
-        });
-        bets.foraAwayMinus15.betsVs.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent -= 1;
-            }
-          }
-        });
-      }
-      if (scoreAway > 0) {
-        bets.it2O05.bets.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent += 1;
-            }
-          }
-        });
-        bets.it2O05.betsVs.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent -= 1;
-            }
-          }
-        });
-      }
-      if (scoreAway > 1) {
-        bets.it2O15.bets.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent += 1;
-            }
-          }
-        });
-        bets.it2O15.betsVs.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent -= 1;
-            }
-          }
-        });
-      }
-      if (scoreAway > 2) {
-        bets.it2O25.bets.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent += 1;
-            }
-          }
-        });
-        bets.it2O25.betsVs.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent -= 1;
-            }
-          }
-        });
-      }
-      if (scoreAway < 1) {
-        bets.it2U05.bets.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent += 1;
-            }
-          }
-        });
-        bets.it2U05.betsVs.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent -= 1;
-            }
-          }
-        });
-      }
-      if (scoreAway < 2) {
-        bets.it2U15.bets.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent += 1;
-            }
-          }
-        });
-        bets.it2U15.betsVs.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent -= 1;
-            }
-          }
-        });
-      }
-      if (scoreAway < 3) {
-        bets.it2U25.bets.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent += 1;
-            }
-          }
-        });
-        bets.it2U25.betsVs.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent -= 1;
-            }
-          }
-        });
-      }
-      if (scoreHome + scoreAway > 1) {
-        bets.to15.bets.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent += 1;
-            }
-          }
-        });
-        bets.to15.betsVs.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent -= 1;
-            }
-          }
-        });
-      }
-      if (scoreHome + scoreAway > 2) {
-        bets.to25.bets.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent += 1;
-            }
-          }
-        });
-        bets.to25.betsVs.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent -= 1;
-            }
-          }
-        });
-      }
-      if (scoreHome + scoreAway > 3) {
-        bets.to35.bets.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent += 1;
-            }
-          }
-        });
-        bets.to35.betsVs.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent -= 1;
-            }
-          }
-        });
-      }
-      if (scoreHome + scoreAway < 2) {
-        bets.tu15.bets.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent += 1;
-            }
-          }
-        });
-        bets.tu15.betsVs.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent -= 1;
-            }
-          }
-        });
-      }
-      if (scoreHome + scoreAway < 3) {
-        bets.tu25.bets.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent += 1;
-            }
-          }
-        });
-        bets.tu25.betsVs.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent -= 1;
-            }
-          }
-        });
-      }
-      if (scoreHome + scoreAway < 4) {
-        bets.tu35.bets.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent += 1;
-            }
-          }
-        });
-        bets.tu35.betsVs.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent -= 1;
-            }
-          }
-        });
-      }
-      if (scoreHome > 0 && scoreAway > 0) {
-        bets.btsYes.bets.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent += 1;
-            }
-          }
-        });
-        bets.btsYes.betsVs.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent -= 1;
-            }
-          }
-        });
-      }
-      if (scoreHome > 0 && scoreAway === 0 || scoreHome === 0 && scoreAway > 0) {
-        bets.btsNo.bets.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent += 1;
-            }
-          }
-        });
-        bets.btsNo.betsVs.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent -= 1;
-            }
-          }
-        });
-      }
-      if (scoreHome === scoreAway) {
-        bets.draw.bets.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent += 1;
-            }
-          }
-        });
-        bets.draw.betsVs.forEach(item => {
-          for (let key in bets) {
-            if (+item === bets[key].num) {
-              bets[key].percent -= 1;
-            }
-          }
-        });
-      }
-    });
-
-    if (arrMatchesAwayTeamAwayH2h.length > 0) {
-      // Для гостевых матчей гостевой команды h2h
-      arrMatchesAwayTeamAwayH2h.forEach(el => {
+      // Для гостевых матчей гостевой команды
+      arrMatchesAwayTeamAway.forEach(el => {
         const scoreHome = el.score[0] + el.score[2];
         const scoreAway = el.score[1] + el.score[3];
 
         if (scoreAway > scoreHome) {
-          bets.winnerAway.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.winnerAway.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.winnerAway.percent += 1;
+          bets.winnerHome.percent -= 1;
         }
         if (scoreAway >= scoreHome) {
-          bets.winOrdrawAway.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.winOrdrawAway.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.winOrdrawAway.percent += 1;
+          bets.winOrDrawHome.percent -= 1;
+          bets.winnerHome.percent -= 1;
         }
         if (scoreAway - scoreHome >= -1) {
-          bets.foraAwayPlus15.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.foraAwayPlus15.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.foraAwayPlus15.percent += 1;
+          bets.foraHomeMinus15.percent -= 1;
         }
         if (scoreAway - scoreHome >= 2) {
-          bets.foraAwayMinus15.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.foraAwayMinus15.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.foraAwayMinus15.percent += 1;
+          bets.winOrDrawHome.percent -= 1;
+          bets.winnerHome.percent -= 1;
+          bets.foraHomeMinus15.percent -= 1;
         }
         if (scoreAway > 0) {
-          bets.it2O05.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.it2O05.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.it2O05.percent += 1;
+          bets.it2U05.percent -= 1;
         }
         if (scoreAway > 1) {
-          bets.it2O15.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.it2O15.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.it2O15.percent += 1;
+          bets.it2U15.percent -= 1;
         }
         if (scoreAway > 2) {
-          bets.it2O25.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.it2O25.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.it2O25.percent += 1;
+          bets.it2U25.percent -= 1;
         }
         if (scoreAway < 1) {
-          bets.it2U05.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.it2U05.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.it2U05.percent += 1;
+          bets.it2O05.percent -= 1;
         }
         if (scoreAway < 2) {
-          bets.it2U15.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.it2U15.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.it2U15.percent += 1;
+          bets.it2O15.percent -= 1;
         }
         if (scoreAway < 3) {
-          bets.it2U25.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.it2U25.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.it2U25.percent += 1;
+          bets.it2O25.percent -= 1;
         }
         if (scoreHome + scoreAway > 1) {
-          bets.to15.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.to15.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.to15.percent += 1;
+          bets.tu15.percent -= 1;
         }
         if (scoreHome + scoreAway > 2) {
-          bets.to25.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.to25.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.to25.percent += 1;
+          bets.tu25.percent -= 1;
         }
         if (scoreHome + scoreAway > 3) {
-          bets.to35.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.to35.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.to35.percent += 1;
+          bets.tu35.percent -= 1;
         }
         if (scoreHome + scoreAway < 2) {
-          bets.tu15.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.tu15.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.tu15.percent += 1;
+          bets.to15.percent -= 1;
         }
         if (scoreHome + scoreAway < 3) {
-          bets.tu25.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.tu25.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.tu25.percent += 1;
+          bets.to25.percent -= 1;
         }
         if (scoreHome + scoreAway < 4) {
-          bets.tu35.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.tu35.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.tu35.percent += 1;
+          bets.to35.percent -= 1;
         }
         if (scoreHome > 0 && scoreAway > 0) {
-          bets.btsYes.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.btsYes.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.btsYes.percent += 1;
+          bets.btsNo.percent -= 1;
         }
         if (scoreHome > 0 && scoreAway === 0 || scoreHome === 0 && scoreAway > 0) {
-          bets.btsNo.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.btsNo.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.btsNo.percent += 1;
+          bets.btsYes.percent -= 1;
         }
         if (scoreHome === scoreAway) {
-          bets.draw.bets.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent += 1;
-              }
-            }
-          });
-          bets.draw.betsVs.forEach(item => {
-            for (let key in bets) {
-              if (+item === bets[key].num) {
-                bets[key].percent -= 1;
-              }
-            }
-          });
+          bets.draw.percent += 1;
+          bets.winnerHome.percent -= 1;
+          bets.winnerAway.percent -= 1;
         }
       });
+
+      if (arrMatchesAwayTeamAwayH2h.length > 0) {
+        // Для гостевых матчей гостевой команды h2h
+        arrMatchesAwayTeamAwayH2h.forEach(el => {
+          const scoreHome = el.score[0] + el.score[2];
+          const scoreAway = el.score[1] + el.score[3];
+
+          if (scoreAway > scoreHome) {
+            bets.winnerAway.percent += 1;
+            bets.winnerHome.percent -= 1;
+          }
+          if (scoreAway >= scoreHome) {
+            bets.winOrdrawAway.percent += 1;
+            bets.winOrDrawHome.percent -= 1;
+            bets.winnerHome.percent -= 1;
+          }
+          if (scoreAway - scoreHome >= -1) {
+            bets.foraAwayPlus15.percent += 1;
+            bets.foraHomeMinus15.percent -= 1;
+          }
+          if (scoreAway - scoreHome >= 2) {
+            bets.foraAwayMinus15.percent += 1;
+            bets.winOrDrawHome.percent -= 1;
+            bets.winnerHome.percent -= 1;
+            bets.foraHomeMinus15.percent -= 1;
+          }
+          if (scoreAway > 0) {
+            bets.it2O05.percent += 1;
+            bets.it2U05.percent -= 1;
+          }
+          if (scoreAway > 1) {
+            bets.it2O15.percent += 1;
+            bets.it2U15.percent -= 1;
+          }
+          if (scoreAway > 2) {
+            bets.it2O25.percent += 1;
+            bets.it2U25.percent -= 1;
+          }
+          if (scoreAway < 1) {
+            bets.it2U05.percent += 1;
+            bets.it2O05.percent -= 1;
+          }
+          if (scoreAway < 2) {
+            bets.it2U15.percent += 1;
+            bets.it2O15.percent -= 1;
+          }
+          if (scoreAway < 3) {
+            bets.it2U25.percent += 1;
+            bets.it2O25.percent -= 1;
+          }
+          if (scoreHome + scoreAway > 1) {
+            bets.to15.percent += 1;
+            bets.tu15.percent -= 1;
+          }
+          if (scoreHome + scoreAway > 2) {
+            bets.to25.percent += 1;
+            bets.tu25.percent -= 1;
+          }
+          if (scoreHome + scoreAway > 3) {
+            bets.to35.percent += 1;
+            bets.tu35.percent -= 1;
+          }
+          if (scoreHome + scoreAway < 2) {
+            bets.tu15.percent += 1;
+            bets.to15.percent -= 1;
+          }
+          if (scoreHome + scoreAway < 3) {
+            bets.tu25.percent += 1;
+            bets.to25.percent -= 1;
+          }
+          if (scoreHome + scoreAway < 4) {
+            bets.tu35.percent += 1;
+            bets.to35.percent -= 1;
+          }
+          if (scoreHome > 0 && scoreAway > 0) {
+            bets.btsYes.percent += 1;
+            bets.btsNo.percent -= 1;
+          }
+          if (scoreHome > 0 && scoreAway === 0 || scoreHome === 0 && scoreAway > 0) {
+            bets.btsNo.percent += 1;
+            bets.btsYes.percent -= 1;
+          }
+          if (scoreHome === scoreAway) {
+            bets.draw.percent += 1;
+            bets.winnerHome.percent -= 1;
+            bets.winnerAway.percent -= 1;
+          }
+        });
+      }
     }
-  }
 
     return bets;
   }
@@ -1423,7 +523,7 @@ export const calcPredictions = (info, predictions, outcomes, moneyWay1x2, moneyW
           });
         }
       });
-      if(bet) {
+      if (bet) {
         bets[bet].betsVs.forEach(item => {
           for (let key2 in bets) {
             if (+item === bets[key2].num) {
@@ -1432,8 +532,6 @@ export const calcPredictions = (info, predictions, outcomes, moneyWay1x2, moneyW
           }
         });
       }
-     
-
     }
 
     return bets;
@@ -1450,7 +548,7 @@ export const calcPredictions = (info, predictions, outcomes, moneyWay1x2, moneyW
           bets[key].percent += 5;
         }
       });
-      if(bet) {
+      if (bet) {
         bets[bet].betsVs.forEach(item => {
           for (let key1 in bets) {
             if (+item === bets[key1]) {
@@ -1459,8 +557,6 @@ export const calcPredictions = (info, predictions, outcomes, moneyWay1x2, moneyW
           }
         });
       }
-      
-
     }
 
     return bets;
@@ -1533,7 +629,7 @@ export const calcPredictions = (info, predictions, outcomes, moneyWay1x2, moneyW
           }
         });
       });
-      if(bet) {
+      if (bet) {
         bets[key].betsVs.forEach(element => {
           for (let key1 in bets) {
             if (+element === bets[key1].num) {
@@ -1542,7 +638,7 @@ export const calcPredictions = (info, predictions, outcomes, moneyWay1x2, moneyW
           }
         });
       }
-      
+
     }
 
     return bets;
@@ -1570,7 +666,7 @@ export const calcPredictions = (info, predictions, outcomes, moneyWay1x2, moneyW
             }
           }
         });
-        if(bet) {
+        if (bet) {
           bets[bet].betsVs.forEach(item => {
             for (let key1 in bets) {
               if (+item === bets[key1].num) {
@@ -1610,7 +706,7 @@ export const calcPredictions = (info, predictions, outcomes, moneyWay1x2, moneyW
             }
           }
         });
-        if(bet) {
+        if (bet) {
           bets[bet].betsVs.forEach(item => {
             for (let key1 in bets) {
               if (+item === bets[key1].num) {
@@ -4897,8 +3993,10 @@ export const calcPredictions = (info, predictions, outcomes, moneyWay1x2, moneyW
 
   const arrOutcomes = [];
 
+  console.log(odd)
+
   for (let key in valuesCorrectScore) {
-    if (valuesCorrectScore[key].odds !== undefined && valuesCorrectScore[key].odds >= 1.45) {
+    if (valuesCorrectScore[key].odds !== undefined && valuesCorrectScore[key].odds >= +odd) {
       arrOutcomes.push(valuesCorrectScore[key]);
     }
   }
@@ -4913,9 +4011,9 @@ export const calcPredictions = (info, predictions, outcomes, moneyWay1x2, moneyW
   }
 
   const newArr = getArrLargestValues(arrOutcomes);
-
   console.log(valuesCorrectScore);
+  
 
-  return [newArr[0], newArr[1], newArr[2]];
+  return [newArr[0], newArr[1]];
 
 }

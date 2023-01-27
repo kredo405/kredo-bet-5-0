@@ -54,7 +54,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             percent: winnerHome,
             odds: odds['1'],
             num: 1,
-            bets: ['1', '79', '77', '31', '35', '39', '41', '75', '81', '143', '181', '183', '231'],
+            bets: ['1', '4', '79', '77', '75', '81'],
             betsVs: ['2', '3', '5', '90']
         },
         winnerAway: {
@@ -62,7 +62,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             percent: winnerAway,
             odds: odds['2'],
             num: 2,
-            bets: ['2', '51', '53', '55', '57', '59', '88', '90', '92', '94', '144', '186', '188', '232'],
+            bets: ['2', '88', '90', '92', '94'],
             betsVs: ['1', '3', '4', '77']
         },
         draw: {
@@ -78,7 +78,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             percent: winOrDrawHome,
             odds: odds['4'],
             num: 4,
-            bets: ['4', '3', '73', '74', '1'],
+            bets: ['4', '3', '73', '74'],
             betsVs: ['2', '3', '5', '90']
         },
         winOrdrawAway: {
@@ -86,7 +86,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             percent: winOrdrawAway,
             odds: odds['5'],
             num: 5,
-            bets: ['5', '3', '2', '86', '87'],
+            bets: ['5', '3', '86', '87'],
             betsVs: ['1', '3', '4', '77']
         },
         foraHomeMinus15: {
@@ -102,7 +102,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             percent: foraHomePlus15,
             odds: odds['76'],
             num: 76,
-            bets: ['76', '1', '4', '79', '77', '31', '35', '39', '41', '73', '74', '75', '81', '143', '181', '183', '231'],
+            bets: ['76', '1', '4', '78', '80', '82'],
             betsVs: ['90']
         },
         foraAwayMinus15: {
@@ -118,7 +118,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             percent: foraAwayPlus15,
             odds: odds['89'],
             num: 89,
-            bets: ['89', '2', '5', '51', '53', '55', '57', '59', '88', '90', '92', '94', '144', '186', '188', '232', '86', '87'],
+            bets: ['89', '2', '5', '91', '93', '95'],
             betsVs: ['77']
         },
         to15: {

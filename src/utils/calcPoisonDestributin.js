@@ -24,7 +24,7 @@ export const calcPoisonDestribution = (data) => {
     const expectedShotsAway = (shotsAway + shotsVsHome) / 2;
     const goalsPerShotsHome = data.summary[0][0]['8'] / data.summary[0][0]['32'];
     const goalsPerShotsAway = data.summary[0][1]['8'] / data.summary[0][1]['32'];
-    expectedGoalsHome = (((expectedShotsHome * goalsPerShotsHome) + ((goalsHome + goalsVsAway) / 2)) / 2) + 0.2;
+    expectedGoalsHome = (((expectedShotsHome * goalsPerShotsHome) + ((goalsHome + goalsVsAway) / 2)) / 2) + 0.1;
     expectedGoalsAway = ((expectedShotsAway * goalsPerShotsAway) + ((goalsAway + goalsVsHome) / 2)) / 2;
 
     } else {
@@ -34,7 +34,7 @@ export const calcPoisonDestribution = (data) => {
     const expectedShotsAway = (data.summary[0][1]['32'] + data.summary[0][0]['33']) / 2;
     const goalsPerShotsHome = data.summary[0][0]['8'] / data.summary[0][0]['32'];
     const goalsPerShotsAway = data.summary[0][1]['8'] / data.summary[0][1]['32'];
-    expectedGoalsHome = (((expectedShotsHome * goalsPerShotsHome) + ((+data.goalsForAvgHome + +data.goalsAgainstAvgAway) / 2)) / 2) + 0.2;
+    expectedGoalsHome = (((expectedShotsHome * goalsPerShotsHome) + ((+data.goalsForAvgHome + +data.goalsAgainstAvgAway) / 2)) / 2) + 0.1 ;
     expectedGoalsAway = ((expectedShotsAway * goalsPerShotsAway) + ((+data.goalsForAvgAway + +data.goalsAgainstAvgHome) / 2)) / 2;
     }
 

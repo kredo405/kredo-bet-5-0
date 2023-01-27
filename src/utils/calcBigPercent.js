@@ -142,7 +142,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             percent: to25,
             odds: odds['15'],
             num: 15,
-            bets: ['15'],
+            bets: ['15', '11'],
             betsVs: ['16', '12']
         },
         tu25: {
@@ -158,7 +158,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             percent: to35,
             odds: odds['19'],
             num: 19,
-            bets: ['19'],
+            bets: ['19', '15', '11'],
             betsVs: ['20', '16', '12']
         },
         tu35: {
@@ -174,7 +174,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             percent: btsYes,
             odds: odds['99'],
             num: 99,
-            bets: ['99', '16', '19'],
+            bets: ['99', '11'],
             betsVs: ['100', '30', '52']
         },
         btsNo: {

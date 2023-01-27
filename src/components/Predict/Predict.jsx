@@ -4,7 +4,7 @@ import { calcPredictions } from "../../utils/calcPredictions";
 import { Spin } from 'antd';
 import * as Scroll from 'react-scroll';
 
-const Predict = ({ info, predictions }) => {
+const Predict = ({ info, predictions, outsiderRange, midleRange, pretendersRange, grandRange }) => {
     const state = useSelector(state => state);
     const [predictionsElements, setPredictionsElements] = useState(null);
     const [outcomes, setOutcomes] = useState({});
@@ -25,7 +25,11 @@ const Predict = ({ info, predictions }) => {
             moneyWay1x2,
             moneyWayOverUnder,
             correctScore,
-            odd
+            odd,
+            outsiderRange,
+            midleRange,
+            pretendersRange, 
+            grandRange
         );
 
         setPredictionsElements(<Spin className="my-3 py-10" size="large" />);

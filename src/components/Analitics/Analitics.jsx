@@ -9,6 +9,7 @@ import MoneyWay from "../MoneyWay/MoneyWay";
 import Standings from "../Standings/Standings";
 import PredicitonsNbBet from "../PredicitonsNbBet/PredicitionsNbBet";
 import Predict from "../Predict/Predict";
+import { TeamRang } from "../../utils/calcTeamRang";
 
 const Analitics = ({ info, predictions }) => {
     let relevanceTeam = {
@@ -18,6 +19,13 @@ const Analitics = ({ info, predictions }) => {
     if(info.teams_form.home) {
        relevanceTeam = relevance(info.teams_form.home.matches, info.teams_form.away.matches)
     }
+
+    // Разделяем команды по рангам
+    const teamRang = new TeamRang(info.table[0]);
+    const outsiderRange = teamRang.calcOutsiderRange();
+    const midleRange = teamRang.calcMidleRange();
+    const pretendersRange = teamRang.calcPretendersRange();
+    const grandRange = teamRang.calcGrandRange();
     
 
     return (
@@ -55,9 +63,6 @@ const Analitics = ({ info, predictions }) => {
                 <FieldFactor 
                     info={info}
                 />
-                <Calendar
-                    info={info}
-                />
                 <Facts
                     info={info}
                 />
@@ -71,6 +76,10 @@ const Analitics = ({ info, predictions }) => {
                 <Predict 
                     info={info}
                     predictions={predictions}
+                    outsiderRange={outsiderRange}
+                    midleRange={midleRange}
+                    pretendersRange={pretendersRange}
+                    grandRange={grandRange}
                 />
             </div>
         </>

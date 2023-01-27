@@ -1,7 +1,20 @@
 import { element } from "prop-types";
 import { relevance } from "./relevence";
 
-export const calcPredictions = (info, predictions, outcomes, moneyWay1x2, moneyWayOverUnder, correctScore, odd) => {
+export const calcPredictions = (
+  info,
+  predictions,
+  outcomes,
+  moneyWay1x2,
+  moneyWayOverUnder,
+  correctScore,
+  odd,
+  outsiderRange,
+  midleRange,
+  pretendersRange,
+  grandRange
+) => {
+
 
   const bets = JSON.parse(JSON.stringify(outcomes));
 
@@ -150,7 +163,142 @@ export const calcPredictions = (info, predictions, outcomes, moneyWay1x2, moneyW
     const arrMatchesHomeTeamHomeH2h = array[2].length > 0 ? filterMatches(array[2], homeName, 'team1_name') : [];
     const arrMatchesAwayTeamAwayH2h = array[2].length > 0 ? filterMatches(array[2], awayName, 'team2_name') : [];
 
+    // Определяем к какому рангу относиться команда
+    const determineRank = (team) => {
+
+      const outsiderHome = outsiderRange.find(el => el['2'] === team);
+      const midleHome = midleRange.find(el => el['2'] === team);
+      const pretenderHome = pretendersRange.find(el => el['2'] === team);
+      const grandHome = grandRange.find(el => el['2'] === team);
+
+      if (outsiderHome) {
+        return 4;
+      }
+      if (midleHome) {
+        return 3;
+      }
+      if (pretenderHome) {
+        return 2;
+      }
+      if (grandHome) {
+        return 1;
+      }
+    }
+
+    const rankHomeTeam = determineRank(info.team1_name);
+    const rankAwayTeam = determineRank(info.team2_name);
+
+    console.log(rankHomeTeam);
+    console.log(rankAwayTeam);
+
+    // Фильтруем матчи взависимости от ранга
+    const filterMatchesFromRank = (array, name, str, strVs, rank) => {
+      const arr = array.filter(el => {
+        if (el[str] === name) {
+          if (rank === determineRank(el[strVs])) {
+            return el;
+          }
+        }
+      });
+
+      return arr;
+    }
+
+    const matchesFromRankHome = filterMatchesFromRank(array[0], homeName, 'team1_name', 'team2_name', rankAwayTeam);
+    const matchesFromRankAway = filterMatchesFromRank(array[1], awayName, 'team2_name', 'team1_name', rankHomeTeam);
+
+    console.log(matchesFromRankHome);
+    console.log(matchesFromRankAway);
+
     if (bets?.winnerHome) {
+      // Для домашних матчей домашней команды взависимости от ранга
+      if (matchesFromRankHome.length > 0) {
+        matchesFromRankHome.forEach(el => {
+          const scoreHome = el.score[0] + el.score[2];
+          const scoreAway = el.score[1] + el.score[3];
+
+          if (scoreHome > scoreAway) {
+            bets.winnerHome.percent += 5;
+            bets.winnerAway.percent -= 5;
+          }
+          if (scoreHome >= scoreAway) {
+            bets.winOrDrawHome.percent += 5;
+            bets.winnerAway.percent -= 5;
+          }
+          if (scoreHome - scoreAway >= -1) {
+            bets.foraHomePlus15.percent += 5;
+            bets.foraAwayMinus15.percent -= 5;
+          }
+          if (scoreHome - scoreAway >= 2) {
+            bets.foraHomeMinus15.percent += 5;
+            bets.winnerAway.percent -= 5;
+            bets.winOrdrawAway.percent -= 5;
+            bets.foraAwayMinus15.percent -= 5;
+          }
+          if (scoreHome > 0) {
+            bets.it1O05.percent += 5;
+            bets.it1U05.percent -= 5;
+          }
+          if (scoreHome > 1) {
+            bets.it1O15.percent += 5;
+            bets.it1U15.percent -= 5;
+          }
+          if (scoreHome > 2) {
+            bets.it1O25.percent += 5;
+            bets.it1U25.percent -= 5;
+          }
+          if (scoreHome < 1) {
+            bets.it1U05.percent += 5;
+            bets.it1O05.percent -= 5;
+          }
+          if (scoreHome < 2) {
+            bets.it1U15.percent += 5;
+            bets.it1O15.percent -= 5;
+          }
+          if (scoreHome < 3) {
+            bets.it1U25.percent += 5;
+            bets.it1O25.percent -= 5;
+          }
+          if (scoreHome + scoreAway > 1) {
+            bets.to15.percent += 5;
+            bets.tu15.percent -= 5;
+          }
+          if (scoreHome + scoreAway > 2) {
+            bets.to25.percent += 5;
+            bets.tu25.percent -= 5;
+          }
+          if (scoreHome + scoreAway > 3) {
+            bets.to35.percent += 5;
+            bets.tu35.percent -= 5;
+          }
+          if (scoreHome + scoreAway < 2) {
+            bets.tu15.percent += 5;
+            bets.to15.percent -= 5;
+          }
+          if (scoreHome + scoreAway < 3) {
+            bets.tu25.percent += 5;
+            bets.to25.percent -= 5;
+          }
+          if (scoreHome + scoreAway < 4) {
+            bets.tu35.percent += 5;
+            bets.to35.percent -= 5;
+          }
+          if (scoreHome > 0 && scoreAway > 0) {
+            bets.btsYes.percent += 5;
+            bets.btsNo.percent -= 5;
+          }
+          if (scoreHome > 0 && scoreAway === 0 || scoreHome === 0 && scoreAway > 0) {
+            bets.btsNo.percent += 5;
+            bets.btsYes.percent -= 5;
+          }
+          if (scoreHome === scoreAway) {
+            bets.draw.percent += 5;
+            bets.winnerHome.percent -= 5;
+            bets.winnerAway.percent -= 5;
+          }
+        });
+      }
+
       // для домашних матчей домашней команды
       arrMatchesHomeTeamHome.forEach(el => {
         const scoreHome = el.score[0] + el.score[2];
@@ -321,6 +469,95 @@ export const calcPredictions = (info, predictions, outcomes, moneyWay1x2, moneyW
             bets.draw.percent += 1;
             bets.winnerHome.percent -= 1;
             bets.winnerAway.percent -= 1;
+          }
+        });
+      }
+
+      // Для гостевых матчей гостевой команды взависимости от ранга
+      if (matchesFromRankAway.length > 0) {
+        arrMatchesAwayTeamAway.forEach(el => {
+          const scoreHome = el.score[0] + el.score[2];
+          const scoreAway = el.score[1] + el.score[3];
+
+          if (scoreAway > scoreHome) {
+            bets.winnerAway.percent += 5;
+            bets.winnerHome.percent -= 5;
+          }
+          if (scoreAway >= scoreHome) {
+            bets.winOrdrawAway.percent += 5;
+            bets.winOrDrawHome.percent -= 5;
+            bets.winnerHome.percent -= 5;
+          }
+          if (scoreAway - scoreHome >= -1) {
+            bets.foraAwayPlus15.percent += 5;
+            bets.foraHomeMinus15.percent -= 5;
+          }
+          if (scoreAway - scoreHome >= 2) {
+            bets.foraAwayMinus15.percent += 5;
+            bets.winOrDrawHome.percent -= 5;
+            bets.winnerHome.percent -= 5;
+            bets.foraHomeMinus15.percent -= 5;
+          }
+          if (scoreAway > 0) {
+            bets.it2O05.percent += 5;
+            bets.it2U05.percent -= 5;
+          }
+          if (scoreAway > 1) {
+            bets.it2O15.percent += 5;
+            bets.it2U15.percent -= 5;
+          }
+          if (scoreAway > 2) {
+            bets.it2O25.percent += 5;
+            bets.it2U25.percent -= 5;
+          }
+          if (scoreAway < 1) {
+            bets.it2U05.percent += 5;
+            bets.it2O05.percent -= 5;
+          }
+          if (scoreAway < 2) {
+            bets.it2U15.percent += 5;
+            bets.it2O15.percent -= 5;
+          }
+          if (scoreAway < 3) {
+            bets.it2U25.percent += 5;
+            bets.it2O25.percent -= 5;
+          }
+          if (scoreHome + scoreAway > 1) {
+            bets.to15.percent += 5;
+            bets.tu15.percent -= 5;
+          }
+          if (scoreHome + scoreAway > 2) {
+            bets.to25.percent += 5;
+            bets.tu25.percent -= 5;
+          }
+          if (scoreHome + scoreAway > 3) {
+            bets.to35.percent += 5;
+            bets.tu35.percent -= 5;
+          }
+          if (scoreHome + scoreAway < 2) {
+            bets.tu15.percent += 5;
+            bets.to15.percent -= 5;
+          }
+          if (scoreHome + scoreAway < 3) {
+            bets.tu25.percent += 5;
+            bets.to25.percent -= 5;
+          }
+          if (scoreHome + scoreAway < 4) {
+            bets.tu35.percent += 5;
+            bets.to35.percent -= 5;
+          }
+          if (scoreHome > 0 && scoreAway > 0) {
+            bets.btsYes.percent += 5;
+            bets.btsNo.percent -= 5;
+          }
+          if (scoreHome > 0 && scoreAway === 0 || scoreHome === 0 && scoreAway > 0) {
+            bets.btsNo.percent += 5;
+            bets.btsYes.percent -= 5;
+          }
+          if (scoreHome === scoreAway) {
+            bets.draw.percent += 5;
+            bets.winnerHome.percent -= 5;
+            bets.winnerAway.percent -= 5
           }
         });
       }
@@ -580,14 +817,14 @@ export const calcPredictions = (info, predictions, outcomes, moneyWay1x2, moneyW
               bets[key].bets.forEach(item => {
                 for (let key in bets) {
                   if (+item === bets[key].num) {
-                    bets[key].percent += 3;
+                    bets[key].percent += 7;
                   }
                 }
               });
               bets[key].betsVs.forEach(el => {
                 for (let key1 in bets) {
                   if (+el === bets[key1]) {
-                    bets[key1].percent -= 3;
+                    bets[key1].percent -= 7;
                   }
                 }
               });
@@ -596,14 +833,14 @@ export const calcPredictions = (info, predictions, outcomes, moneyWay1x2, moneyW
               bets[key].bets.forEach(item => {
                 for (let key in bets) {
                   if (+item === bets[key].num) {
-                    bets[key].percent += 3;
+                    bets[key].percent += 7;
                   }
                 }
               });
               bets[key].betsVs.forEach(el => {
                 for (let key1 in bets) {
                   if (+el === bets[key1]) {
-                    bets[key1].percent += 3;
+                    bets[key1].percent += 7;
                   }
                 }
               });
@@ -4012,7 +4249,7 @@ export const calcPredictions = (info, predictions, outcomes, moneyWay1x2, moneyW
 
   const newArr = getArrLargestValues(arrOutcomes);
   console.log(valuesCorrectScore);
-  
+
 
   return [newArr[0], newArr[1]];
 

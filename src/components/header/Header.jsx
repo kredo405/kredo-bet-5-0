@@ -1,18 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import logo from './kredi-logo.png'
-import { Link } from 'react-router-dom';
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { MenuIcon, XIcon } from '@heroicons/react/outline'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-const Header = (props) => {
-  const email = localStorage.getItem('email');
+const Header = () => {
   const navigate = useNavigate();
-  const name = localStorage.getItem('name')
 
   const logOut = () => {
     localStorage.clear();

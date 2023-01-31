@@ -5,7 +5,6 @@ import { store } from './store/store';
 import { BrowserRouter } from 'react-router-dom';
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
 import './index.css';
 import App from './App';
 

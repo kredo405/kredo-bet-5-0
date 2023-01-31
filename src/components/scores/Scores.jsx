@@ -4,28 +4,26 @@ import { Table } from 'react-bootstrap';
 const Scores = ({ correctScoreMatch }) => {
 
     const [scores, setScores] = useState(<tr>
-        <td colSpan={4}><p className='text-center'>Нет данных</p></td>
-    </tr>)
+        <td colSpan={4}><p className='text-center'>No data</p></td>
+    </tr>);
 
-   
-    
     useEffect(() => {
         const elements = correctScoreMatch.map((el, i) => {
-            for (let key in el) {
-                return (
-                    <tr key={key}>
-                        <td><p className='text-center'>{key.slice(-3)}</p></td>
-                        <td><p className='text-center text-blue-200'>{el[key].odd}</p></td>
-                        <td><p className='text-center text-blue-200'>{el[key].percent}%</p></td>
-                        <td><p className='text-center text-blue-200'>{el[key].money}</p></td>
-                    </tr>
-                )
-            }
-        })
-        if(correctScoreMatch[0].score0_0.percent) {
-            setScores(elements)
+            const key = Object.keys(el)[0];
+            return (
+                <tr key={key}>
+                    <td><p className='text-center'>{key.slice(-3)}</p></td>
+                    <td><p className='text-center text-blue-200'>{el[key].odd}</p></td>
+                    <td><p className='text-center text-blue-200'>{el[key].percent}%</p></td>
+                    <td><p className='text-center text-blue-200'>{el[key].money}</p></td>
+                </tr>
+            );
+        });
+
+        if (correctScoreMatch[0].score0_0.percent) {
+            setScores(elements);
         }
-    }, [])
+    }, [correctScoreMatch]);
 
     return (
         <div className='container'>

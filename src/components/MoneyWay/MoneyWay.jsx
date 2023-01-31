@@ -58,10 +58,6 @@ const MoneyWay = () => {
                 const moneyWayUnderOver = await arbworldServices.getMoneyWayUnderOver()
                 const correctScore = await arbworldServices.getcorrectScore()
 
-                console.log(moneyWay1X2.data.moneyWay)
-                console.log(moneyWayUnderOver.data.moneyWay)
-                console.log(correctScore.data.moneyWay)
-
                 const correctScoreFixTeamName = correctScore.data.moneyWay.map(el => {
                     const pos = el.teamName.indexOf('vs');
                     return {
@@ -73,13 +69,9 @@ const MoneyWay = () => {
                     }
                 })
 
-                console.log(correctScoreFixTeamName)
-
                 setMoneyWay1X2(moneyWay1X2.data.moneyWay);
                 setMoneyWayOverUnder(moneyWayUnderOver.data.moneyWay);
                 setCorrectScore(correctScoreFixTeamName);
-
-
             }
             catch (error) {
                 console.log(error)

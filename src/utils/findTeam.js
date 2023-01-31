@@ -93,12 +93,6 @@ const findTeam = (name1, name2) => {
     if (name1.toLowerCase() === 'wolves' && name2.toLowerCase() === 'wolverhampton wanderers') {
         return true
     }
-
-
-
-    
-
-
     return false
 }
 

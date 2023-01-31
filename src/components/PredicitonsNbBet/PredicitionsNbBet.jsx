@@ -42,32 +42,25 @@ const PredicitonsNbBet = ({ predictions }) => {
     }, []);
 
     useEffect(() => {
-        const predictionsAndOdds = [];
-
-        predictions.forEach(el => {
-            odds.odds.forEach(item => {
-                if (el[2] === +item.odd) {
-                    predictionsAndOdds.push({
-                        rank: el[10],
-                        predict: item.name,
-                        odd: el[3],
-                        profit: el[6]
-                    });
-                }
-            });
-        });
+        const predictionsAndOdds = predictions.reduce((result, el) => {
+            const matchedOdd = odds.odds.find(item => +item.odd === el[2]);
+            if (matchedOdd) {
+                result.push({
+                    rank: el[10],
+                    predict: matchedOdd.name,
+                    odd: el[3],
+                    profit: el[6]
+                });
+            }
+            return result;
+        }, []);
 
         console.log(predictionsAndOdds);
 
-        const newArr = getArrLargestValues(predictionsAndOdds);
+        const newArr = getArrLargestValues(predictionsAndOdds, 'profit');
 
         function getArrLargestValues(target, byValue = 'profit') {
-            let result = target;
-
-            result.sort((a, b) => a[byValue] - b[byValue]);
-            result = result.reverse();
-
-            return result;
+            return target.sort((a, b) => b[byValue] - a[byValue]);
         }
 
         const elements = newArr.map((el, i) => {

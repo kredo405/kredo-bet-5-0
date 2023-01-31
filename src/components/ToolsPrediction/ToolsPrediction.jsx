@@ -16,7 +16,6 @@ const ToolsPrediction = ({ percentPoison, percentWithScore, info }) => {
         percent: 0
     }]);
     
-
     useEffect(() => {
         const getDataOdds = async () => {
             const db = getFirestore(state.app);

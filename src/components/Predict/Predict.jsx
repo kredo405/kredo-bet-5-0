@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { calcPredictions } from "../../utils/calcPredictions";
 import { Spin } from 'antd';
+import { Loading } from "../Loading/Loading";
 import * as Scroll from 'react-scroll';
 
 const Predict = ({ info, predictions, outsiderRange, midleRange, pretendersRange, grandRange }) => {

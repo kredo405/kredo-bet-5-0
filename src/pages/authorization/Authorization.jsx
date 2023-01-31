@@ -1,10 +1,9 @@
 import { LockClosedIcon } from '@heroicons/react/solid'
-import { Link } from 'react-router-dom';
 import { getAuth, signInWithEmailAndPassword,  GithubAuthProvider, FacebookAuthProvider, signInWithPopup, GoogleAuthProvider  } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
 import { Modal } from 'antd';
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import logo from './logo2.png'
 
 const errorModal = (message) => {

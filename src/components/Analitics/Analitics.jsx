@@ -3,7 +3,6 @@ import TeamStrength from '../TeamStrength/TeamStrength';
 import Motivation from "../Motivation/Motivation";
 import InjuredPlayers from "../InjuredPlyers/InjuredPlayers";
 import FieldFactor from "../FieldFactor/FieldFactor";
-import Calendar from "../Calendar/Calendar";
 import Facts from "../Facts/Facts";
 import MoneyWay from "../MoneyWay/MoneyWay";
 import Standings from "../Standings/Standings";

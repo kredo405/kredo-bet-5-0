@@ -6,10 +6,6 @@ export const nbbetServices = {
         const dateFix = Number(String(timestamp).slice(3, 8)) + 740;
         const newTimestamp = +`${String(timestamp).slice(0, 3)}${dateFix}99999`;
 
-        // 1672014253276
-        // 1672044299999
-        // 1672088399999
-
         const options = {
             method: 'GET',
             url: 'https://node-api-ochre.vercel.app/nbbetMatches',

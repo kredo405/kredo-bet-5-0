@@ -3,9 +3,8 @@ const LastMatches = ({ data }) => {
     const matchesAway = data.matches[1];
 
     function timestampToDate(timeStamp) {
-        const date = new Date();
-        date.setTime(timeStamp);
-        return ('0' + date.getDate()).slice(-2) + '.' + ('0' + (date.getMonth() + 1)).slice(-2) + '.' + date.getFullYear();
+        const date = new Date(timeStamp);
+        return date.toLocaleDateString();
     }
 
     const createElementsMatches = (arr) => {

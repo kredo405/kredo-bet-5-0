@@ -36,10 +36,7 @@ const Matches = () => {
                     }
                 });
 
-
                 setArrayMatches(filterMatches)
-
-                console.log(filterMatches)
 
                 dispatch({
                     type: 'ALLMATCHES',
@@ -81,7 +78,7 @@ const Matches = () => {
                             <span className="text-xs md:text-base lg:text-lg lg:font-bold px-1 lg:px-2 font-mono text-green-600">{item['5'] ? item['5']['1'].toFixed(1) : null}</span>
                             <span className="text-xs md:text-base lg:text-lg lg:font-bold px-1 lg:px-2 font-mono text-cyan-500">{item['5'] ? item['5']['3'].toFixed(1) : null}</span>
                             <span className="text-xs md:text-base lg:text-lg lg:font-bold px-1 lg:px-2 font-mono text-amber-600">{item['5'] ? item['5']['2'].toFixed(1) : null}</span>
-                           
+
                         </div>
                     </div>
                 )

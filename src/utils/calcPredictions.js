@@ -1,4 +1,3 @@
-import { element } from "prop-types";
 import { relevance } from "./relevence";
 
 export const calcPredictions = (
@@ -20,104 +19,47 @@ export const calcPredictions = (
 
   const relevanceTeam = relevance(info.teams_form.home ? info.teams_form.home.matches : [1, 1], info.teams_form.away ? info.teams_form.away.matches : [1, 1]);
 
-  // Рассчитываем исходы исходя из формы
-  const calcValueForForm = (relevanceTeam, bets) => {
-    if (relevanceTeam.percentHome - relevanceTeam.percentAway > 15 && relevanceTeam.percentHome - relevanceTeam.percentAway <= 30) {
-      bets.winnerHome.percent += 5;
-      bets.winnerAway.percent -= 5;
-      bets.winOrDrawHome.percent += 5;
-      bets.winOrdrawAway.percent -= 5;
-      bets.foraHomePlus15.percent += 5;
-      bets.foraAwayPlus15.percent -= 5;
-      bets.foraHomeMinus15.percent += 5;
-      bets.foraAwayMinus15.percent -= 5;
-      bets.it1O05.percent += 5;
-      bets.it1O15.percent += 5;
-      bets.it1O25.percent += 5;
-      bets.it1U05.percent -= 5;
-      bets.it1U15.percent -= 5;
-      bets.it1U25.percent -= 5;
-      bets.it2O05.percent -= 5;
-      bets.it2O15.percent -= 5;
-      bets.it2O25.percent -= 5;
-      bets.it2U05.percent += 5;
-      bets.it2U15.percent += 5;
-      bets.it2U25.percent += 5;
-    }
-    if (relevanceTeam.percentHome - relevanceTeam.percentAway > 30) {
-      bets.winnerHome.percent += 8;
-      bets.winnerAway.percent -= 8;
-      bets.winOrDrawHome.percent += 8;
-      bets.winOrdrawAway.percent -= 8;
-      bets.foraHomePlus15.percent += 8;
-      bets.foraAwayPlus15.percent -= 8;
-      bets.foraHomeMinus15.percent += 8;
-      bets.foraAwayMinus15.percent -= 8;
-      bets.it1O05.percent += 8;
-      bets.it1O15.percent += 8;
-      bets.it1O25.percent += 8;
-      bets.it1U05.percent -= 8;
-      bets.it1U15.percent -= 8;
-      bets.it1U25.percent -= 8;
-      bets.it2O05.percent -= 8;
-      bets.it2O15.percent -= 8;
-      bets.it2O25.percent -= 8;
-      bets.it2U05.percent += 8;
-      bets.it2U15.percent += 8;
-      bets.it2U25.percent += 8;
-    }
-    if (relevanceTeam.percentAway - relevanceTeam.percentHome > 15 && relevanceTeam.percentAway - relevanceTeam.percentHome <= 30) {
-      bets.winnerHome.percent -= 5;
-      bets.winnerAway.percent += 5;
-      bets.winOrDrawHome.percent -= 5;
-      bets.winOrdrawAway.percent += 5;
-      bets.foraHomePlus15.percent -= 5;
-      bets.foraAwayPlus15.percent += 5;
-      bets.foraHomeMinus15.percent -= 5;
-      bets.foraAwayMinus15.percent += 5;
-      bets.it1O05.percent -= 5;
-      bets.it1O15.percent -= 5;
-      bets.it1O25.percent -= 5;
-      bets.it1U05.percent += 5;
-      bets.it1U15.percent += 5;
-      bets.it1U25.percent += 5;
-      bets.it2O05.percent += 5;
-      bets.it2O15.percent += 5;
-      bets.it2O25.percent += 5;
-      bets.it2U05.percent -= 5;
-      bets.it2U15.percent -= 5;
-      bets.it2U25.percent -= 5;
-    }
-    if (relevanceTeam.percentAway - relevanceTeam.percentHome > 30) {
-      bets.winnerHome.percent -= 8;
-      bets.winnerAway.percent += 8;
-      bets.winOrDrawHome.percent -= 8;
-      bets.winOrdrawAway.percent += 8;
-      bets.foraHomePlus15.percent -= 8;
-      bets.foraAwayPlus15.percent += 8;
-      bets.foraHomeMinus15.percent -= 8;
-      bets.foraAwayMinus15.percent += 8;
-      bets.it1O05.percent -= 8;
-      bets.it1O15.percent -= 8;
-      bets.it1O25.percent -= 8;
-      bets.it1U05.percent += 8;
-      bets.it1U15.percent += 8;
-      bets.it1U25.percent += 8;
-      bets.it2O05.percent += 8;
-      bets.it2O15.percent += 8;
-      bets.it2O25.percent += 8;
-      bets.it2U05.percent -= 8;
-      bets.it2U15.percent -= 8;
-      bets.it2U25.percent -= 8;
-    }
+  const calcValueForForm = (relevanceTeam, outcomes) => {
+
+    const bets = JSON.parse(JSON.stringify(outcomes));
+    const calcChange = (diff) => {
+      const change = diff > 15 ? (diff > 30 ? 8 : 5) : 0;
+      bets.winnerHome.percent -= change;
+      bets.winnerAway.percent += change;
+      bets.winOrDrawHome.percent -= change;
+      bets.winOrdrawAway.percent += change;
+      bets.foraHomePlus15.percent -= change;
+      bets.foraAwayPlus15.percent += change;
+      bets.foraHomeMinus15.percent -= change;
+      bets.foraAwayMinus15.percent += change;
+      bets.it1O05.percent -= change;
+      bets.it1O15.percent -= change;
+      bets.it1O25.percent -= change;
+      bets.it1U05.percent += change;
+      bets.it1U15.percent += change;
+      bets.it1U25.percent += change;
+      bets.it2O05.percent += change;
+      bets.it2O15.percent += change;
+      bets.it2O25.percent += change;
+      bets.it2U05.percent -= change;
+      bets.it2U15.percent -= change;
+      bets.it2U25.percent -= change;
+    };
+
+    calcChange(relevanceTeam.percentHome - relevanceTeam.percentAway);
+    calcChange(relevanceTeam.percentAway - relevanceTeam.percentHome);
+
+    console.log('начало');
+    console.log(bets);
 
     return bets;
-  }
+  };
 
   const valuesForm = calcValueForForm(relevanceTeam, bets);
 
   // ищем и изменяем исход исходя из прогноза в api 
-  const clacValueForPredict = (odd, bets) => {
+  const clacValueForPredict = (odd, outcomes) => {
+    const bets = JSON.parse(JSON.stringify(outcomes));
     for (let key in bets) {
       bets[key].bets.forEach(el => {
         if (+el === odd) {
@@ -139,23 +81,20 @@ export const calcPredictions = (
       });
     }
 
+    console.log('1')
+    console.log(bets)
+
     return bets;
   }
 
   const valuePredict = clacValueForPredict(info.forecast.odds_type, valuesForm);
 
   // изменяем исходы исходя из результатов матчей
-  const clacValueForMatches = (array, homeName, awayName, bets) => {
+  const clacValueForMatches = (array, homeName, awayName, outcomes) => {
 
-    const filterMatches = (array, name, str) => {
-      const arr = array.filter(el => {
-        if (el[str] === name) {
-          return el;
-        }
-      });
+    const bets = JSON.parse(JSON.stringify(outcomes));
 
-      return arr;
-    }
+    const filterMatches = (array, name, str) => array.filter(el => el[str] === name);
 
     const arrMatchesHomeTeamHome = filterMatches(array[0], homeName, 'team1_name');
     const arrMatchesAwayTeamAway = filterMatches(array[1], awayName, 'team2_name');
@@ -192,17 +131,8 @@ export const calcPredictions = (
     console.log(rankAwayTeam);
 
     // Фильтруем матчи взависимости от ранга
-    const filterMatchesFromRank = (array, name, str, strVs, rank) => {
-      const arr = array.filter(el => {
-        if (el[str] === name) {
-          if (rank === determineRank(el[strVs])) {
-            return el;
-          }
-        }
-      });
-
-      return arr;
-    }
+    const filterMatchesFromRank = (array, name, str, strVs, rank) =>
+      array.filter(el => el[str] === name && rank === determineRank(el[strVs]));
 
     const matchesFromRankHome = filterMatchesFromRank(array[0], homeName, 'team1_name', 'team2_name', rankAwayTeam);
     const matchesFromRankAway = filterMatchesFromRank(array[1], awayName, 'team2_name', 'team1_name', rankHomeTeam);
@@ -738,14 +668,16 @@ export const calcPredictions = (
         });
       }
     }
+    console.log('2');
+    console.log(bets);
 
     return bets;
   }
 
   const valuesMatches = clacValueForMatches(info.matches, info.team1_name, info.team2_name, valuePredict);
 
-  // Рассчитываем исходы исходя из фактов
-  const clacValueForFacts = (facts, bets) => {
+  const calcValueForFacts = (facts, outcomes) => {
+    const bets = JSON.parse(JSON.stringify(outcomes));
     for (let key in bets) {
       let bet;
       facts.forEach(item => {
@@ -754,7 +686,7 @@ export const calcPredictions = (
           bets[key].bets.forEach(el => {
             for (let key1 in bets) {
               if (el === String(bets[key1].num)) {
-                bets[key1].percent += 3;
+                bets[key1].percent += 10;
               }
             }
           });
@@ -764,67 +696,73 @@ export const calcPredictions = (
         bets[bet].betsVs.forEach(item => {
           for (let key2 in bets) {
             if (+item === bets[key2].num) {
-              bets[key2].percent -= 3;
+              bets[key2].percent -= 10;
             }
           }
         });
       }
     }
 
+    console.log('3');
+    console.log(bets);
+
     return bets;
-  }
+  };
 
-  const valuesFacts = clacValueForFacts(info.facts, valuesMatches)
+  const valuesFacts = calcValueForFacts(info.facts, valuesMatches)
 
-  const calcValueForUserTopTips = (tip, bets) => {
+  const calcValueForUserTopTips = (tip, outcomes) => {
+    const bets = JSON.parse(JSON.stringify(outcomes));
     for (let key in bets) {
       let bet;
       bets[key].bets.forEach(el => {
-        if (el === tip) {
+        if (+el === tip) {
           bet = key;
-          bets[key].percent += 5;
+          bets[key].percent += 10;
         }
       });
       if (bet) {
         bets[bet].betsVs.forEach(item => {
           for (let key1 in bets) {
-            if (+item === bets[key1]) {
-              bets[key1].percent -= 5;
+            if (+item === bets[key1].num) {
+              bets[key1].percent -= 10;
             }
           }
         });
       }
     }
-
+    console.log('4');
+    console.log(bets);
     return bets;
-  }
+  };
 
   let valuesUsersTopTip;
 
-  if (info.users_top_tip) {
-    valuesUsersTopTip = calcValueForUserTopTips(info.users_top_tip[0], valuesFacts);
+  if (info.forecast.odds_type) {
+    valuesUsersTopTip = calcValueForUserTopTips(info.forecast.odds_type, valuesFacts);
   } else {
     valuesUsersTopTip = valuesFacts;
   }
 
-  const calcValueForDroppingOdds = (first_odds, current_odds, bets) => {
+  const calcValueForDroppingOdds = (first_odds, current_odds, outcomes) => {
+    const bets = JSON.parse(JSON.stringify(outcomes));
     for (let i in first_odds) {
       for (let j in current_odds) {
         const oddsDiff = first_odds[i] - current_odds[j];
         for (let key in bets) {
-          if (bets[key].num === i) {
+          if (bets[key].num === +i && bets[key].num === +j) {
             if (oddsDiff > 0) {
               bets[key].bets.forEach(item => {
                 for (let key in bets) {
                   if (+item === bets[key].num) {
-                    bets[key].percent += 7;
+                    bets[key].percent += 5;
                   }
                 }
               });
               bets[key].betsVs.forEach(el => {
                 for (let key1 in bets) {
-                  if (+el === bets[key1]) {
-                    bets[key1].percent -= 7;
+                  if (+el === bets[key1].num) {
+                    bets[key1].percent -= 5;
                   }
                 }
               });
@@ -833,14 +771,14 @@ export const calcPredictions = (
               bets[key].bets.forEach(item => {
                 for (let key in bets) {
                   if (+item === bets[key].num) {
-                    bets[key].percent += 7;
+                    bets[key].percent -= 5;
                   }
                 }
               });
               bets[key].betsVs.forEach(el => {
                 for (let key1 in bets) {
-                  if (+el === bets[key1]) {
-                    bets[key1].percent += 7;
+                  if (+el === bets[key1].num) {
+                    bets[key1].percent += 5;
                   }
                 }
               });
@@ -850,40 +788,44 @@ export const calcPredictions = (
       }
     }
 
+    console.log('5');
+    console.log(bets);
+
     return bets;
   }
 
   const valuesDroppingOdds = calcValueForDroppingOdds(info.first_odds, info.current_odds, valuesUsersTopTip);
 
-  const calcValueForPredictions = (predictions, bets) => {
+  const calcValueForPredictions = (predictions, outcomes) => {
+    const bets = JSON.parse(JSON.stringify(outcomes));
     for (let key in bets) {
-      let bet;
       predictions.forEach(el => {
         bets[key].bets.forEach(item => {
-          if (item === el[2]) {
-            bet = key;
+          if (+item === el[2]) {
             bets[key].percent += 5;
+            bets[key].betsVs.forEach(element => {
+              for (let key1 in bets) {
+                if (+element === bets[key1].num) {
+                  bets[key1].percent -= 5;
+                }
+              }
+            });
           }
         });
       });
-      if (bet) {
-        bets[key].betsVs.forEach(element => {
-          for (let key1 in bets) {
-            if (+element === bets[key1].num) {
-              bets[key1].percent -= 5;
-            }
-          }
-        });
-      }
 
     }
+
+    console.log('6');
+    console.log(bets);
 
     return bets;
   }
 
   const valuesPredictions = calcValueForPredictions(predictions, valuesDroppingOdds);
 
-  const calcValueForMoneyWay1x2 = (moneyWay, bets) => {
+  const calcValueForMoneyWay1x2 = (moneyWay, outcomes) => {
+    const bets = JSON.parse(JSON.stringify(outcomes));
     if (moneyWay.homeName) {
       const posHome = moneyWay.percentHome.indexOf('%');
       const posDraw = moneyWay.percentDraw.indexOf('%');
@@ -919,12 +861,16 @@ export const calcPredictions = (
       findOutcomes('draw', percentDraw);
     }
 
+    console.log('7');
+    console.log(bets);
+
     return bets;
-  }
+  };
 
   const valuesMoneyWay1x2 = calcValueForMoneyWay1x2(moneyWay1x2, valuesPredictions);
 
-  const calcValueForMoneyWayOverUnder = (moneyWay, bets) => {
+  const calcValueForMoneyWayOverUnder = (moneyWay, outcomes) => {
+    const bets = JSON.parse(JSON.stringify(outcomes));
     if (moneyWay.homeName) {
       const posOver = moneyWay.percentOver.indexOf('%');
       const posUnder = moneyWay.percentUnder.indexOf('%');
@@ -958,13 +904,16 @@ export const calcPredictions = (
       findOutcomes('tu15', percentUnder);
     }
 
+    console.log('8');
+    console.log(bets);
+
     return bets;
-  }
+  };
 
   const valuesMoneyWayOverUnder = calcValueForMoneyWayOverUnder(moneyWayOverUnder, valuesMoneyWay1x2);
 
-
-  const calcValueForCorrectScore = (correctScore, bets) => {
+  const calcValueForCorrectScore = (correctScore, outcomes) => {
+    const bets = JSON.parse(JSON.stringify(outcomes));
     if (correctScore.homeName) {
       const pos0_0 = correctScore.scores[0].score0_0.percent.indexOf('%');
       const percent0_0 = correctScore.scores[0].score0_0.percent.slice(0, pos0_0);
@@ -4223,14 +4172,15 @@ export const calcPredictions = (
       });
     }
 
+    console.log('9');
+    console.log(bets);
+
     return bets;
   }
 
   const valuesCorrectScore = calcValueForCorrectScore(correctScore, valuesMoneyWayOverUnder);
 
   const arrOutcomes = [];
-
-  console.log(odd)
 
   for (let key in valuesCorrectScore) {
     if (valuesCorrectScore[key].odds !== undefined && valuesCorrectScore[key].odds >= +odd) {
@@ -4250,7 +4200,6 @@ export const calcPredictions = (
   const newArr = getArrLargestValues(arrOutcomes);
   console.log(valuesCorrectScore);
 
-
-  return [newArr[0], newArr[1]];
+  return [newArr[0]];
 
 }

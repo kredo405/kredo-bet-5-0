@@ -1,15 +1,13 @@
 import { useState, useEffect } from 'react';
 import findTeam from '../../utils/findTeam';
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { predictionsServices } from "../../services/predctions";
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import UserVotes from '../UserVotes/UserVotes';
 import { Spin, Empty } from 'antd';
-
 
 const Predictions = (props) => {
     const state = useSelector(state => state);
@@ -139,9 +137,6 @@ const Predictions = (props) => {
                 <>
                     <div>
                         {data}
-                    </div>
-                    <div>
-                        <UserVotes data={percent} />
                     </div>
                 </>
                 :

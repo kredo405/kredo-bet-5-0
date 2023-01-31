@@ -1,9 +1,7 @@
 import { createStore } from 'redux';
 const initialState = {
     app: '',
-    allMatches: [
-        
-    ],
+    allMatches: [],
     token: '',
     betzona: [{link:'',homeName:'',awayName:''}],
     euroFootball: [{link:'',homeName:'',awayName:''}],

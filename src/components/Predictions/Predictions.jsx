@@ -35,7 +35,7 @@ const Predictions = (props) => {
         const getPredictions = async () => {
             try {
                 // Изем прогнозы на матч в бетзоне
-                const betzonaLinks = state.betzona.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName));
+                const betzonaLinks = state.predictionsSlice.betzona.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName));
                 let betzona
                 if (betzonaLinks.length !== 0) {
                     const betzonaPredict = await predictionsServices.getBetzonaPredict(betzonaLinks[0].link);
@@ -47,7 +47,7 @@ const Predictions = (props) => {
                 }
 
                 // Ищем прогнозы на матч на сайте oddsRu
-                const oddsRuLinks = state.oddsRu.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName));
+                const oddsRuLinks = state.predictionsSlice.oddsRu.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName));
                 let oddsRu
                 if (oddsRuLinks.length !== 0) {
                     const oddsPredict = await predictionsServices.getOddsRuPredict(oddsRuLinks[0].link);
@@ -59,7 +59,7 @@ const Predictions = (props) => {
                 }
 
                 // Ищем прогнозы на матч на сайте Legalbet
-                const legalbetlLink = state.legalbet.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName));
+                const legalbetlLink = state.predictionsSlice.legalbet.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName));
                 let legalbet
                 if (legalbetlLink.length !== 0) {
                     const legalbetPredict = await predictionsServices.getLeagalbetPredict(legalbetlLink[0].link);
@@ -71,7 +71,7 @@ const Predictions = (props) => {
                 }
 
                 // Ищем прогнозы на матч на сайте Liveresult
-                const liveresultFilterOnNull = state.liveresult.filter(el => el.homeName && el.awayName);
+                const liveresultFilterOnNull = state.predictionsSlice.liveresult.filter(el => el.homeName && el.awayName);
                 const liveresultlLink = liveresultFilterOnNull.filter(el => findTeam(el.homeName, props.homeName) && findTeam(el.awayName, props.awayName));
                 let liveresult;
                 if (liveresultlLink.length !== 0) {

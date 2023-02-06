@@ -2,8 +2,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { nbbetServices } from "../../services/nbbet";
-import { BackTop, Spin, Modal, Empty } from 'antd';
+import { BackTop, Modal, Empty } from 'antd';
 import { Loading } from "../Loading/Loading";
+import { setMatches } from "../../store/slices/matchSlice";
 
 const errorModal = (message) => {
     Modal.error({
@@ -19,13 +20,12 @@ const Matches = () => {
     const history = useNavigate();
 
     useEffect(() => {
-        if (state.token === '') {
+        if (state.firebaseSlice.token === '') {
             history('/');
         }
 
         const getData = async () => {
             try {
-
                 const allMatches = await nbbetServices.getAllMatches();
 
                 const filterMatches = allMatches.data.matches.data.leagues.filter(el => {
@@ -37,12 +37,7 @@ const Matches = () => {
                 });
 
                 setArrayMatches(filterMatches)
-
-                dispatch({
-                    type: 'ALLMATCHES',
-                    payload: filterMatches
-                });
-
+                dispatch(setMatches(filterMatches));
                 setIsLoading(true);
             }
             catch (error) {
@@ -114,7 +109,6 @@ const Matches = () => {
             >
             </Empty>
         </div>
-
     }
 
     return (

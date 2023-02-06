@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
 import { Modal } from 'antd';
 import { useDispatch } from "react-redux";
+import { setToken } from '../../store/slices/firebaseSlice';
 import logo from './logo2.png'
 
 const errorModal = (message) => {
@@ -43,10 +44,7 @@ const Authorization = () => {
           localStorage.setItem('email', user.email);
           localStorage.setItem('photoURL', user.photoURL);
           localStorage.setItem('name', user.displayName);
-          dispatch({
-            type: 'TOKEN',
-            payload: token
-          })
+          dispatch(setToken(token))
           if (token) {
             navigate("/home", { replace: true });
           }
@@ -79,10 +77,7 @@ const Authorization = () => {
           localStorage.setItem('email', user.email);
           localStorage.setItem('photoURL', user.photoURL);
           localStorage.setItem('name', user.displayName);
-          dispatch({
-            type: 'TOKEN',
-            payload: token
-          })
+          dispatch(setToken(token))
           if (token) {
             navigate("/home", { replace: true });
           }
@@ -115,10 +110,7 @@ const Authorization = () => {
           localStorage.setItem('email', user.email);
           localStorage.setItem('photoURL', user.photoURL);
           localStorage.setItem('name', user.displayName);
-          dispatch({
-            type: 'TOKEN',
-            payload: token
-          })
+          dispatch(setToken(token))
           if (token) {
             navigate("/home", { replace: true });
           }
@@ -148,10 +140,7 @@ const Authorization = () => {
                 const user = userCredential.user;
                 sessionStorage.setItem('token', user.accessToken);
                 sessionStorage.setItem('email', user.email);
-                dispatch({
-                  type: 'TOKEN',
-                  payload: user.accessToken
-              })
+                dispatch(setToken(user.accessToken));
                 if(user.accessToken) {
                     navigate("/home", { replace: true });
                 }

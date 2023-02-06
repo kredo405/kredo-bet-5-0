@@ -1,8 +1,7 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { calcPredictions } from "../../utils/calcPredictions";
 import { Spin } from 'antd';
-import { Loading } from "../Loading/Loading";
 import * as Scroll from 'react-scroll';
 
 const Predict = ({ info, predictions, outsiderRange, midleRange, pretendersRange, grandRange }) => {
@@ -58,11 +57,11 @@ const Predict = ({ info, predictions, outsiderRange, midleRange, pretendersRange
     }
 
     useEffect(() => {
-        setOutcomes(state.outcomes);
-        setMoneyWay1x2(state.moneyWay1x2);
-        setMoneyWayOverUnder(state.moneyWayOverUnder);
-        setCorrectScore(state.correctScore);
-    }, [state.outcomes, state.moneyWay1x2, state.moneyWayOverUnder, state.correctScore]);
+        setOutcomes(state.matchSlice.outcomes);
+        setMoneyWay1x2(state.moneyWaySlice.moneyWay1x2);
+        setMoneyWayOverUnder(state.moneyWaySlice.moneyWayOverUnder);
+        setCorrectScore(state.moneyWaySlice.correctScore);
+    }, [state.matchSlice.outcomes, state.moneyWaySlice.moneyWay1x2, state.moneyWaySlice.moneyWayOverUnder, state.moneyWaySlice.correctScore]);
 
     return (
         <>

@@ -126,7 +126,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             percent: to15,
             odds: odds['11'],
             num: 11,
-            bets: ['11'], 
+            bets: ['11'],
             betsVs: ['12']
         },
         tu15: {

@@ -1,9 +1,8 @@
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import { useEffect, useState } from 'react';
-import { useSelector } from "react-redux";
 import Header from "../../components/header/Header";
-import { Progress, Spin, BackTop, Modal } from 'antd';
+import { Progress, BackTop, Modal } from 'antd';
 import Bets from "../../components/Bets/Bets";
 import Form from "../../components/Form/Form";
 import { Loading } from '../../components/Loading/Loading';
@@ -28,47 +27,47 @@ const Match = () => {
     useEffect(() => {
         const getInfo = async () => {
             try {
-              const matchesInfo = await Soccer365Services.getAllMatches();
-              console.log(matchesInfo.data);
-          
-              const [matchesInfoNbbet, matchesPredictionsNbbet] = await Promise.all([
-                nbbetServices.getMatchInfo(),
-                nbbetServices.getMatchPredictions()
-              ]);
-          
-              console.log(matchesInfoNbbet);
-              console.log(matchesPredictionsNbbet);
-          
-              setInfo(matchesInfoNbbet.data.match.data.match);
-              setPredictions(matchesPredictionsNbbet.data.match.data.tips);
-          
-              const matchSoccer365 = matchesInfo.data.matches.flat().find(item =>
-                findTeam(
-                  matchesInfoNbbet.data.match.data.match.team1_name,
-                  item.homeTeam || ""
-                ) &&
-                findTeam(
-                  matchesInfoNbbet.data.match.data.match.team2_name,
-                  item.awayTeam || ""
-                )
-              );
-          
-              console.log(matchSoccer365);
-          
-              if (matchSoccer365) {
-                const match = await Soccer365Services.getMatchInfo(matchSoccer365.id);
-                console.log(match.data.match[0].predictions);
-                setComents(match.data.match[0].predictions);
-              }
-          
-              setIsLoading(true);
+                const matchesInfo = await Soccer365Services.getAllMatches();
+                console.log(matchesInfo.data);
+
+                const [matchesInfoNbbet, matchesPredictionsNbbet] = await Promise.all([
+                    nbbetServices.getMatchInfo(),
+                    nbbetServices.getMatchPredictions()
+                ]);
+
+                console.log(matchesInfoNbbet);
+                console.log(matchesPredictionsNbbet);
+
+                setInfo(matchesInfoNbbet.data.match.data.match);
+                setPredictions(matchesPredictionsNbbet.data.match.data.tips);
+
+                const matchSoccer365 = matchesInfo.data.matches.flat().find(item =>
+                    findTeam(
+                        matchesInfoNbbet.data.match.data.match.team1_name,
+                        item.homeTeam || ""
+                    ) &&
+                    findTeam(
+                        matchesInfoNbbet.data.match.data.match.team2_name,
+                        item.awayTeam || ""
+                    )
+                );
+
+                console.log(matchSoccer365);
+
+                if (matchSoccer365) {
+                    const match = await Soccer365Services.getMatchInfo(matchSoccer365.id);
+                    console.log(match.data.match[0].predictions);
+                    setComents(match.data.match[0].predictions);
+                }
+
+                setIsLoading(true);
             } catch (error) {
-              console.error(error);
-              errorModal(error.message);
+                console.error(error);
+                errorModal(error.message);
             }
-          };
-          
-          getInfo();
+        };
+
+        getInfo();
 
     }, []);
 

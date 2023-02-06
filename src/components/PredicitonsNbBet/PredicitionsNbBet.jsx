@@ -1,11 +1,22 @@
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { useState } from "react";
+import { initializeApp } from "firebase/app";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+
+const firebaseConfig = {
+    apiKey: process.env.REACT_APP_API_KEY,
+    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID_,
+    appId: process.env.REACT_APP_APP_ID,
+    measurementId: process.env.REACT_APP_MEASUREMENT_ID
+};
+
+const app = initializeApp(firebaseConfig);
 
 
 const PredicitonsNbBet = ({ predictions }) => {
-    const state = useSelector(state => state);
     const [odds, setOdds] = useState({ odds: [{ name: "Победа 1", odd: "1" }] });
     const [elements, setElements] = useState(<>
         <li className="flex justify-around border-y-2 border-gray-100 border-solid py-3">
@@ -26,7 +37,7 @@ const PredicitonsNbBet = ({ predictions }) => {
 
     useEffect(() => {
         const getDataOdds = async () => {
-            const db = getFirestore(state.app);
+            const db = getFirestore(app);
             const docRef = doc(db, "decodingOdds", "odds");
             const docSnap = await getDoc(docRef);
 

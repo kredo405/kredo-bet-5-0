@@ -1,13 +1,26 @@
 import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
+import { initializeApp } from "firebase/app";
 import { Table } from 'react-bootstrap';
+import { setOutcomes } from "../../store/slices/matchSlice";
 import Predictions from "../Predictions/Predictions";
 import { calcBigPercent } from "../../utils/calcBigPercent";
 
+const firebaseConfig = {
+    apiKey: process.env.REACT_APP_API_KEY,
+    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID_,
+    appId: process.env.REACT_APP_APP_ID,
+    measurementId: process.env.REACT_APP_MEASUREMENT_ID
+};
+
+const app = initializeApp(firebaseConfig);
+
 
 const ToolsPrediction = ({ percentPoison, percentWithScore, info }) => {
-    const state = useSelector(state => state);
     const dispatch = useDispatch();
     const [odds, setOdds] = useState({ odds: [{ name: "Победа 1", odd: "1" }] });
     const [elementsPropobility, setElementsPropobility] = useState([{
@@ -15,10 +28,10 @@ const ToolsPrediction = ({ percentPoison, percentWithScore, info }) => {
         odds: 0,
         percent: 0
     }]);
-    
+
     useEffect(() => {
         const getDataOdds = async () => {
-            const db = getFirestore(state.app);
+            const db = getFirestore(app);
             const docRef = doc(db, "decodingOdds", "odds");
             const docSnap = await getDoc(docRef);
 
@@ -34,13 +47,10 @@ const ToolsPrediction = ({ percentPoison, percentWithScore, info }) => {
     }, [])
 
     useEffect(() => {
-     
+
         const outcomesBigPercent = calcBigPercent(percentPoison, percentWithScore, odds.odds, info.current_odds);
 
-        dispatch({
-            type: 'OUTCOMES',
-            payload: outcomesBigPercent.arrOutcomesForPredictions
-        })
+        dispatch(setOutcomes(outcomesBigPercent.arrOutcomesForPredictions));
         setElementsPropobility(outcomesBigPercent.arrOutcomes);
     }, []);
 

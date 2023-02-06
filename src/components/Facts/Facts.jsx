@@ -1,17 +1,28 @@
-import { Avatar, List } from 'antd';
+import { List } from 'antd';
 import { doc, getDoc, getFirestore } from "firebase/firestore";
+import { initializeApp } from "firebase/app";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+
+const firebaseConfig = {
+    apiKey: process.env.REACT_APP_API_KEY,
+    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID_,
+    appId: process.env.REACT_APP_APP_ID,
+    measurementId: process.env.REACT_APP_MEASUREMENT_ID
+};
+
+const app = initializeApp(firebaseConfig);
 
 const Facts = ({ info }) => {
     const [odds, setOdds] = useState({ odds: [{ name: "Победа 1", odd: "1" }] });
     const [elements, setElements] = useState([['Загрузка...', '...']]);
-    const state = useSelector(state => state);
 
     useEffect(() => {
         const getDataOdds = async () => {
-            const db = getFirestore(state.app);
+            const db = getFirestore(app);
             const docRef = doc(db, "decodingOdds", "odds");
             const docSnap = await getDoc(docRef);
 
@@ -27,11 +38,11 @@ const Facts = ({ info }) => {
                         }
                         const pos1 = item.indexOf('<strong');
                         let str1 = '';
-            
+
                         if (pos1 !== -1) {
                             str1 = item.slice(0, pos1);
                         };
-            
+
                         if (str1 === '') {
                             return item
                         }
@@ -45,11 +56,11 @@ const Facts = ({ info }) => {
                         }
                         const pos1 = item.indexOf('</strong');
                         let str1 = '';
-            
+
                         if (pos1 !== -1) {
                             str1 = item.slice(0, pos1);
                         };
-            
+
                         if (str1 === '') {
                             return item
                         }
@@ -57,14 +68,14 @@ const Facts = ({ info }) => {
                             return str1
                         }
                     });
-            
+
                     return [arr3.join(' '), el[1]];
                 });
-            
+
                 const elements = newArrFacts.map(el => {
                     const arr = [];
                     docSnap.data().odds.forEach(element => {
-                        if(+element.odd === el[1]) {
+                        if (+element.odd === el[1]) {
                             arr.push(el[0]);
                             arr.push(element.name);
                         }

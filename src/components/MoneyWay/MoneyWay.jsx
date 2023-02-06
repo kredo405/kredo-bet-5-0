@@ -2,6 +2,7 @@ import { Table } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { arbworldServices } from '../../services/arbworld';
 import { useDispatch } from "react-redux";
+import { setScore, setMoney1x2, setMoneyOverUnder } from '../../store/slices/moneyWaySlice';
 import Dropdown from 'react-bootstrap/Dropdown';
 
 const MoneyWay = () => {
@@ -84,29 +85,20 @@ const MoneyWay = () => {
 
     const handleClick1X2 = (e) => {
         const element = moneyWay1X2.filter(el => el.homeName === e.target.name);
-        dispatch({
-            type: 'MONEYWAY1X2',
-            payload: element[0],
-        })
+        dispatch(setMoney1x2(element[0]));
         setElement1X2(element[0]);
         setShow1X2(true);
     }
 
     const handleClickUnderOver = (e) => {
         const element = moneyWayOverUnder.filter(el => el.homeName === e.target.name);
-        dispatch({
-            type: 'MONEYWAYOVERUNDER',
-            payload: element[0],
-        })
+        dispatch(setMoneyOverUnder(element[0]));
         setElementOverUnder(element[0]);
         setShowUnderOver(true)
     }
     const handleClickScores = (e) => {
         const element = correctScore.filter(el => el.homeName === e.target.name);
-        dispatch({
-            type: 'CORRECTSCORE',
-            payload: element[0],
-        })
+        dispatch(setScore(element[0]));
         setElementCorrectScore(element[0]);
         setShowScore(true)
     }

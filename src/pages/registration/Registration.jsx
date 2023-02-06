@@ -1,9 +1,10 @@
 import { getAuth, createUserWithEmailAndPassword, GithubAuthProvider, FacebookAuthProvider, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { LockClosedIcon } from '@heroicons/react/solid';
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Modal } from 'antd';
+import { setToken } from "../../store/slices/firebaseSlice";
 import logo from './logo2.png'
 
 const errorModal = (message) => {
@@ -16,10 +17,9 @@ const providerGoogle = new GoogleAuthProvider()
 const providerFacebook = new FacebookAuthProvider();
 const providerGithub = new GithubAuthProvider();
 
-const Registration = (props) => {
+const Registration = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { app } = props;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const auth = getAuth();
@@ -44,10 +44,7 @@ const Registration = (props) => {
         localStorage.setItem('email', user.email);
         localStorage.setItem('photoURL', user.photoURL);
         localStorage.setItem('name', user.displayName);
-        dispatch({
-          type: 'TOKEN',
-          payload: token
-        })
+        dispatch(setToken(token))
         if (token) {
           navigate("/home", { replace: true });
         }
@@ -79,10 +76,7 @@ const Registration = (props) => {
         localStorage.setItem('email', user.email);
         localStorage.setItem('photoURL', user.photoURL);
         localStorage.setItem('name', user.displayName);
-        dispatch({
-          type: 'TOKEN',
-          payload: token
-        })
+        dispatch(setToken(token))
         if (token) {
           navigate("/home", { replace: true });
         }
@@ -115,10 +109,7 @@ const Registration = (props) => {
         localStorage.setItem('email', user.email);
         localStorage.setItem('photoURL', user.photoURL);
         localStorage.setItem('name', user.displayName);
-        dispatch({
-          type: 'TOKEN',
-          payload: token
-        })
+        dispatch(setToken(token))
         if (token) {
           navigate("/home", { replace: true });
         }
@@ -149,10 +140,7 @@ const Registration = (props) => {
         const user = userCredential.user;
         localStorage.setItem('token', user.accessToken);
         localStorage.setItem('email', user.email);
-        dispatch({
-          type: 'TOKEN',
-          payload: user.accessToken
-        })
+        dispatch(setToken(user.accessToken));
         if (user.accessToken) {
           navigate("/home", { replace: true });
         }

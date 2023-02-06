@@ -1,11 +1,16 @@
 import { Link } from 'react-router-dom';
 import { Popover } from '@headlessui/react'
-import { nbbetServices } from '../../services/nbbet';
 import { predictionsServices } from '../../services/predctions';
-import { arbworldServices } from '../../services/arbworld';
 import { useEffect } from 'react';
 import { useDispatch } from "react-redux";
 import { Modal } from 'antd';
+import {
+  setBetzona,
+  setLegalbet,
+  setLiveresult,
+  setStavkiprognozy,
+  setOddsRu
+} from '../../store/slices/predictionsSlice';
 import logo from './Kredo-bet.png';
 import fon2 from './fon2.png';
 
@@ -28,26 +33,11 @@ export default function Velcome() {
         const stavkiprognozy = await predictionsServices.getStavkiprognozy();
         const oddsRu = await predictionsServices.getOddsRu();
 
-        dispatch({
-          type: 'BETZONA',
-          payload: betzona.data.predicitons
-        });
-        dispatch({
-          type: 'LEGALBET',
-          payload: legalbet.data.predicitons
-        });
-        dispatch({
-          type: 'LIVERESULT',
-          payload: liveresult.data.predicitons
-        });
-        dispatch({
-          type: 'STAVKIPROGNOZY',
-          payload: stavkiprognozy.data.predicitons
-        });
-        dispatch({
-          type: 'ODDSRU',
-          payload: oddsRu.data.predicitons
-        });
+        dispatch(setBetzona(betzona.data.predicitons));
+        dispatch(setLegalbet(legalbet.data.predicitons));
+        dispatch(setLiveresult(liveresult.data.predicitons));
+        dispatch(setStavkiprognozy(stavkiprognozy.data.predicitons));
+        dispatch(setOddsRu(oddsRu.data.predicitons));
       }
       catch (error) {
         console.log(error)

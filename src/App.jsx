@@ -4,15 +4,9 @@ import Authorization from './pages/authorization/Authorization';
 import Registration from './pages/registration/Registration';
 import Match from './pages/match/match';
 import { Routes, Route } from "react-router-dom";
-import { useDispatch } from "react-redux";
 
 function App(props) {
   const { app } = props;
-  const dispatch = useDispatch();
-  dispatch({
-    type: 'APP',
-    payload: app,
-  });
 
   return (
     <div className="app">

@@ -4200,6 +4200,6 @@ export const calcPredictions = (
   const newArr = getArrLargestValues(arrOutcomes);
   console.log(valuesCorrectScore);
 
-  return [newArr[0], newArr[1]];
+  return [newArr[0], newArr[1], newArr[2], newArr[3]];
 
 }

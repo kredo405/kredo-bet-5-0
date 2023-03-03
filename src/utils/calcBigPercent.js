@@ -49,13 +49,25 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
 
     const arrOutcomes = []
     const arrOutcomesForPredictions = {
+        countMatchesRankHome: 0,
+        countMatchesH2hHome: 0,
+        countMatchesHome: 0,
+        countPredictionHome: 0,
+        countMatchesRankAway: 0,
+        countMatchesH2hAway: 0,
+        countMatchesAway: 0,
+        countPredictionAway: 0,
         winnerHome: {
             outcomes: 'Победа 1',
             percent: winnerHome,
             odds: odds['1'],
             num: 1,
             bets: ['1', '4', '79', '77', '75', '81'],
-            betsVs: ['2', '3', '5', '90']
+            betsVs: ['2', '3', '5', '90'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         winnerAway: {
             outcomes: 'Победа 2',
@@ -63,7 +75,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['2'],
             num: 2,
             bets: ['2', '88', '90', '92', '94'],
-            betsVs: ['1', '3', '4', '77']
+            betsVs: ['1', '3', '4', '77'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         draw: {
             outcomes: 'Ничья',
@@ -71,7 +87,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['3'],
             num: 3,
             bets: ['3', '4', '5', '74', '87', '101'],
-            betsVs: ['1', '2', '77', '90']
+            betsVs: ['1', '2', '77', '90'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         winOrDrawHome: {
             outcomes: '1X',
@@ -79,7 +99,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['4'],
             num: 4,
             bets: ['4', '3', '73', '74'],
-            betsVs: ['2', '3', '5', '90']
+            betsVs: ['2', '3', '5', '90'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         winOrdrawAway: {
             outcomes: '2X',
@@ -87,7 +111,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['5'],
             num: 5,
             bets: ['5', '3', '86', '87'],
-            betsVs: ['1', '3', '4', '77']
+            betsVs: ['1', '3', '4', '77'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         foraHomeMinus15: {
             outcomes: 'Фора 1 -1.5',
@@ -95,7 +123,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['77'],
             num: 77,
             bets: ['77', '33', '35', '37', '79', '81'],
-            betsVs: ['2', '3', '5', '90', '89']
+            betsVs: ['2', '3', '5', '90', '89'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         foraHomePlus15: {
             outcomes: 'Фора 1 +1.5',
@@ -103,7 +135,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['76'],
             num: 76,
             bets: ['76', '1', '4', '78', '80', '82'],
-            betsVs: ['90']
+            betsVs: ['90'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         foraAwayMinus15: {
             outcomes: 'Фора 2 -1.5',
@@ -111,7 +147,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['90'],
             num: 90,
             bets: ['90', '55', '57', '59', '92', '94'],
-            betsVs: ['1', '3', '4', '77', '76']
+            betsVs: ['1', '3', '4', '77', '76'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         foraAwayPlus15: {
             outcomes: 'Фора 2 +1.5',
@@ -119,7 +159,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['89'],
             num: 89,
             bets: ['89', '2', '5', '91', '93', '95'],
-            betsVs: ['77']
+            betsVs: ['77'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         to15: {
             outcomes: 'Тотал больше 1.5',
@@ -127,7 +171,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['11'],
             num: 11,
             bets: ['11'],
-            betsVs: ['12']
+            betsVs: ['12'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         tu15: {
             outcomes: 'Тотал меньше 1.5',
@@ -135,7 +183,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['12'],
             num: 12,
             bets: ['12', '14', '16', '18', '20', '22', '24', '26', '28'],
-            betsVs: ['11', '15', '19']
+            betsVs: ['11', '15', '19'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         to25: {
             outcomes: 'Тотал больше 2.5',
@@ -143,7 +195,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['15'],
             num: 15,
             bets: ['15', '11'],
-            betsVs: ['16', '12']
+            betsVs: ['16', '12'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         tu25: {
             outcomes: 'Тотал меньше 2.5',
@@ -151,7 +207,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['16'],
             num: 16,
             bets: ['16', '18', '20', '22', '24', '26', '28'],
-            betsVs: ['15', '19']
+            betsVs: ['15', '19'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         to35: {
             outcomes: 'Тотал больше 3.5',
@@ -159,7 +219,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['19'],
             num: 19,
             bets: ['19', '15', '11'],
-            betsVs: ['20', '16', '12']
+            betsVs: ['20', '16', '12'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         tu35: {
             outcomes: 'Тотал меньше 3.5',
@@ -167,7 +231,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['20'],
             num: 20,
             bets: ['20', '22', '24', '26', '28'],
-            betsVs: ['19']
+            betsVs: ['19'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         btsYes: {
             outcomes: 'Обе забьют ДА',
@@ -175,7 +243,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['99'],
             num: 99,
             bets: ['99', '11'],
-            betsVs: ['100', '30', '52']
+            betsVs: ['100', '30', '52'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         btsNo: {
             outcomes: 'Обе забьют Нет',
@@ -183,7 +255,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['100'],
             num: 100,
             bets: ['100', '12', '30', '52'],
-            betsVs: ['99', '29', '51']
+            betsVs: ['99', '29', '51'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         it1O05: {
             outcomes: 'Команда 1 забьет',
@@ -191,7 +267,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['29'],
             num: 29,
             bets: ['29', '31', '33', '35', '37', '39', '41'],
-            betsVs: ['30']
+            betsVs: ['30'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         it1O15: {
             outcomes: 'Ит1 больше 1.5',
@@ -199,7 +279,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['33'],
             num: 33,
             bets: ['33', '35', '37', '39', '41'],
-            betsVs: ['34', '30']
+            betsVs: ['34', '30'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         it1O25: {
             outcomes: 'Ит1 больше 2.5',
@@ -207,7 +291,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['37'],
             num: 37,
             bets: ['37', '39', '41'],
-            betsVs: ['38', '34', '30']
+            betsVs: ['38', '34', '30'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         it1U05: {
             outcomes: 'Команда 1 не забьет',
@@ -215,7 +303,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['30'],
             num: 30,
             bets: ['30', '32', '34', '36', '38', '40', '42'],
-            betsVs: ['29', '33', '37']
+            betsVs: ['29', '33', '37'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         it1U15: {
             outcomes: 'Ит1 меньше 1.5',
@@ -223,7 +315,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['34'],
             num: 34,
             bets: ['34', '36', '38', '40', '42'],
-            betsVs: ['33', '37']
+            betsVs: ['33', '37'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         it1U25: {
             outcomes: 'Ит1 меньше 2.5',
@@ -231,7 +327,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['38'],
             num: 38,
             bets: ['38', '40', '42'],
-            betsVs: ['37']
+            betsVs: ['37'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         it2O05: {
             outcomes: 'Команда 2 забьет',
@@ -239,7 +339,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['51'],
             num: 51,
             bets: ['51', '53', '55', '57', '59', '61', '63'],
-            betsVs: ['52']
+            betsVs: ['52'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         it2O15: {
             outcomes: 'Ит2 больше 1.5',
@@ -247,7 +351,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['55'],
             num: 55,
             bets: ['55', '57', '59', '61', '63'],
-            betsVs: ['52', '56']
+            betsVs: ['52', '56'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         it2O25: {
             outcomes: 'Ит2 больше 2.5',
@@ -255,7 +363,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['59'],
             num: 59,
             bets: ['59', '61', '63'],
-            betsVs: ['52', '56', '60']
+            betsVs: ['52', '56', '60'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         it2U05: {
             outcomes: 'Команда 2 не забьет',
@@ -263,7 +375,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['52'],
             num: 52,
             bets: ['52', '54', '56', '58', '60', '62', '64'],
-            betsVs: ['51', '55', '59']
+            betsVs: ['51', '55', '59'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         it2U15: {
             outcomes: 'Ит2 меньше 1.5',
@@ -271,7 +387,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['56'],
             num: 56,
             bets: ['56', '58', '60', '62', '64'],
-            betsVs: ['55', '59']
+            betsVs: ['55', '59'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
         it2U25: {
             outcomes: 'Ит2 меньше 2.5',
@@ -279,7 +399,11 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
             odds: odds['60'],
             num: 60,
             bets: ['60', '62', '64'],
-            betsVs: ['59']
+            betsVs: ['59'],
+            percentageRank: 0,
+            percentagleH2h: 0,
+            percentagleMatches: 0,
+            percentaglePredictions: 0,
         },
     }
 

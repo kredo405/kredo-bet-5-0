@@ -4327,7 +4327,7 @@ export const calcPredictions = (
   const arrOutcomes = [];
 
   for (let key in valuesCorrectScore) {
-    if (valuesCorrectScore[key].odds !== undefined && valuesCorrectScore[key].odds >= +odd) {
+    if (valuesCorrectScore[key].oddFinish !== null && valuesCorrectScore[key].oddFinish >= +odd) {
       arrOutcomes.push(valuesCorrectScore[key]);
     }
   }

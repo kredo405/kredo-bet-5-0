@@ -39,8 +39,8 @@ const Predict = ({ info, predictions, outsiderRange, midleRange, pretendersRange
         const elements = predictArr.bets.map((el, i) => {
             return (
                 <div key={i} className="flex justify-center border-2 rounded-lg border-slate-200 border-solid mb-3 py-2 px-2 md:px-5 shadow shadow-gray-200">
-                    <span className="font-semibold text-xl ml-5 w-[200px] md:w-[300px] lg:w-[400px]">{el.outcomes}</span>
-                    <span className="font-semibold text-xl text-amber-900 w-[50px]">{el.odds}</span>
+                    <span className="font-semibold text-xl ml-5 w-[200px] md:w-[300px] lg:w-[400px]">{el.outcomesFinish}</span>
+                    <span className="font-semibold text-xl text-amber-900 w-[50px]">{el.oddFinish}</span>
                 </div>
             )
         });

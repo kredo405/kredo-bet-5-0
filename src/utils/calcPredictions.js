@@ -146,8 +146,8 @@ export const calcPredictions = (
       // Для домашних матчей домашней команды взависимости от ранга
       if (matchesFromRankHome.length > 0) {
         matchesFromRankHome.forEach(el => {
-          const scoreHome = el.score[0] + el.score[2];
-          const scoreAway = el.score[1] + el.score[3];
+          const scoreHome = el.score[0];
+          const scoreAway = el.score[1];
 
           bets.countMatchesRankHome += 1;
 
@@ -254,107 +254,107 @@ export const calcPredictions = (
 
       // для домашних матчей домашней команды
       arrMatchesHomeTeamHome.forEach(el => {
-        const scoreHome = el.score[0] + el.score[2];
-        const scoreAway = el.score[1] + el.score[3];
+        const scoreHome = el.score[0];
+        const scoreAway = el.score[1];
 
         bets.countMatchesHome += 1;
 
         if (scoreHome > scoreAway) {
-          bets.winnerHome.percent += 1;
-          bets.winnerAway.percent -= 1;
+          bets.winnerHome.percent += 5;
+          bets.winnerAway.percent -= 5;
           bets.winnerHome.percentagleMatches += 1;
         }
         if (scoreHome >= scoreAway) {
-          bets.winOrDrawHome.percent += 1;
-          bets.winnerAway.percent -= 1;
+          bets.winOrDrawHome.percent += 5;
+          bets.winnerAway.percent -= 5;
           bets.winOrDrawHome.percentagleMatches += 1;
         }
         if (scoreHome - scoreAway >= -1) {
-          bets.foraHomePlus15.percent += 1;
-          bets.foraAwayMinus15.percent -= 1;
+          bets.foraHomePlus15.percent += 5;
+          bets.foraAwayMinus15.percent -= 5;
           bets.foraHomePlus15.percentagleMatches += 1;
         }
         if (scoreHome - scoreAway >= 2) {
-          bets.foraHomeMinus15.percent += 1;
-          bets.winnerAway.percent -= 1;
-          bets.winOrdrawAway.percent -= 1;
-          bets.foraAwayMinus15.percent -= 1;
+          bets.foraHomeMinus15.percent += 5;
+          bets.winnerAway.percent -= 5;
+          bets.winOrdrawAway.percent -= 5;
+          bets.foraAwayMinus15.percent -= 5;
           bets.foraHomeMinus15.percentagleMatches += 1;
         }
         if (scoreHome > 0) {
-          bets.it1O05.percent += 1;
-          bets.it1U05.percent -= 1;
+          bets.it1O05.percent += 5;
+          bets.it1U05.percent -= 5;
           bets.it1O05.percentagleMatches += 1;
         }
         if (scoreHome > 1) {
-          bets.it1O15.percent += 1;
-          bets.it1U15.percent -= 1;
+          bets.it1O15.percent += 5;
+          bets.it1U15.percent -= 5;
           bets.it1O15.percentagleMatches += 1;
         }
         if (scoreHome > 2) {
-          bets.it1O25.percent += 1;
-          bets.it1U25.percent -= 1;
+          bets.it1O25.percent += 5;
+          bets.it1U25.percent -= 5;
           bets.it1O25.percentagleMatches += 1;
         }
         if (scoreHome < 1) {
-          bets.it1U05.percent += 1;
-          bets.it1O05.percent -= 1;
+          bets.it1U05.percent += 5;
+          bets.it1O05.percent -= 5;
           bets.it1U05.percentagleMatches += 1;
         }
         if (scoreHome < 2) {
-          bets.it1U15.percent += 1;
-          bets.it1O15.percent -= 1;
+          bets.it1U15.percent += 5;
+          bets.it1O15.percent -= 5;
           bets.it1U15.percentagleMatches += 1;
         }
         if (scoreHome < 3) {
-          bets.it1U25.percent += 1;
-          bets.it1O25.percent -= 1;
+          bets.it1U25.percent += 5;
+          bets.it1O25.percent -= 5;
           bets.it1U25.percentagleMatches += 1;
         }
         if (scoreHome + scoreAway > 1) {
-          bets.to15.percent += 1;
-          bets.tu15.percent -= 1;
+          bets.to15.percent += 5;
+          bets.tu15.percent -= 5;
           bets.to15.percentagleMatches += 1;
         }
         if (scoreHome + scoreAway > 2) {
-          bets.to25.percent += 1;
-          bets.tu25.percent -= 1;
+          bets.to25.percent += 5;
+          bets.tu25.percent -= 5;
           bets.to25.percentagleMatches += 1;
         }
         if (scoreHome + scoreAway > 3) {
-          bets.to35.percent += 1;
-          bets.tu35.percent -= 1;
+          bets.to35.percent += 5;
+          bets.tu35.percent -= 5;
           bets.to35.percentagleMatches += 1;
         }
         if (scoreHome + scoreAway < 2) {
-          bets.tu15.percent += 1;
-          bets.to15.percent -= 1;
+          bets.tu15.percent += 5;
+          bets.to15.percent -= 5;
           bets.tu15.percentagleMatches += 1;
         }
         if (scoreHome + scoreAway < 3) {
-          bets.tu25.percent += 1;
-          bets.to25.percent -= 1;
+          bets.tu25.percent += 5;
+          bets.to25.percent -= 5;
           bets.tu25.percentagleMatches += 1;
         }
         if (scoreHome + scoreAway < 4) {
-          bets.tu35.percent += 1;
-          bets.to35.percent -= 1;
+          bets.tu35.percent += 5;
+          bets.to35.percent -= 5;
           bets.tu35.percentagleMatches += 1;
         }
         if (scoreHome > 0 && scoreAway > 0) {
-          bets.btsYes.percent += 1;
-          bets.btsNo.percent -= 1;
+          bets.btsYes.percent += 5;
+          bets.btsNo.percent -= 5;
           bets.btsYes.percentagleMatches += 1;
         }
         if (scoreHome > 0 && scoreAway === 0 || scoreHome === 0 && scoreAway > 0) {
-          bets.btsNo.percent += 1;
-          bets.btsYes.percent -= 1;
+          bets.btsNo.percent += 5;
+          bets.btsYes.percent -= 5;
           bets.btsNo.percentagleMatches += 1;
         }
         if (scoreHome === scoreAway) {
-          bets.draw.percent += 1;
-          bets.winnerHome.percent -= 1;
-          bets.winnerAway.percent -= 1;
+          bets.draw.percent += 5;
+          bets.winnerHome.percent -= 5;
+          bets.winnerAway.percent -= 5;
           bets.draw.percentagleMatches += 1;
         }
       });
@@ -362,107 +362,107 @@ export const calcPredictions = (
       if (arrMatchesHomeTeamHomeH2h.length > 0) {
         // Для домашних матчей домашней команды h2h
         arrMatchesHomeTeamHomeH2h.forEach(el => {
-          const scoreHome = el.score[0] + el.score[2];
-          const scoreAway = el.score[1] + el.score[3];
+          const scoreHome = el.score[0];
+          const scoreAway = el.score[1];
 
           bets.countMatchesH2hHome += 1;
 
           if (scoreHome > scoreAway) {
-            bets.winnerHome.percent += 1;
-            bets.winnerAway.percent -= 1;
+            bets.winnerHome.percent += 5;
+            bets.winnerAway.percent -= 5;
             bets.winnerHome.percentagleH2h += 1;
           }
           if (scoreHome >= scoreAway) {
-            bets.winOrDrawHome.percent += 1;
-            bets.winnerAway.percent -= 1;
+            bets.winOrDrawHome.percent += 5;
+            bets.winnerAway.percent -= 5;
             bets.winOrDrawHome.percentagleH2h += 1;
           }
           if (scoreHome - scoreAway >= -1) {
-            bets.foraHomePlus15.percent += 1;
-            bets.foraAwayMinus15.percent -= 1;
+            bets.foraHomePlus15.percent += 5;
+            bets.foraAwayMinus15.percent -= 5;
             bets.foraHomePlus15.percentagleH2h += 1;
           }
           if (scoreHome - scoreAway >= 2) {
-            bets.foraHomeMinus15.percent += 1;
-            bets.winnerAway.percent -= 1;
-            bets.winOrdrawAway.percent -= 1;
-            bets.foraAwayMinus15.percent -= 1;
+            bets.foraHomeMinus15.percent += 5;
+            bets.winnerAway.percent -= 5;
+            bets.winOrdrawAway.percent -= 5;
+            bets.foraAwayMinus15.percent -= 5;
             bets.foraHomeMinus15.percentagleH2h += 1;
           }
           if (scoreHome > 0) {
-            bets.it1O05.percent += 1;
-            bets.it1U05.percent -= 1;
-            bets.it1O05.percentagleH2h += 1;
+            bets.it1O05.percent += 5;
+            bets.it1U05.percent -= 5;
+            bets.it1O05.percentagleH2h += 5;
           }
           if (scoreHome > 1) {
-            bets.it1O15.percent += 1;
-            bets.it1U15.percent -= 1;
+            bets.it1O15.percent += 5;
+            bets.it1U15.percent -= 5;
             bets.it1O15.percentagleH2h += 1;
           }
           if (scoreHome > 2) {
-            bets.it1O25.percent += 1;
-            bets.it1U25.percent -= 1;
-            bets.it1O25.percentagleH2h += 1;
+            bets.it1O25.percent += 5;
+            bets.it1U25.percent -= 5;
+            bets.it1O25.percentagleH2h += 5;
           }
           if (scoreHome < 1) {
-            bets.it1U05.percent += 1;
-            bets.it1O05.percent -= 1;
+            bets.it1U05.percent += 5;
+            bets.it1O05.percent -= 5;
             bets.it1U05.percentagleH2h += 1;
           }
           if (scoreHome < 2) {
-            bets.it1U15.percent += 1;
-            bets.it1O15.percent -= 1;
+            bets.it1U15.percent += 5;
+            bets.it1O15.percent -= 5;
             bets.it1U15.percentagleH2h += 1;
           }
           if (scoreHome < 3) {
-            bets.it1U25.percent += 1;
-            bets.it1O25.percent -= 1;
+            bets.it1U25.percent += 5;
+            bets.it1O25.percent -= 5;
             bets.it1U25.percentagleH2h += 1;
           }
           if (scoreHome + scoreAway > 1) {
-            bets.to15.percent += 1;
-            bets.tu15.percent -= 1;
+            bets.to15.percent += 5;
+            bets.tu15.percent -= 5;
             bets.to15.percentagleH2h += 1;
           }
           if (scoreHome + scoreAway > 2) {
-            bets.to25.percent += 1;
-            bets.tu25.percent -= 1;
+            bets.to25.percent += 5;
+            bets.tu25.percent -= 5;
             bets.to25.percentagleH2h += 1;
           }
           if (scoreHome + scoreAway > 3) {
-            bets.to35.percent += 1;
-            bets.tu35.percent -= 1;
+            bets.to35.percent += 5;
+            bets.tu35.percent -= 5;
             bets.to35.percentagleH2h += 1;
           }
           if (scoreHome + scoreAway < 2) {
-            bets.tu15.percent += 1;
-            bets.to15.percent -= 1;
+            bets.tu15.percent += 5;
+            bets.to15.percent -= 5;
             bets.tu15.percentagleH2h += 1;
           }
           if (scoreHome + scoreAway < 3) {
-            bets.tu25.percent += 1;
-            bets.to25.percent -= 1;
+            bets.tu25.percent += 5;
+            bets.to25.percent -= 5;
             bets.tu25.percentagleH2h += 1;
           }
           if (scoreHome + scoreAway < 4) {
-            bets.tu35.percent += 1;
-            bets.to35.percent -= 1;
+            bets.tu35.percent += 5;
+            bets.to35.percent -= 5;
             bets.tu35.percentagleH2h += 1;
           }
           if (scoreHome > 0 && scoreAway > 0) {
-            bets.btsYes.percent += 1;
-            bets.btsNo.percent -= 1;
+            bets.btsYes.percent += 5;
+            bets.btsNo.percent -= 5;
             bets.btsYes.percentagleH2h += 1;
           }
           if (scoreHome > 0 && scoreAway === 0 || scoreHome === 0 && scoreAway > 0) {
-            bets.btsNo.percent += 1;
-            bets.btsYes.percent -= 1;
+            bets.btsNo.percent += 5;
+            bets.btsYes.percent -= 5;
             bets.btsNo.percentagleH2h += 1;
           }
           if (scoreHome === scoreAway) {
-            bets.draw.percent += 1;
-            bets.winnerHome.percent -= 1;
-            bets.winnerAway.percent -= 1;
+            bets.draw.percent += 5;
+            bets.winnerHome.percent -= 5;
+            bets.winnerAway.percent -= 5;
             bets.draw.percentagleH2h += 1;
           }
         });
@@ -471,8 +471,8 @@ export const calcPredictions = (
       // Для гостевых матчей гостевой команды взависимости от ранга
       if (matchesFromRankAway.length > 0) {
         arrMatchesAwayTeamAway.forEach(el => {
-          const scoreHome = el.score[0] + el.score[2];
-          const scoreAway = el.score[1] + el.score[3];
+          const scoreHome = el.score[0];
+          const scoreAway = el.score[1];
 
           bets.countMatchesRankAway += 1;
 
@@ -581,108 +581,108 @@ export const calcPredictions = (
 
       // Для гостевых матчей гостевой команды
       arrMatchesAwayTeamAway.forEach(el => {
-        const scoreHome = el.score[0] + el.score[2];
-        const scoreAway = el.score[1] + el.score[3];
+        const scoreHome = el.score[0];
+        const scoreAway = el.score[1];
 
         bets.countMatchesAway += 1;
 
         if (scoreAway > scoreHome) {
-          bets.winnerAway.percent += 1;
-          bets.winnerHome.percent -= 1;
+          bets.winnerAway.percent += 5;
+          bets.winnerHome.percent -= 5;
           bets.winnerAway.percentagleMatches += 1;
         }
         if (scoreAway >= scoreHome) {
-          bets.winOrdrawAway.percent += 1;
-          bets.winOrDrawHome.percent -= 1;
+          bets.winOrdrawAway.percent += 5;
+          bets.winOrDrawHome.percent -= 5;
           bets.winnerHome.percent -= 1;
           bets.winOrdrawAway.percentagleMatches += 1;
         }
         if (scoreAway - scoreHome >= -1) {
-          bets.foraAwayPlus15.percent += 1;
-          bets.foraHomeMinus15.percent -= 1;
+          bets.foraAwayPlus15.percent += 5;
+          bets.foraHomeMinus15.percent -= 5;
           bets.foraAwayPlus15.percentagleMatches += 1;
         }
         if (scoreAway - scoreHome >= 2) {
-          bets.foraAwayMinus15.percent += 1;
-          bets.winOrDrawHome.percent -= 1;
-          bets.winnerHome.percent -= 1;
-          bets.foraHomeMinus15.percent -= 1;
+          bets.foraAwayMinus15.percent += 5;
+          bets.winOrDrawHome.percent -= 5;
+          bets.winnerHome.percent -= 5;
+          bets.foraHomeMinus15.percent -= 5;
           bets.foraAwayMinus15.percentagleMatches += 1;
         }
         if (scoreAway > 0) {
-          bets.it2O05.percent += 1;
-          bets.it2U05.percent -= 1;
+          bets.it2O05.percent += 5;
+          bets.it2U05.percent -= 5;
           bets.it2O05.percentagleMatches += 1;
         }
         if (scoreAway > 1) {
-          bets.it2O15.percent += 1;
-          bets.it2U15.percent -= 1;
+          bets.it2O15.percent += 5;
+          bets.it2U15.percent -= 5;
           bets.it2O15.percentagleMatches += 1;
         }
         if (scoreAway > 2) {
-          bets.it2O25.percent += 1;
-          bets.it2U25.percent -= 1;
+          bets.it2O25.percent += 5;
+          bets.it2U25.percent -= 5;
           bets.it2O25.percentagleMatches += 1;
         }
         if (scoreAway < 1) {
-          bets.it2U05.percent += 1;
-          bets.it2O05.percent -= 1;
+          bets.it2U05.percent += 5;
+          bets.it2O05.percent -= 5;
           bets.it2U05.percentagleMatches += 1;
         }
         if (scoreAway < 2) {
-          bets.it2U15.percent += 1;
-          bets.it2O15.percent -= 1;
+          bets.it2U15.percent += 5;
+          bets.it2O15.percent -= 5;
           bets.it2U15.percentagleMatches += 1;
         }
         if (scoreAway < 3) {
-          bets.it2U25.percent += 1;
-          bets.it2O25.percent -= 1;
+          bets.it2U25.percent += 5;
+          bets.it2O25.percent -= 5;
           bets.it2U25.percentagleMatches += 1;
         }
         if (scoreHome + scoreAway > 1) {
-          bets.to15.percent += 1;
-          bets.tu15.percent -= 1;
+          bets.to15.percent += 5;
+          bets.tu15.percent -= 5;
           bets.to15.percentagleMatches += 1;
         }
         if (scoreHome + scoreAway > 2) {
-          bets.to25.percent += 1;
-          bets.tu25.percent -= 1;
+          bets.to25.percent += 5;
+          bets.tu25.percent -= 5;
           bets.to25.percentagleMatches += 1;
         }
         if (scoreHome + scoreAway > 3) {
-          bets.to35.percent += 1;
-          bets.tu35.percent -= 1;
+          bets.to35.percent += 5;
+          bets.tu35.percent -= 5;
           bets.to35.percentagleMatches += 1;
         }
         if (scoreHome + scoreAway < 2) {
-          bets.tu15.percent += 1;
-          bets.to15.percent -= 1;
+          bets.tu15.percent += 5;
+          bets.to15.percent -= 5;
           bets.tu15.percentagleMatches += 1;
         }
         if (scoreHome + scoreAway < 3) {
-          bets.tu25.percent += 1;
-          bets.to25.percent -= 1;
+          bets.tu25.percent += 5;
+          bets.to25.percent -= 5;
           bets.tu25.percentagleMatches += 1;
         }
         if (scoreHome + scoreAway < 4) {
-          bets.tu35.percent += 1;
-          bets.to35.percent -= 1;
+          bets.tu35.percent += 5;
+          bets.to35.percent -= 5;
           bets.tu35.percentagleMatches += 1;
         }
         if (scoreHome > 0 && scoreAway > 0) {
-          bets.btsYes.percent += 1;
-          bets.btsNo.percent -= 1;
+          bets.btsYes.percent += 5;
+          bets.btsNo.percent -= 5;
           bets.btsYes.percentagleMatches += 1;
         }
         if (scoreHome > 0 && scoreAway === 0 || scoreHome === 0 && scoreAway > 0) {
-          bets.btsNo.percent += 1;
-          bets.btsYes.percent -= 1;
+          bets.btsNo.percent += 5;
+          bets.btsYes.percent -= 5;
           bets.btsNo.percentagleMatches += 1;
         }
         if (scoreHome === scoreAway) {
-          bets.draw.percent += 1;
-          bets.winnerHome.percent -= 1;
-          bets.winnerAway.percent -= 1;
+          bets.draw.percent += 5;
+          bets.winnerHome.percent -= 5;
+          bets.winnerAway.percent -= 5;
           bets.draw.percentagleMatches += 1;
         }
       });
@@ -690,108 +690,108 @@ export const calcPredictions = (
       if (arrMatchesAwayTeamAwayH2h.length > 0) {
         // Для гостевых матчей гостевой команды h2h
         arrMatchesAwayTeamAwayH2h.forEach(el => {
-          const scoreHome = el.score[0] + el.score[2];
-          const scoreAway = el.score[1] + el.score[3];
+          const scoreHome = el.score[0];
+          const scoreAway = el.score[1];
 
           bets.countMatchesH2hAway += 1;
 
           if (scoreAway > scoreHome) {
-            bets.winnerAway.percent += 1;
-            bets.winnerHome.percent -= 1;
+            bets.winnerAway.percent += 5;
+            bets.winnerHome.percent -= 5;
             bets.winnerAway.percentagleH2h += 1;
           }
           if (scoreAway >= scoreHome) {
-            bets.winOrdrawAway.percent += 1;
-            bets.winOrDrawHome.percent -= 1;
-            bets.winnerHome.percent -= 1;
+            bets.winOrdrawAway.percent += 5;
+            bets.winOrDrawHome.percent -= 5;
+            bets.winnerHome.percent -= 5;
             bets.winOrdrawAway.percentagleH2h += 1;
           }
           if (scoreAway - scoreHome >= -1) {
-            bets.foraAwayPlus15.percent += 1;
-            bets.foraHomeMinus15.percent -= 1;
+            bets.foraAwayPlus15.percent += 5;
+            bets.foraHomeMinus15.percent -= 5;
             bets.foraAwayPlus15.percentagleH2h += 1;
           }
           if (scoreAway - scoreHome >= 2) {
-            bets.foraAwayMinus15.percent += 1;
-            bets.winOrDrawHome.percent -= 1;
-            bets.winnerHome.percent -= 1;
-            bets.foraHomeMinus15.percent -= 1;
+            bets.foraAwayMinus15.percent += 5;
+            bets.winOrDrawHome.percent -= 5;
+            bets.winnerHome.percent -= 5;
+            bets.foraHomeMinus15.percent -= 5;
             bets.foraAwayMinus15.percentagleH2h += 1;
           }
           if (scoreAway > 0) {
-            bets.it2O05.percent += 1;
-            bets.it2U05.percent -= 1;
+            bets.it2O05.percent += 5;
+            bets.it2U05.percent -= 5;
             bets.it2O05.percentagleH2h += 1;
           }
           if (scoreAway > 1) {
-            bets.it2O15.percent += 1;
-            bets.it2U15.percent -= 1;
+            bets.it2O15.percent += 5;
+            bets.it2U15.percent -= 5;
             bets.it2O15.percentagleH2h += 1;
           }
           if (scoreAway > 2) {
-            bets.it2O25.percent += 1;
-            bets.it2U25.percent -= 1;
+            bets.it2O25.percent += 5;
+            bets.it2U25.percent -= 5;
             bets.it2O25.percentagleH2h += 1;
           }
           if (scoreAway < 1) {
-            bets.it2U05.percent += 1;
-            bets.it2O05.percent -= 1;
+            bets.it2U05.percent += 5;
+            bets.it2O05.percent -= 5;
             bets.it2U05.percentagleH2h += 1;
           }
           if (scoreAway < 2) {
-            bets.it2U15.percent += 1;
-            bets.it2O15.percent -= 1;
+            bets.it2U15.percent += 5;
+            bets.it2O15.percent -= 5;
             bets.it2U15.percentagleH2h += 1;
           }
           if (scoreAway < 3) {
-            bets.it2U25.percent += 1;
-            bets.it2O25.percent -= 1;
+            bets.it2U25.percent += 5;
+            bets.it2O25.percent -= 5;
             bets.it2U25.percentagleH2h += 1;
           }
           if (scoreHome + scoreAway > 1) {
-            bets.to15.percent += 1;
-            bets.tu15.percent -= 1;
+            bets.to15.percent += 5;
+            bets.tu15.percent -= 5;
             bets.to15.percentagleH2h += 1;
           }
           if (scoreHome + scoreAway > 2) {
-            bets.to25.percent += 1;
-            bets.tu25.percent -= 1;
+            bets.to25.percent += 5;
+            bets.tu25.percent -= 5;
             bets.to25.percentagleH2h += 1;
           }
           if (scoreHome + scoreAway > 3) {
-            bets.to35.percent += 1;
-            bets.tu35.percent -= 1;
+            bets.to35.percent += 5;
+            bets.tu35.percent -= 5;
             bets.to35.percentagleH2h += 1;
           }
           if (scoreHome + scoreAway < 2) {
-            bets.tu15.percent += 1;
-            bets.to15.percent -= 1;
+            bets.tu15.percent += 5;
+            bets.to15.percent -= 5;
             bets.tu15.percentagleH2h += 1;
           }
           if (scoreHome + scoreAway < 3) {
-            bets.tu25.percent += 1;
-            bets.to25.percent -= 1;
+            bets.tu25.percent += 5;
+            bets.to25.percent -= 5;
             bets.tu25.percentagleH2h += 1;
           }
           if (scoreHome + scoreAway < 4) {
-            bets.tu35.percent += 1;
-            bets.to35.percent -= 1;
+            bets.tu35.percent += 5;
+            bets.to35.percent -= 5;
             bets.tu35.percentagleH2h += 1;
           }
           if (scoreHome > 0 && scoreAway > 0) {
-            bets.btsYes.percent += 1;
-            bets.btsNo.percent -= 1;
+            bets.btsYes.percent += 5;
+            bets.btsNo.percent -= 5;
             bets.btsYes.percentagleH2h += 1;
           }
           if (scoreHome > 0 && scoreAway === 0 || scoreHome === 0 && scoreAway > 0) {
-            bets.btsNo.percent += 1;
-            bets.btsYes.percent -= 1;
+            bets.btsNo.percent += 5;
+            bets.btsYes.percent -= 5;
             bets.btsNo.percentagleH2h += 1;
           }
           if (scoreHome === scoreAway) {
-            bets.draw.percent += 1;
-            bets.winnerHome.percent -= 1;
-            bets.winnerAway.percent -= 1;
+            bets.draw.percent += 5;
+            bets.winnerHome.percent -= 5;
+            bets.winnerAway.percent -= 5;
             bets.draw.percentagleH2h += 1;
           }
         });

@@ -1,4 +1,6 @@
-export const calcPoisonDestribution = (data) => {
+import { calcIndividualTotalWithXg } from "./calcIndividualTotalWithXg";
+
+export const calcPoisonDestribution = async (data) => {
 
     let expectedGoalsHome = 0;
     let expectedGoalsAway = 0;
@@ -38,247 +40,277 @@ export const calcPoisonDestribution = (data) => {
     expectedGoalsAway = ((expectedShotsAway * goalsPerShotsAway) + ((+data.goalsForAvgAway + +data.goalsAgainstAvgHome) / 2)) / 2;
     }
 
+    // Рассчитываем индивидуальный тотал Команд с помощью xg
+    const expectedXg = await calcIndividualTotalWithXg(data);
 
-    // рассчиываем распределение паусона все матчи
-    const poissonGoals = (expectedGoals, goals, number) => {
-        return (
-            ((expectedGoals ** goals * 2.71828 ** -expectedGoals) / number) * 100
-        );
-    }
+    const goalsHome = (expectedXg.individualTotalHome + expectedGoalsHome) / 2;
+    const goalsAway = (expectedXg.individualTotalAway + expectedGoalsAway) / 2;
 
-    const poisonGoals0Home = poissonGoals(expectedGoalsHome, 0, 1);
-    const poisonGoals0Away = poissonGoals(expectedGoalsAway, 0, 1);
-    const poisonGoals1Home = poissonGoals(expectedGoalsHome, 1, 1);
-    const poisonGoals1Away = poissonGoals(expectedGoalsAway, 1, 1);
-    const poisonGoals2Home = poissonGoals(expectedGoalsHome, 2, 2);
-    const poisonGoals2Away = poissonGoals(expectedGoalsAway, 2, 2);
-    const poisonGoals3Home = poissonGoals(expectedGoalsHome, 3, 6);
-    const poisonGoals3Away = poissonGoals(expectedGoalsAway, 3, 6);
-    const poisonGoals4Home = poissonGoals(expectedGoalsHome, 4, 24);
-    const poisonGoals4Away = poissonGoals(expectedGoalsAway, 4, 24);
-    const poisonGoals5Home = poissonGoals(expectedGoalsHome, 5, 120);
-    const poisonGoals5Away = poissonGoals(expectedGoalsAway, 5, 120);
+    console.log(goalsHome)
+    console.log(goalsAway)
+    
+    function poissonDistribution(lambda, k) {
+        // Функция для расчета значения распределения Пуассона для заданных параметров
+      
+        // Расчет вероятности события
+        const probability = (Math.exp(-lambda) * Math.pow(lambda, k) / factorial(k)) * 100;
+      
+        return probability;
+      }
+      
+      function factorial(n) {
+        // Функция для расчета факториала
+      
+        let result = 1;
+      
+        for (let i = 2; i <= n; i++) {
+          result *= i;
+        }
+      
+        return result;
+      }
+      
+      function calculatePoissonDistribution(outcomes, lambda) {
+        // Функция для расчета распределения Пуассона для всех исходов в ставках
+      
+        let result = {};
+      
+        // Рассчитываем вероятность каждого исхода
+        for (let i = 0; i < outcomes.length; i++) {
+          let k = outcomes[i];
+          let probability = poissonDistribution(lambda, k);
+          result[k] = probability;
+        }
+      
+        return result;
+      }
+      
+      let outcomes = [0, 1, 2, 3, 4, 5];
+      
+      let distributionHome = calculatePoissonDistribution(outcomes, goalsHome);
+      let distributionAway = calculatePoissonDistribution(outcomes, goalsAway);
+
 
     // рассчитываем вероятности прохода ставки по распределению паусона
     const percentOutcomes = {
-        winnerHome: (poisonGoals1Home * poisonGoals0Away) / 100 +
-            (poisonGoals2Home * poisonGoals0Away) / 100 +
-            (poisonGoals3Home * poisonGoals0Away) / 100 +
-            (poisonGoals4Home * poisonGoals0Away) / 100 +
-            (poisonGoals5Home * poisonGoals0Away) / 100 +
-            (poisonGoals2Home * poisonGoals1Away) / 100 +
-            (poisonGoals3Home * poisonGoals1Away) / 100 +
-            (poisonGoals4Home * poisonGoals1Away) / 100 +
-            (poisonGoals5Home * poisonGoals1Away) / 100 +
-            (poisonGoals3Home * poisonGoals2Away) / 100 +
-            (poisonGoals4Home * poisonGoals2Away) / 100 +
-            (poisonGoals5Home * poisonGoals2Away) / 100 +
-            (poisonGoals4Home * poisonGoals3Away) / 100 +
-            (poisonGoals5Home * poisonGoals3Away) / 100 +
-            (poisonGoals5Home * poisonGoals4Away) / 100,
-        draw: (poisonGoals0Home * poisonGoals0Away) / 100 +
-            (poisonGoals1Home * poisonGoals1Away) / 100 +
-            (poisonGoals2Home * poisonGoals2Away) / 100 +
-            (poisonGoals3Home * poisonGoals3Away) / 100 +
-            (poisonGoals4Home * poisonGoals4Away) / 100 +
-            (poisonGoals5Home * poisonGoals5Away) / 100,
-        winnerAway: (poisonGoals0Home * poisonGoals1Away) / 100 +
-            (poisonGoals0Home * poisonGoals2Away) / 100 +
-            (poisonGoals0Home * poisonGoals3Away) / 100 +
-            (poisonGoals0Home * poisonGoals4Away) / 100 +
-            (poisonGoals0Home * poisonGoals5Away) / 100 +
-            (poisonGoals1Home * poisonGoals2Away) / 100 +
-            (poisonGoals1Home * poisonGoals3Away) / 100 +
-            (poisonGoals1Home * poisonGoals4Away) / 100 +
-            (poisonGoals1Home * poisonGoals5Away) / 100 +
-            (poisonGoals2Home * poisonGoals3Away) / 100 +
-            (poisonGoals2Home * poisonGoals4Away) / 100 +
-            (poisonGoals2Home * poisonGoals5Away) / 100 +
-            (poisonGoals3Home * poisonGoals4Away) / 100 +
-            (poisonGoals3Home * poisonGoals5Away) / 100 +
-            (poisonGoals4Home * poisonGoals5Away) / 100,
-        foraHomeMinus15: (poisonGoals2Home * poisonGoals0Away) / 100 +
-            (poisonGoals3Home * poisonGoals0Away) / 100 +
-            (poisonGoals4Home * poisonGoals0Away) / 100 +
-            (poisonGoals5Home * poisonGoals0Away) / 100 +
-            (poisonGoals3Home * poisonGoals1Away) / 100 +
-            (poisonGoals4Home * poisonGoals1Away) / 100 +
-            (poisonGoals5Home * poisonGoals1Away) / 100 +
-            (poisonGoals4Home * poisonGoals2Away) / 100 +
-            (poisonGoals5Home * poisonGoals2Away) / 100 +
-            (poisonGoals5Home * poisonGoals3Away) / 100,
-        foraAwayMinus15: (poisonGoals0Home * poisonGoals2Away) / 100 +
-            (poisonGoals0Home * poisonGoals3Away) / 100 +
-            (poisonGoals0Home * poisonGoals4Away) / 100 +
-            (poisonGoals0Home * poisonGoals5Away) / 100 +
-            (poisonGoals1Home * poisonGoals3Away) / 100 +
-            (poisonGoals1Home * poisonGoals4Away) / 100 +
-            (poisonGoals1Home * poisonGoals5Away) / 100 +
-            (poisonGoals2Home * poisonGoals4Away) / 100 +
-            (poisonGoals2Home * poisonGoals5Away) / 100 +
-            (poisonGoals3Home * poisonGoals5Away) / 100,
-        foraHomePlus15: (poisonGoals1Home * poisonGoals0Away) / 100 +
-            (poisonGoals2Home * poisonGoals0Away) / 100 +
-            (poisonGoals3Home * poisonGoals0Away) / 100 +
-            (poisonGoals4Home * poisonGoals0Away) / 100 +
-            (poisonGoals5Home * poisonGoals0Away) / 100 +
-            (poisonGoals2Home * poisonGoals1Away) / 100 +
-            (poisonGoals3Home * poisonGoals1Away) / 100 +
-            (poisonGoals4Home * poisonGoals1Away) / 100 +
-            (poisonGoals5Home * poisonGoals1Away) / 100 +
-            (poisonGoals3Home * poisonGoals2Away) / 100 +
-            (poisonGoals4Home * poisonGoals2Away) / 100 +
-            (poisonGoals5Home * poisonGoals2Away) / 100 +
-            (poisonGoals4Home * poisonGoals3Away) / 100 +
-            (poisonGoals5Home * poisonGoals3Away) / 100 +
-            (poisonGoals5Home * poisonGoals4Away) / 100 +
-            (poisonGoals0Home * poisonGoals0Away) / 100 +
-            (poisonGoals1Home * poisonGoals1Away) / 100 +
-            (poisonGoals2Home * poisonGoals2Away) / 100 +
-            (poisonGoals3Home * poisonGoals3Away) / 100 +
-            (poisonGoals4Home * poisonGoals4Away) / 100 +
-            (poisonGoals5Home * poisonGoals5Away) / 100 +
-            (poisonGoals0Home * poisonGoals1Away) / 100 +
-            (poisonGoals1Home * poisonGoals2Away) / 100 +
-            (poisonGoals2Home * poisonGoals3Away) / 100 +
-            (poisonGoals3Home * poisonGoals4Away) / 100 +
-            (poisonGoals4Home * poisonGoals5Away) / 100,
-        foraAwayPlus15: (poisonGoals0Home * poisonGoals1Away) / 100 +
-            (poisonGoals0Home * poisonGoals2Away) / 100 +
-            (poisonGoals0Home * poisonGoals3Away) / 100 +
-            (poisonGoals0Home * poisonGoals4Away) / 100 +
-            (poisonGoals0Home * poisonGoals5Away) / 100 +
-            (poisonGoals1Home * poisonGoals2Away) / 100 +
-            (poisonGoals1Home * poisonGoals3Away) / 100 +
-            (poisonGoals1Home * poisonGoals4Away) / 100 +
-            (poisonGoals1Home * poisonGoals5Away) / 100 +
-            (poisonGoals2Home * poisonGoals3Away) / 100 +
-            (poisonGoals2Home * poisonGoals4Away) / 100 +
-            (poisonGoals2Home * poisonGoals5Away) / 100 +
-            (poisonGoals3Home * poisonGoals4Away) / 100 +
-            (poisonGoals3Home * poisonGoals5Away) / 100 +
-            (poisonGoals4Home * poisonGoals5Away) / 100 +
-            (poisonGoals0Home * poisonGoals0Away) / 100 +
-            (poisonGoals1Home * poisonGoals1Away) / 100 +
-            (poisonGoals2Home * poisonGoals2Away) / 100 +
-            (poisonGoals3Home * poisonGoals3Away) / 100 +
-            (poisonGoals4Home * poisonGoals4Away) / 100 +
-            (poisonGoals5Home * poisonGoals5Away) / 100 +
-            (poisonGoals1Home * poisonGoals0Away) / 100 +
-            (poisonGoals2Home * poisonGoals1Away) / 100 +
-            (poisonGoals3Home * poisonGoals2Away) / 100 +
-            (poisonGoals4Home * poisonGoals3Away) / 100 +
-            (poisonGoals5Home * poisonGoals4Away) / 100,
-        winOrDrawHome: (poisonGoals1Home * poisonGoals0Away) / 100 +
-            (poisonGoals2Home * poisonGoals0Away) / 100 +
-            (poisonGoals3Home * poisonGoals0Away) / 100 +
-            (poisonGoals4Home * poisonGoals0Away) / 100 +
-            (poisonGoals5Home * poisonGoals0Away) / 100 +
-            (poisonGoals2Home * poisonGoals1Away) / 100 +
-            (poisonGoals3Home * poisonGoals1Away) / 100 +
-            (poisonGoals4Home * poisonGoals1Away) / 100 +
-            (poisonGoals5Home * poisonGoals1Away) / 100 +
-            (poisonGoals3Home * poisonGoals2Away) / 100 +
-            (poisonGoals4Home * poisonGoals2Away) / 100 +
-            (poisonGoals5Home * poisonGoals2Away) / 100 +
-            (poisonGoals4Home * poisonGoals3Away) / 100 +
-            (poisonGoals5Home * poisonGoals3Away) / 100 +
-            (poisonGoals5Home * poisonGoals4Away) / 100 +
-            (poisonGoals0Home * poisonGoals0Away) / 100 +
-            (poisonGoals1Home * poisonGoals1Away) / 100 +
-            (poisonGoals2Home * poisonGoals2Away) / 100 +
-            (poisonGoals3Home * poisonGoals3Away) / 100 +
-            (poisonGoals4Home * poisonGoals4Away) / 100 +
-            (poisonGoals5Home * poisonGoals5Away) / 100,
-        winOrdrawAway: (poisonGoals0Home * poisonGoals1Away) / 100 +
-            (poisonGoals0Home * poisonGoals2Away) / 100 +
-            (poisonGoals0Home * poisonGoals3Away) / 100 +
-            (poisonGoals0Home * poisonGoals4Away) / 100 +
-            (poisonGoals0Home * poisonGoals5Away) / 100 +
-            (poisonGoals1Home * poisonGoals2Away) / 100 +
-            (poisonGoals1Home * poisonGoals3Away) / 100 +
-            (poisonGoals1Home * poisonGoals4Away) / 100 +
-            (poisonGoals1Home * poisonGoals5Away) / 100 +
-            (poisonGoals2Home * poisonGoals3Away) / 100 +
-            (poisonGoals2Home * poisonGoals4Away) / 100 +
-            (poisonGoals2Home * poisonGoals5Away) / 100 +
-            (poisonGoals3Home * poisonGoals4Away) / 100 +
-            (poisonGoals3Home * poisonGoals5Away) / 100 +
-            (poisonGoals4Home * poisonGoals5Away) / 100 +
-            (poisonGoals0Home * poisonGoals0Away) / 100 +
-            (poisonGoals1Home * poisonGoals1Away) / 100 +
-            (poisonGoals2Home * poisonGoals2Away) / 100 +
-            (poisonGoals3Home * poisonGoals3Away) / 100 +
-            (poisonGoals4Home * poisonGoals4Away) / 100 +
-            (poisonGoals5Home * poisonGoals5Away) / 100,
-        tu15: (poisonGoals0Home * poisonGoals0Away) / 100 +
-            (poisonGoals1Home * poisonGoals0Away) / 100 +
-            (poisonGoals0Home * poisonGoals1Away) / 100,
-        to15: 100 - ((poisonGoals0Home * poisonGoals0Away) / 100 +
-            (poisonGoals1Home * poisonGoals0Away) / 100 +
-            (poisonGoals0Home * poisonGoals1Away) / 100),
-        tu25: (poisonGoals0Home * poisonGoals0Away) / 100 +
-            (poisonGoals1Home * poisonGoals0Away) / 100 +
-            (poisonGoals0Home * poisonGoals1Away) / 100 +
-            (poisonGoals1Home * poisonGoals1Away) / 100 +
-            (poisonGoals2Home * poisonGoals0Away) / 100 +
-            (poisonGoals0Home * poisonGoals2Away) / 100,
-        to25: 100 - ((poisonGoals0Home * poisonGoals0Away) / 100 +
-            (poisonGoals1Home * poisonGoals0Away) / 100 +
-            (poisonGoals0Home * poisonGoals1Away) / 100 +
-            (poisonGoals1Home * poisonGoals1Away) / 100 +
-            (poisonGoals2Home * poisonGoals0Away) / 100 +
-            (poisonGoals0Home * poisonGoals2Away) / 100),
-        tu35: (poisonGoals0Home * poisonGoals0Away) / 100 +
-            (poisonGoals1Home * poisonGoals0Away) / 100 +
-            (poisonGoals0Home * poisonGoals1Away) / 100 +
-            (poisonGoals1Home * poisonGoals1Away) / 100 +
-            (poisonGoals2Home * poisonGoals0Away) / 100 +
-            (poisonGoals0Home * poisonGoals2Away) / 100 +
-            (poisonGoals2Home * poisonGoals1Away) / 100 +
-            (poisonGoals1Home * poisonGoals2Away) / 100,
-        to35: 100 - ((poisonGoals0Home * poisonGoals0Away) / 100 +
-            (poisonGoals1Home * poisonGoals0Away) / 100 +
-            (poisonGoals0Home * poisonGoals1Away) / 100 +
-            (poisonGoals1Home * poisonGoals1Away) / 100 +
-            (poisonGoals2Home * poisonGoals0Away) / 100 +
-            (poisonGoals0Home * poisonGoals2Away) / 100 +
-            (poisonGoals2Home * poisonGoals1Away) / 100 +
-            (poisonGoals1Home * poisonGoals2Away) / 100),
-        btsYes: 100 - ((poisonGoals0Home * poisonGoals0Away) / 100 +
-            (poisonGoals1Home * poisonGoals0Away) / 100 +
-            (poisonGoals2Home * poisonGoals0Away) / 100 +
-            (poisonGoals3Home * poisonGoals0Away) / 100 +
-            (poisonGoals4Home * poisonGoals0Away) / 100 +
-            (poisonGoals5Home * poisonGoals0Away) / 100 +
-            (poisonGoals0Home * poisonGoals1Away) / 100 +
-            (poisonGoals0Home * poisonGoals2Away) / 100 +
-            (poisonGoals0Home * poisonGoals3Away) / 100 +
-            (poisonGoals0Home * poisonGoals4Away) / 100 +
-            (poisonGoals0Home * poisonGoals5Away) / 100),
-        btsNo: ((poisonGoals0Home * poisonGoals0Away) / 100 +
-            (poisonGoals1Home * poisonGoals0Away) / 100 +
-            (poisonGoals2Home * poisonGoals0Away) / 100 +
-            (poisonGoals3Home * poisonGoals0Away) / 100 +
-            (poisonGoals4Home * poisonGoals0Away) / 100 +
-            (poisonGoals5Home * poisonGoals0Away) / 100 +
-            (poisonGoals0Home * poisonGoals1Away) / 100 +
-            (poisonGoals0Home * poisonGoals2Away) / 100 +
-            (poisonGoals0Home * poisonGoals3Away) / 100 +
-            (poisonGoals0Home * poisonGoals4Away) / 100 +
-            (poisonGoals0Home * poisonGoals5Away) / 100),
-        it1O05: poisonGoals1Home + poisonGoals2Home + poisonGoals3Home + poisonGoals4Home + poisonGoals5Home,
-        it2O05: poisonGoals1Away + poisonGoals2Away + poisonGoals3Away + poisonGoals4Away + poisonGoals5Away,
-        it1O15: poisonGoals2Home + poisonGoals3Home + poisonGoals4Home + poisonGoals5Home,
-        it2O15: poisonGoals2Away + poisonGoals3Away + poisonGoals4Away + poisonGoals5Away,
-        it1O25: poisonGoals3Home + poisonGoals4Home + poisonGoals5Home,
-        it2O25: poisonGoals3Away + poisonGoals4Away + poisonGoals5Away,
-        it1U05: poisonGoals0Home,
-        it2U05: poisonGoals0Away,
-        it1U15: poisonGoals0Home + poisonGoals1Home,
-        it2U15: poisonGoals0Away + poisonGoals1Away,
-        it1U25: poisonGoals0Home + poisonGoals1Home + poisonGoals2Home,
-        it2U25: poisonGoals0Away + poisonGoals1Away + poisonGoals2Away,
+        winnerHome: (distributionHome['1'] * distributionAway['0']) / 100 +
+            (distributionHome['2'] * distributionAway['0']) / 100 +
+            (distributionHome['3'] * distributionAway['0']) / 100 +
+            (distributionHome['4'] * distributionAway['0']) / 100 +
+            (distributionHome['5'] * distributionAway['0']) / 100 +
+            (distributionHome['2'] * distributionAway['1']) / 100 +
+            (distributionHome['3'] * distributionAway['1']) / 100 +
+            (distributionHome['4'] * distributionAway['1']) / 100 +
+            (distributionHome['5'] * distributionAway['1']) / 100 +
+            (distributionHome['3'] * distributionAway['2']) / 100 +
+            (distributionHome['4'] * distributionAway['2']) / 100 +
+            (distributionHome['5'] * distributionAway['2']) / 100 +
+            (distributionHome['4'] * distributionAway['3']) / 100 +
+            (distributionHome['5'] * distributionAway['3']) / 100 +
+            (distributionHome['5'] * distributionAway['4']) / 100,
+        draw: (distributionHome['0'] * distributionAway['0']) / 100 +
+            (distributionHome['1'] * distributionAway['1']) / 100 +
+            (distributionHome['2'] * distributionAway['2']) / 100 +
+            (distributionHome['3'] * distributionAway['3']) / 100 +
+            (distributionHome['4'] * distributionAway['4']) / 100 +
+            (distributionHome['5'] * distributionAway['5']) / 100,
+        winnerAway: (distributionHome['0'] * distributionAway['1']) / 100 +
+            (distributionHome['0'] * distributionAway['2']) / 100 +
+            (distributionHome['0'] * distributionAway['3']) / 100 +
+            (distributionHome['0'] * distributionAway['4']) / 100 +
+            (distributionHome['0'] * distributionAway['5']) / 100 +
+            (distributionHome['1'] * distributionAway['2']) / 100 +
+            (distributionHome['1'] * distributionAway['3']) / 100 +
+            (distributionHome['1'] * distributionAway['4']) / 100 +
+            (distributionHome['1'] * distributionAway['5']) / 100 +
+            (distributionHome['2'] * distributionAway['3']) / 100 +
+            (distributionHome['2'] * distributionAway['4']) / 100 +
+            (distributionHome['2'] * distributionAway['5']) / 100 +
+            (distributionHome['3'] * distributionAway['4']) / 100 +
+            (distributionHome['3'] * distributionAway['5']) / 100 +
+            (distributionHome['4'] * distributionAway['5']) / 100,
+        foraHomeMinus15: (distributionHome['2'] * distributionAway['0']) / 100 +
+            (distributionHome['3'] * distributionAway['0']) / 100 +
+            (distributionHome['4'] * distributionAway['0']) / 100 +
+            (distributionHome['5'] * distributionAway['0']) / 100 +
+            (distributionHome['3'] * distributionAway['1']) / 100 +
+            (distributionHome['4'] * distributionAway['1']) / 100 +
+            (distributionHome['5'] * distributionAway['1']) / 100 +
+            (distributionHome['4'] * distributionAway['2']) / 100 +
+            (distributionHome['5'] * distributionAway['2']) / 100 +
+            (distributionHome['5'] * distributionAway['3']) / 100,
+        foraAwayMinus15: (distributionHome['0'] * distributionAway['2']) / 100 +
+            (distributionHome['0'] * distributionAway['3']) / 100 +
+            (distributionHome['0'] * distributionAway['4']) / 100 +
+            (distributionHome['0'] * distributionAway['5']) / 100 +
+            (distributionHome['1'] * distributionAway['3']) / 100 +
+            (distributionHome['1'] * distributionAway['4']) / 100 +
+            (distributionHome['1'] * distributionAway['5']) / 100 +
+            (distributionHome['2'] * distributionAway['4']) / 100 +
+            (distributionHome['2'] * distributionAway['5']) / 100 +
+            (distributionHome['3'] * distributionAway['5']) / 100,
+        foraHomePlus15: (distributionHome['1'] * distributionAway['0']) / 100 +
+            (distributionHome['2'] * distributionAway['0']) / 100 +
+            (distributionHome['3'] * distributionAway['0']) / 100 +
+            (distributionHome['4'] * distributionAway['0']) / 100 +
+            (distributionHome['5'] * distributionAway['0']) / 100 +
+            (distributionHome['2'] * distributionAway['1']) / 100 +
+            (distributionHome['3'] * distributionAway['1']) / 100 +
+            (distributionHome['4'] * distributionAway['1']) / 100 +
+            (distributionHome['5'] * distributionAway['1']) / 100 +
+            (distributionHome['3'] * distributionAway['2']) / 100 +
+            (distributionHome['4'] * distributionAway['2']) / 100 +
+            (distributionHome['5'] * distributionAway['2']) / 100 +
+            (distributionHome['4'] * distributionAway['3']) / 100 +
+            (distributionHome['5'] * distributionAway['3']) / 100 +
+            (distributionHome['5'] * distributionAway['4']) / 100 +
+            (distributionHome['0'] * distributionAway['0']) / 100 +
+            (distributionHome['1'] * distributionAway['1']) / 100 +
+            (distributionHome['2'] * distributionAway['2']) / 100 +
+            (distributionHome['3'] * distributionAway['3']) / 100 +
+            (distributionHome['4'] * distributionAway['4']) / 100 +
+            (distributionHome['5'] * distributionAway['5']) / 100 +
+            (distributionHome['0'] * distributionAway['1']) / 100 +
+            (distributionHome['1'] * distributionAway['2']) / 100 +
+            (distributionHome['2'] * distributionAway['3']) / 100 +
+            (distributionHome['3'] * distributionAway['4']) / 100 +
+            (distributionHome['4'] * distributionAway['5']) / 100,
+        foraAwayPlus15: (distributionHome['0'] * distributionAway['1']) / 100 +
+            (distributionHome['0'] * distributionAway['2']) / 100 +
+            (distributionHome['0'] * distributionAway['3']) / 100 +
+            (distributionHome['0'] * distributionAway['4']) / 100 +
+            (distributionHome['0'] * distributionAway['5']) / 100 +
+            (distributionHome['1'] * distributionAway['2']) / 100 +
+            (distributionHome['1'] * distributionAway['3']) / 100 +
+            (distributionHome['1'] * distributionAway['4']) / 100 +
+            (distributionHome['1'] * distributionAway['5']) / 100 +
+            (distributionHome['2'] * distributionAway['3']) / 100 +
+            (distributionHome['2'] * distributionAway['4']) / 100 +
+            (distributionHome['2'] * distributionAway['5']) / 100 +
+            (distributionHome['3'] * distributionAway['4']) / 100 +
+            (distributionHome['3'] * distributionAway['5']) / 100 +
+            (distributionHome['4'] * distributionAway['5']) / 100 +
+            (distributionHome['0'] * distributionAway['0']) / 100 +
+            (distributionHome['1'] * distributionAway['1']) / 100 +
+            (distributionHome['2'] * distributionAway['2']) / 100 +
+            (distributionHome['3'] * distributionAway['3']) / 100 +
+            (distributionHome['4'] * distributionAway['4']) / 100 +
+            (distributionHome['5'] * distributionAway['5']) / 100 +
+            (distributionHome['1'] * distributionAway['0']) / 100 +
+            (distributionHome['2'] * distributionAway['1']) / 100 +
+            (distributionHome['3'] * distributionAway['2']) / 100 +
+            (distributionHome['4'] * distributionAway['3']) / 100 +
+            (distributionHome['5'] * distributionAway['4']) / 100,
+        winOrDrawHome: (distributionHome['1'] * distributionAway['0']) / 100 +
+            (distributionHome['2'] * distributionAway['0']) / 100 +
+            (distributionHome['3'] * distributionAway['0']) / 100 +
+            (distributionHome['4'] * distributionAway['0']) / 100 +
+            (distributionHome['5'] * distributionAway['0']) / 100 +
+            (distributionHome['2'] * distributionAway['1']) / 100 +
+            (distributionHome['3'] * distributionAway['1']) / 100 +
+            (distributionHome['4'] * distributionAway['1']) / 100 +
+            (distributionHome['5'] * distributionAway['1']) / 100 +
+            (distributionHome['3'] * distributionAway['2']) / 100 +
+            (distributionHome['4'] * distributionAway['2']) / 100 +
+            (distributionHome['5'] * distributionAway['2']) / 100 +
+            (distributionHome['4'] * distributionAway['3']) / 100 +
+            (distributionHome['5'] * distributionAway['3']) / 100 +
+            (distributionHome['5'] * distributionAway['4']) / 100 +
+            (distributionHome['0'] * distributionAway['0']) / 100 +
+            (distributionHome['1'] * distributionAway['1']) / 100 +
+            (distributionHome['2'] * distributionAway['2']) / 100 +
+            (distributionHome['3'] * distributionAway['3']) / 100 +
+            (distributionHome['4'] * distributionAway['4']) / 100 +
+            (distributionHome['5'] * distributionAway['5']) / 100,
+        winOrdrawAway: (distributionHome['0'] * distributionAway['1']) / 100 +
+            (distributionHome['0'] * distributionAway['2']) / 100 +
+            (distributionHome['0'] * distributionAway['3']) / 100 +
+            (distributionHome['0'] * distributionAway['4']) / 100 +
+            (distributionHome['0'] * distributionAway['5']) / 100 +
+            (distributionHome['1'] * distributionAway['2']) / 100 +
+            (distributionHome['1'] * distributionAway['3']) / 100 +
+            (distributionHome['1'] * distributionAway['4']) / 100 +
+            (distributionHome['1'] * distributionAway['5']) / 100 +
+            (distributionHome['2'] * distributionAway['3']) / 100 +
+            (distributionHome['2'] * distributionAway['4']) / 100 +
+            (distributionHome['2'] * distributionAway['5']) / 100 +
+            (distributionHome['3'] * distributionAway['4']) / 100 +
+            (distributionHome['3'] * distributionAway['5']) / 100 +
+            (distributionHome['4'] * distributionAway['5']) / 100 +
+            (distributionHome['0'] * distributionAway['0']) / 100 +
+            (distributionHome['1'] * distributionAway['1']) / 100 +
+            (distributionHome['2'] * distributionAway['2']) / 100 +
+            (distributionHome['3'] * distributionAway['3']) / 100 +
+            (distributionHome['4'] * distributionAway['4']) / 100 +
+            (distributionHome['5'] * distributionAway['5']) / 100,
+        tu15: (distributionHome['0'] * distributionAway['0']) / 100 +
+            (distributionHome['1'] * distributionAway['0']) / 100 +
+            (distributionHome['0'] * distributionAway['1']) / 100,
+        to15: 100 - ((distributionHome['0'] * distributionAway['0']) / 100 +
+            (distributionHome['1'] * distributionAway['0']) / 100 +
+            (distributionHome['0'] * distributionAway['1']) / 100),
+        tu25: (distributionHome['0'] * distributionAway['0']) / 100 +
+            (distributionHome['1'] * distributionAway['0']) / 100 +
+            (distributionHome['0'] * distributionAway['1']) / 100 +
+            (distributionHome['1'] * distributionAway['1']) / 100 +
+            (distributionHome['2'] * distributionAway['0']) / 100 +
+            (distributionHome['0'] * distributionAway['2']) / 100,
+        to25: 100 - ((distributionHome['0'] * distributionAway['0']) / 100 +
+            (distributionHome['1'] * distributionAway['0']) / 100 +
+            (distributionHome['0'] * distributionAway['1']) / 100 +
+            (distributionHome['1'] * distributionAway['1']) / 100 +
+            (distributionHome['2'] * distributionAway['0']) / 100 +
+            (distributionHome['0'] * distributionAway['2']) / 100),
+        tu35: (distributionHome['0'] * distributionAway['0']) / 100 +
+            (distributionHome['1'] * distributionAway['0']) / 100 +
+            (distributionHome['0'] * distributionAway['1']) / 100 +
+            (distributionHome['1'] * distributionAway['1']) / 100 +
+            (distributionHome['2'] * distributionAway['0']) / 100 +
+            (distributionHome['0'] * distributionAway['2']) / 100 +
+            (distributionHome['2'] * distributionAway['1']) / 100 +
+            (distributionHome['1'] * distributionAway['2']) / 100,
+        to35: 100 - ((distributionHome['0'] * distributionAway['0']) / 100 +
+            (distributionHome['1'] * distributionAway['0']) / 100 +
+            (distributionHome['0'] * distributionAway['1']) / 100 +
+            (distributionHome['1'] * distributionAway['1']) / 100 +
+            (distributionHome['2'] * distributionAway['0']) / 100 +
+            (distributionHome['0'] * distributionAway['2']) / 100 +
+            (distributionHome['2'] * distributionAway['1']) / 100 +
+            (distributionHome['1'] * distributionAway['2']) / 100),
+        btsYes: 100 - ((distributionHome['0'] * distributionAway['0']) / 100 +
+            (distributionHome['1'] * distributionAway['0']) / 100 +
+            (distributionHome['2'] * distributionAway['0']) / 100 +
+            (distributionHome['3'] * distributionAway['0']) / 100 +
+            (distributionHome['4'] * distributionAway['0']) / 100 +
+            (distributionHome['5'] * distributionAway['0']) / 100 +
+            (distributionHome['0'] * distributionAway['1']) / 100 +
+            (distributionHome['0'] * distributionAway['2']) / 100 +
+            (distributionHome['0'] * distributionAway['3']) / 100 +
+            (distributionHome['0'] * distributionAway['4']) / 100 +
+            (distributionHome['0'] * distributionAway['5']) / 100),
+        btsNo: ((distributionHome['0'] * distributionAway['0']) / 100 +
+            (distributionHome['1'] * distributionAway['0']) / 100 +
+            (distributionHome['2'] * distributionAway['0']) / 100 +
+            (distributionHome['3'] * distributionAway['0']) / 100 +
+            (distributionHome['4'] * distributionAway['0']) / 100 +
+            (distributionHome['5'] * distributionAway['0']) / 100 +
+            (distributionHome['0'] * distributionAway['1']) / 100 +
+            (distributionHome['0'] * distributionAway['2']) / 100 +
+            (distributionHome['0'] * distributionAway['3']) / 100 +
+            (distributionHome['0'] * distributionAway['4']) / 100 +
+            (distributionHome['0'] * distributionAway['5']) / 100),
+        it1O05: distributionHome['1'] + distributionHome['2'] + distributionHome['3'] + distributionHome['4'] + distributionHome['5'],
+        it2O05: distributionAway['1'] + distributionAway['2'] + distributionAway['3'] + distributionAway['4'] + distributionAway['5'],
+        it1O15: distributionHome['2'] + distributionHome['3'] + distributionHome['4'] + distributionHome['5'],
+        it2O15: distributionAway['2'] + distributionAway['3'] + distributionAway['4'] + distributionAway['5'],
+        it1O25: distributionHome['3'] + distributionHome['4'] + distributionHome['5'],
+        it2O25: distributionAway['3'] + distributionAway['4'] + distributionAway['5'],
+        it1U05: distributionHome['0'],
+        it2U05: distributionAway['0'],
+        it1U15: distributionHome['0'] + distributionHome['1'],
+        it2U15: distributionAway['0'] + distributionAway['1'],
+        it1U25: distributionHome['0'] + distributionHome['1'] + distributionHome['2'],
+        it2U25: distributionAway['0'] + distributionAway['1'] + distributionAway['2'],
     }
     console.log(percentOutcomes)
 

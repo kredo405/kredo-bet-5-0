@@ -19,7 +19,6 @@ const errorModal = (message) => {
 };
 
 const Match = () => {
-    const [coments, setComents] = useState([]);
     const [info, setInfo] = useState({});
     const [predictions, setPredictions] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -40,25 +39,6 @@ const Match = () => {
 
                 setInfo(matchesInfoNbbet.data.match.data.match);
                 setPredictions(matchesPredictionsNbbet.data.match.data.tips);
-
-                const matchSoccer365 = matchesInfo.data.matches.flat().find(item =>
-                    findTeam(
-                        matchesInfoNbbet.data.match.data.match.team1_name,
-                        item.homeTeam || ""
-                    ) &&
-                    findTeam(
-                        matchesInfoNbbet.data.match.data.match.team2_name,
-                        item.awayTeam || ""
-                    )
-                );
-
-                console.log(matchSoccer365);
-
-                if (matchSoccer365) {
-                    const match = await Soccer365Services.getMatchInfo(matchSoccer365.id);
-                    console.log(match.data.match[0].predictions);
-                    setComents(match.data.match[0].predictions);
-                }
 
                 setIsLoading(true);
             } catch (error) {
@@ -176,7 +156,6 @@ const Match = () => {
                                 eventKey="bets"
                                 title={<p className='font-mono  font-medium text-indigo-900'>Ставки</p>}>
                                 <Bets
-                                    data={coments}
                                     info={info}
                                 />
                             </Tab>

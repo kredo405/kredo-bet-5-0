@@ -3,8 +3,8 @@ import axios from 'axios';
 export const nbbetServices = {
     async getAllMatches() {
         const timestamp = Date.now();
-        const dateFix = Number(String(timestamp).slice(3, 8)) + 740;
-        const newTimestamp = +`${String(timestamp).slice(0, 3)}${dateFix}99999`;
+        const dateFix = Number(String(timestamp).slice(0, 8)) + 180;
+        const newTimestamp = +`${dateFix}99999`;
 
         const options = {
             method: 'GET',
@@ -22,6 +22,18 @@ export const nbbetServices = {
             url: 'https://node-api-ochre.vercel.app/nbbetMatch',
             params: {
                 link: `${sessionStorage.getItem('link')}`
+                // link: '972530-manchester-siti-tottenhem-hotspur-prognoz-na-match'
+            }
+        };
+
+        return axios.request(options);
+    },
+    async getLastMatchInfo(link) {
+        const options = {
+            method: 'GET',
+            url: 'https://node-api-ochre.vercel.app/nbbetMatch',
+            params: {
+                link: link
                 // link: '972530-manchester-siti-tottenhem-hotspur-prognoz-na-match'
             }
         };

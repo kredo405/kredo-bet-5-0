@@ -20,7 +20,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 
-const ToolsPrediction = ({ percentPoison, percentWithScore, info }) => {
+const ToolsPrediction = ({ percentPoison, info }) => {
     const dispatch = useDispatch();
     const [odds, setOdds] = useState({ odds: [{ name: "Победа 1", odd: "1" }] });
     const [elementsPropobility, setElementsPropobility] = useState([{
@@ -48,10 +48,17 @@ const ToolsPrediction = ({ percentPoison, percentWithScore, info }) => {
 
     useEffect(() => {
 
-        const outcomesBigPercent = calcBigPercent(percentPoison, percentWithScore, odds.odds, info.current_odds);
+       
 
-        dispatch(setOutcomes(outcomesBigPercent.arrOutcomesForPredictions));
-        setElementsPropobility(outcomesBigPercent.arrOutcomes);
+        const getPercent = async () => {
+            const res = await percentPoison;
+            const outcomesBigPercent = calcBigPercent(res, odds.odds, info.current_odds);
+            dispatch(setOutcomes(outcomesBigPercent.arrOutcomesForPredictions));
+            setElementsPropobility(outcomesBigPercent.arrOutcomes);
+        }
+
+        getPercent();
+        
     }, []);
 
     const green = 'bg-green-200 flex justify-center font-mono';
@@ -83,7 +90,6 @@ const ToolsPrediction = ({ percentPoison, percentWithScore, info }) => {
                         {elements}
                     </tbody>
                 </Table>
-                <Predictions homeName={info.team1_name} awayName={info.team2_name} />
             </div>
         </>
     )

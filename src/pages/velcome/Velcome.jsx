@@ -4,13 +4,6 @@ import { predictionsServices } from '../../services/predctions';
 import { useEffect } from 'react';
 import { useDispatch } from "react-redux";
 import { Modal } from 'antd';
-import {
-  setBetzona,
-  setLegalbet,
-  setLiveresult,
-  setStavkiprognozy,
-  setOddsRu
-} from '../../store/slices/predictionsSlice';
 import logo from './Kredo-bet.png';
 import fon2 from './fon2.png';
 
@@ -21,33 +14,6 @@ const errorModal = (message) => {
 };
 
 export default function Velcome() {
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const getInfo = async () => {
-      try {
-        const betzona = await predictionsServices.getBetzona();
-        const legalbet = await predictionsServices.getLegalbet();
-        const liveresult = await predictionsServices.getLiveresult();
-        const stavkiprognozy = await predictionsServices.getStavkiprognozy();
-        const oddsRu = await predictionsServices.getOddsRu();
-
-        dispatch(setBetzona(betzona.data.predicitons));
-        dispatch(setLegalbet(legalbet.data.predicitons));
-        dispatch(setLiveresult(liveresult.data.predicitons));
-        dispatch(setStavkiprognozy(stavkiprognozy.data.predicitons));
-        dispatch(setOddsRu(oddsRu.data.predicitons));
-      }
-      catch (error) {
-        console.log(error)
-        errorModal(error.message)
-      }
-    }
-
-    getInfo();
-  }, []);
-
   return (
     <div className="container">
       <div className="relative bg-white overflow-hidden">

@@ -1,51 +1,43 @@
-export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds) => {
+export const calcBigPercent = (percentPoison, matchOdds, odds) => {
 
-    const calcPercent = (percentPoison, percentWithScore) => {
-        if (percentPoison !== 0 && percentWithScore !== 0) {
-            let result = (percentPoison + percentWithScore) / 2
-            return result
-        }
-        if (percentPoison !== 0 && percentWithScore === 0) {
+    const calcPercent = (percentPoison) => {
+        if (percentPoison !== 0 ) {
             let result = percentPoison
-            return result
-        }
-        if (percentPoison === 0 && percentWithScore !== 0) {
-            let result = percentWithScore
             return result
         }
 
         return 0
     }
 
-    let btsNo = calcPercent(percentPoison.btsNo, percentWithScore.btsNo)
-    let btsYes = calcPercent(percentPoison.btsYes, percentWithScore.btsYes)
-    let draw = calcPercent(percentPoison.draw, percentWithScore.draw)
-    let foraAwayMinus15 = calcPercent(percentPoison.foraAwayMinus15, percentWithScore.foraAwayMinus15)
-    let foraAwayPlus15 = calcPercent(percentPoison.foraAwayPlus15, percentWithScore.foraAwayPlus15)
-    let foraHomeMinus15 = calcPercent(percentPoison.foraHomeMinus15, percentWithScore.foraHomeMinus15)
-    let foraHomePlus15 = calcPercent(percentPoison.foraHomePlus15, percentWithScore.foraHomePlus15)
-    let it1O05 = calcPercent(percentPoison.it1O05, percentWithScore.it1O05)
-    let it1O15 = calcPercent(percentPoison.it1O15, percentWithScore.it1O15)
-    let it1O25 = calcPercent(percentPoison.it1O25, percentWithScore.it1O25)
-    let it1U05 = calcPercent(percentPoison.it1U05, percentWithScore.it1U05)
-    let it1U15 = calcPercent(percentPoison.it1U15, percentWithScore.it1U15)
-    let it1U25 = calcPercent(percentPoison.it1U25, percentWithScore.it1U25)
-    let it2O05 = calcPercent(percentPoison.it2O05, percentWithScore.it2O05)
-    let it2O15 = calcPercent(percentPoison.it2O15, percentWithScore.it2O15)
-    let it2O25 = calcPercent(percentPoison.it2O25, percentWithScore.it2O25)
-    let it2U05 = calcPercent(percentPoison.it2U05, percentWithScore.it2U05)
-    let it2U15 = calcPercent(percentPoison.it2U15, percentWithScore.it2U15)
-    let it2U25 = calcPercent(percentPoison.it2U25, percentWithScore.it2U25)
-    let to15 = calcPercent(percentPoison.to15, percentWithScore.to15)
-    let to25 = calcPercent(percentPoison.to25, percentWithScore.to25)
-    let to35 = calcPercent(percentPoison.to35, percentWithScore.to35)
-    let tu15 = calcPercent(percentPoison.tu15, percentWithScore.tu15)
-    let tu25 = calcPercent(percentPoison.tu25, percentWithScore.tu25)
-    let tu35 = calcPercent(percentPoison.tu35, percentWithScore.tu35)
-    let winOrDrawHome = calcPercent(percentPoison.winOrDrawHome, percentWithScore.winOrDrawHome)
-    let winOrdrawAway = calcPercent(percentPoison.winOrdrawAway, percentWithScore.winOrdrawAway)
-    let winnerAway = calcPercent(percentPoison.winnerAway, percentWithScore.winnerAway)
-    let winnerHome = calcPercent(percentPoison.winnerHome, percentWithScore.winnerHome)
+    let btsNo = calcPercent(percentPoison.btsNo)
+    let btsYes = calcPercent(percentPoison.btsYes)
+    let draw = calcPercent(percentPoison.draw)
+    let foraAwayMinus15 = calcPercent(percentPoison.foraAwayMinus15)
+    let foraAwayPlus15 = calcPercent(percentPoison.foraAwayPlus15)
+    let foraHomeMinus15 = calcPercent(percentPoison.foraHomeMinus15)
+    let foraHomePlus15 = calcPercent(percentPoison.foraHomePlus15)
+    let it1O05 = calcPercent(percentPoison.it1O05)
+    let it1O15 = calcPercent(percentPoison.it1O15)
+    let it1O25 = calcPercent(percentPoison.it1O25)
+    let it1U05 = calcPercent(percentPoison.it1U05)
+    let it1U15 = calcPercent(percentPoison.it1U15)
+    let it1U25 = calcPercent(percentPoison.it1U25)
+    let it2O05 = calcPercent(percentPoison.it2O05)
+    let it2O15 = calcPercent(percentPoison.it2O15)
+    let it2O25 = calcPercent(percentPoison.it2O25)
+    let it2U05 = calcPercent(percentPoison.it2U05)
+    let it2U15 = calcPercent(percentPoison.it2U15)
+    let it2U25 = calcPercent(percentPoison.it2U25)
+    let to15 = calcPercent(percentPoison.to15)
+    let to25 = calcPercent(percentPoison.to25)
+    let to35 = calcPercent(percentPoison.to35)
+    let tu15 = calcPercent(percentPoison.tu15)
+    let tu25 = calcPercent(percentPoison.tu25)
+    let tu35 = calcPercent(percentPoison.tu35)
+    let winOrDrawHome = calcPercent(percentPoison.winOrDrawHome)
+    let winOrdrawAway = calcPercent(percentPoison.winOrdrawAway)
+    let winnerAway = calcPercent(percentPoison.winnerAway)
+    let winnerHome = calcPercent(percentPoison.winnerHome)
 
     const arrOutcomes = []
     const arrOutcomesForPredictions = {
@@ -465,7 +457,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         },
     }
 
-    if (odds['1'] >= 1.45) {
+    if (odds['1'] >= 1.3) {
         const obj = {
             outcomes: 'Победа 1',
             percent: winnerHome,
@@ -473,7 +465,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['3'] >= 1.45) {
+    if (odds['3'] >= 1.3) {
         const obj = {
             outcomes: 'Ничья',
             percent: draw,
@@ -481,7 +473,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['2'] >= 1.45) {
+    if (odds['2'] >= 1.3) {
         const obj = {
             outcomes: 'Победа 2',
             percent: winnerAway,
@@ -489,7 +481,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['4'] >= 1.45) {
+    if (odds['4'] >= 1.3) {
         const obj = {
             outcomes: '1X',
             percent: winOrDrawHome,
@@ -497,7 +489,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['5'] >= 1.45) {
+    if (odds['5'] >= 1.3) {
         const obj = {
             outcomes: '2X',
             percent: winOrdrawAway,
@@ -505,7 +497,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['77'] >= 1.45) {
+    if (odds['77'] >= 1.3) {
         const obj = {
             outcomes: 'Фора 1 -1.5',
             percent: foraHomeMinus15,
@@ -513,7 +505,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['76'] >= 1.45) {
+    if (odds['76'] >= 1.3) {
         const obj = {
             outcomes: 'Фора 1 +1.5',
             percent: foraHomePlus15,
@@ -521,7 +513,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['90'] >= 1.45) {
+    if (odds['90'] >= 1.3) {
         const obj = {
             outcomes: 'Фора 2 -1.5',
             percent: foraAwayMinus15,
@@ -529,7 +521,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['89'] >= 1.45) {
+    if (odds['89'] >= 1.3) {
         const obj = {
             outcomes: 'Фора 2 +1.5',
             percent: foraAwayPlus15,
@@ -537,7 +529,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['11'] >= 1.45) {
+    if (odds['11'] >= 1.3) {
         const obj = {
             outcomes: 'Тотал больше 1.5',
             percent: to15,
@@ -545,7 +537,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['12'] >= 1.45) {
+    if (odds['12'] >= 1.3) {
         const obj = {
             outcomes: 'Тотал меньше 1.5',
             percent: tu15,
@@ -553,7 +545,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['15'] >= 1.45) {
+    if (odds['15'] >= 1.3) {
         const obj = {
             outcomes: 'Тотал больше 2.5',
             percent: to25,
@@ -561,7 +553,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['16'] >= 1.45) {
+    if (odds['16'] >= 1.3) {
         const obj = {
             outcomes: 'Тотал меньше 2.5',
             percent: tu25,
@@ -569,7 +561,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['19'] >= 1.45) {
+    if (odds['19'] >= 1.3) {
         const obj = {
             outcomes: 'Тотал больше 3.5',
             percent: to35,
@@ -577,7 +569,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['20'] >= 1.45) {
+    if (odds['20'] >= 1.3) {
         const obj = {
             outcomes: 'Тотал меньше 3.5',
             percent: tu35,
@@ -585,7 +577,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['99'] >= 1.45) {
+    if (odds['99'] >= 1.3) {
         const obj = {
             outcomes: 'Обе забьют ДА',
             percent: btsYes,
@@ -593,7 +585,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['100'] >= 1.45) {
+    if (odds['100'] >= 1.3) {
         const obj = {
             outcomes: 'Обе забьют Нет',
             percent: btsNo,
@@ -601,7 +593,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['29'] >= 1.45) {
+    if (odds['29'] >= 1.3) {
         const obj = {
             outcomes: 'Команда 1 забьет',
             percent: it1O05,
@@ -609,7 +601,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['33'] >= 1.45) {
+    if (odds['33'] >= 1.3) {
         const obj = {
             outcomes: 'Ит1 больше 1.5',
             percent: it1O15,
@@ -617,7 +609,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['37'] >= 1.45) {
+    if (odds['37'] >= 1.3) {
         const obj = {
             outcomes: 'Ит1 больше 2.5',
             percent: it1O25,
@@ -625,7 +617,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['30'] >= 1.45) {
+    if (odds['30'] >= 1.3) {
         const obj = {
             outcomes: 'Команда 1 не забьет',
             percent: it1U05,
@@ -633,7 +625,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['34'] >= 1.45) {
+    if (odds['34'] >= 1.3) {
         const obj = {
             outcomes: 'Ит1 меньше 1.5',
             percent: it1U15,
@@ -641,7 +633,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['38'] >= 1.45) {
+    if (odds['38'] >= 1.3) {
         const obj = {
             outcomes: 'Ит1 меньше 2.5',
             percent: it1U25,
@@ -649,7 +641,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['51'] >= 1.45) {
+    if (odds['51'] >= 1.3) {
         const obj = {
             outcomes: 'Команда 2 забьет',
             percent: it2O05,
@@ -657,7 +649,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['55'] >= 1.45) {
+    if (odds['55'] >= 1.3) {
         const obj = {
             outcomes: 'Ит2 больше 1.5',
             percent: it2O15,
@@ -665,7 +657,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['59'] >= 1.45) {
+    if (odds['59'] >= 1.3) {
         const obj = {
             outcomes: 'Ит2 больше 2.5',
             percent: it2O25,
@@ -673,7 +665,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['52'] >= 1.45) {
+    if (odds['52'] >= 1.3) {
         const obj = {
             outcomes: 'Команда 2 не забьет',
             percent: it2U05,
@@ -681,7 +673,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['56'] >= 1.45) {
+    if (odds['56'] >= 1.3) {
         const obj = {
             outcomes: 'Ит2 меньше 1.5',
             percent: it2U15,
@@ -689,7 +681,7 @@ export const calcBigPercent = (percentPoison, percentWithScore, matchOdds, odds)
         }
         arrOutcomes.push(obj)
     }
-    if (odds['60'] >= 1.45) {
+    if (odds['60'] >= 1.3) {
         const obj = {
             outcomes: 'Ит2 меньше 2.5',
             percent: it2U25,

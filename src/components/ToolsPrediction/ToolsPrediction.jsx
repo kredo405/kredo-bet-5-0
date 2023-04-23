@@ -70,7 +70,7 @@ const ToolsPrediction = ({ percentPoison, info }) => {
             <tr key={i}>
                 <td><p className="font-medium font-sans text-orange-900">{el.outcomes}</p></td>
                 <td><p className={el.percent >= 65 ? green : el.percent < 65 && el.percent >= 50 ? blue : rose}>{el.percent.toFixed(0)}%</p></td>
-                <td><p className="font-medium font-sans text-orange-900">{`${el.odds.toFixed(2)} (${el.odds ? (100 / +el.odds).toFixed(0) : 0}%)`}</p></td>
+                <td><p className={(100 / +el.odds) < el.percent ? green : rose}>{`${el.odds.toFixed(2)} (${el.odds ? (100 / +el.odds).toFixed(0) : 0}%)`}</p></td>
             </tr>
         )
     })

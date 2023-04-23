@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { arbworldServices } from '../../services/arbworld';
 import { useDispatch } from "react-redux";
 import { setScore, setMoney1x2, setMoneyOverUnder } from '../../store/slices/moneyWaySlice';
+import { calcCorrectScore } from '../../utils/calcCorrectScore';
 import Dropdown from 'react-bootstrap/Dropdown';
 
 const MoneyWay = () => {
@@ -47,7 +48,24 @@ const MoneyWay = () => {
         awayName: '',
         date: '',
         leagueName: '',
-        scores: [],
+        scores: [
+                {score0_0: {percent: '0%'}},
+                {score0_1: {percent: '0%'}},
+                {score0_2: {percent: '0%'}},
+                {score0_3: {percent: '0%'}},
+                {score1_0: {percent: '0%'}},
+                {score1_1: {percent: '0%'}},
+                {score1_2: {percent: '0%'}},
+                {score1_3: {percent: '0%'}},
+                {score2_0: {percent: '0%'}},
+                {score2_1: {percent: '0%'}},
+                {score2_2: {percent: '0%'}},
+                {score2_3: {percent: '0%'}},
+                {score3_0: {percent: '0%'}},
+                {score3_1: {percent: '0%'}},
+                {score3_2: {percent: '0%'}},
+                {score3_3: {percent: '0%'}},
+            ]
     });
 
 
@@ -58,6 +76,8 @@ const MoneyWay = () => {
                 const moneyWay1X2 = await arbworldServices.getMoneyWay1x2()
                 const moneyWayUnderOver = await arbworldServices.getMoneyWayUnderOver()
                 const correctScore = await arbworldServices.getcorrectScore()
+
+                console.log(correctScore)
 
                 const correctScoreFixTeamName = correctScore.data.moneyWay.map(el => {
                     const pos = el.teamName.indexOf('vs');
@@ -98,7 +118,7 @@ const MoneyWay = () => {
     }
     const handleClickScores = (e) => {
         const element = correctScore.filter(el => el.homeName === e.target.name);
-        dispatch(setScore(element[0]));
+        
         setElementCorrectScore(element[0]);
         setShowScore(true)
     }
@@ -121,21 +141,29 @@ const MoneyWay = () => {
         )
     });
 
-    const correctScoreElementsScores = (elemetnCorrectScore) => {
-        const elements = elemetnCorrectScore.scores.map((el, i) => {
-            for (let key in el) {
-                return (
-                    <tr key={key}>
-                        <td><p className='text-center'>{key.slice(-3)}</p></td>
-                        <td><p className='text-center text-blue-200'>{el[key].odd}</p></td>
-                        <td><p className='text-center text-blue-200'>{el[key].percent}</p></td>
-                        <td><p className='text-center text-blue-200'>{el[key].money}</p></td>
-                    </tr>
-                )
-            }
-        })
+    const green = 'bg-green-200 flex justify-center font-mono text-center text-black font-bold';
+    const rose = 'bg-rose-200 flex justify-center font-mono text-center text-black font-bold';
+    const blue = 'bg-sky-200 flex justify-center font-mono text-center text-black font-bold';
 
-        return elements;
+    const correctScoreElementsScores = (elemetnCorrectScore) => {
+        const res = calcCorrectScore(elemetnCorrectScore.scores);
+        dispatch(setScore(res));
+        console.log(res);
+        const arr = [];
+            
+            for (let key in res) {
+                
+                arr.push(
+                    <tr key={key}>
+                        <td><p className='text-center'>{key}</p></td>
+                        {/* <td><p className='text-center text-blue-200'>{el[key].odd}</p></td> */}
+                        <td><p className={res[key] >= 65 ? green : res[key] < 65 && res[key] >= 50 ? blue : rose}>{res[key].toFixed(0)}</p></td>
+                        {/* <td><p className='text-center text-blue-200'>{el[key].money}</p></td> */}
+                    </tr>
+                );
+            };
+
+        return arr;
     }
 
     const scores = correctScoreElementsScores(elemetnCorrectScore);
@@ -256,10 +284,10 @@ const MoneyWay = () => {
                 <Table striped bordered hover variant="dark">
                     <thead>
                         <tr>
-                            <th><p className='text-center'>Счет</p></th>
-                            <th><p className='text-center'>Кэф</p></th>
+                            <th><p className='text-center'>Исход</p></th>
+                            {/* <th><p className='text-center'>Кэф</p></th> */}
                             <th><p className='text-center'>%</p></th>
-                            <th><p className='text-center'>Деньги</p></th>
+                            {/* <th><p className='text-center'>Деньги</p></th> */}
                         </tr>
                     </thead>
                     <tbody>

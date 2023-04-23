@@ -70,9 +70,9 @@ const Matches = () => {
                             <span className="px-1 md:px-3 font-mono text-slate-700 text-sm lg:text-xl">{item['15']}</span>
                         </div>
                         <div className="flex flex-col md:flex-row">
-                            <span className="text-xs md:text-base lg:text-lg lg:font-bold px-1 lg:px-2 font-mono text-green-600">{item['5'] ? item['5']['1'].toFixed(1) : null}</span>
-                            <span className="text-xs md:text-base lg:text-lg lg:font-bold px-1 lg:px-2 font-mono text-cyan-500">{item['5'] ? item['5']['3'].toFixed(1) : null}</span>
-                            <span className="text-xs md:text-base lg:text-lg lg:font-bold px-1 lg:px-2 font-mono text-amber-600">{item['5'] ? item['5']['2'].toFixed(1) : null}</span>
+                            <span className="text-xs md:text-base lg:text-lg lg:font-bold px-1 lg:px-2 font-mono text-green-600">{item['5'] ? item['5']['1'] ? item['5']['1'].toFixed(1) : null : null}</span>
+                            <span className="text-xs md:text-base lg:text-lg lg:font-bold px-1 lg:px-2 font-mono text-cyan-500">{item['5'] ? item['5']['3'] ? item['5']['3'].toFixed(1) : null : null}</span>
+                            <span className="text-xs md:text-base lg:text-lg lg:font-bold px-1 lg:px-2 font-mono text-amber-600">{item['5'] ? item['5']['2'] ? item['5']['2'].toFixed(1) : null : null}</span>
 
                         </div>
                     </div>

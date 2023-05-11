@@ -3,13 +3,15 @@ import firebaseSlice from "./slices/firebaseSlice";
 import predictionsSlice from "./slices/predictionsSlice";
 import moneyWaySlice from "./slices/moneyWaySlice";
 import matchSlice from "./slices/matchSlice";
+import matchHockeySlice from "./slices/matchHockeySlice";
 
 export const store = configureStore({
     reducer: {
         firebaseSlice,
         predictionsSlice,
         moneyWaySlice,
-        matchSlice
+        matchSlice,
+        matchHockeySlice
     },
     devTools: true
 });

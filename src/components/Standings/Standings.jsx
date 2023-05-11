@@ -30,7 +30,7 @@ const Standings = ({ info }) => {
         team: (
             <div className="flex justify-start items-center">
                 <img
-                    className="w-3/12 sm:w-2/12 md:w-1/12"
+                    className="w-2/12 sm:w-[20px]"
                     src={el[3]}
                     alt="logo"
                 />

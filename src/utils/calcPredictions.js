@@ -10,7 +10,6 @@ export const calcPredictions = (
   odd,
   outsiderRange,
   midleRange,
-  pretendersRange,
   grandRange
 ) => {
 
@@ -109,7 +108,6 @@ export const calcPredictions = (
 
       const outsiderHome = outsiderRange.find(el => el['2'] === team);
       const midleHome = midleRange.find(el => el['2'] === team);
-      const pretenderHome = pretendersRange.find(el => el['2'] === team);
       const grandHome = grandRange.find(el => el['2'] === team);
 
       if (outsiderHome) {
@@ -117,9 +115,6 @@ export const calcPredictions = (
       }
       if (midleHome) {
         return 3;
-      }
-      if (pretenderHome) {
-        return 2;
       }
       if (grandHome) {
         return 1;

@@ -34,6 +34,7 @@ const PredicitonsNbBet = ({ predictions }) => {
             </div>
         </li>
     </>);
+    const [text, setText] = useState('')
 
     useEffect(() => {
         const getDataOdds = async () => {
@@ -60,7 +61,8 @@ const PredicitonsNbBet = ({ predictions }) => {
                     rank: el[10],
                     predict: matchedOdd.name,
                     odd: el[3],
-                    profit: el[6]
+                    profit: el[6],
+                    text: el[4],
                 });
             }
             return result;
@@ -75,25 +77,37 @@ const PredicitonsNbBet = ({ predictions }) => {
         }
 
         const elements = newArr.map((el, i) => {
-            return (
-                <li key={i} className="flex justify-around border-y-2 border-gray-100 border-solid py-3">
-                    <div className="font-semibold flex justify-center w-3/12">
-                        <p className="text-center">{el.rank}</p>
-                    </div>
-                    <div className="font-semibold flex justify-center w-3/12 text-amber-900">
-                        <p className="text-center">{el.predict}</p>
-                    </div>
-                    <div className="font-semibold flex justify-center w-3/12 text-indigo-600">
-                        <p className="text-center">{el.odd}</p>
-                    </div>
-                    <div className="font-semibold flex justify-center w-3/12">
-                        <p className="text-center">+{el.profit}%</p>
-                    </div>
-                </li>
-            )
+            if(el.profit > 20) {
+                return (
+                    <li key={i} className="flex justify-around border-y-2 border-gray-100 border-solid py-3">
+                        <div className="font-semibold flex justify-center w-3/12 text-amber-900">
+                            <p className="text-center">{el.predict}</p>
+                        </div>
+                        <div className="font-semibold flex justify-center w-3/12 text-indigo-600">
+                            <p className="text-center">{el.odd}</p>
+                        </div>
+                        <div className="font-semibold flex justify-center w-3/12">
+                            <p className="text-center">+{el.profit}%</p>
+                        </div>
+                    </li>
+                )
+            }
         });
 
         setElements(elements)
+
+        const predictionsTextFilter = newArr.filter(el => el.text);
+
+        const elementsPredictionsText = predictionsTextFilter.map(el => {
+            return (
+                <div className="rounded-md border border-slate-100 border-solid shadow-md shadow-gray-100 p-4 mt-2">
+                    <div><span className="pr-3 font-bold">{el.predict}</span><span className="text-orange-700 font-semibold">{el.odd}</span> </div>
+                    <div>{el.text}</div>
+                </div>
+            )
+        })
+
+        setText(elementsPredictionsText)
     }, [odds]);
 
     return (
@@ -102,9 +116,6 @@ const PredicitonsNbBet = ({ predictions }) => {
                 <h2 className='text-center py-3 font-serif text-2xl font-bold text-slate-600'>Прогнозы</h2>
             </div>
             <div className="flex justify-around w-full items-center mb-3 px-4">
-                <div className="font-bold w-3/12 text-center">
-                    Место
-                </div>
                 <div className="font-bold w-3/12 text-center">
                     Прогноз
                 </div>
@@ -115,9 +126,13 @@ const PredicitonsNbBet = ({ predictions }) => {
                     Прибыль
                 </div>
             </div>
-            <ul className="flex flex-col overflow-y-scroll h-96 px-3">
+            <ul className="flex flex-col overflow-y-scroll h-56 px-3">
                 {elements}
             </ul>
+
+            <div className="mt-5">
+                {text}
+            </div>
         </>
     )
 }

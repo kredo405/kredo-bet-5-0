@@ -149,21 +149,20 @@ const MoneyWay = () => {
         const res = calcCorrectScore(elemetnCorrectScore.scores);
         dispatch(setScore(res));
         console.log(res);
-        const arr = [];
-            
-            for (let key in res) {
-                
-                arr.push(
+        const elements = elemetnCorrectScore.scores.map((el, i) => {
+            for (let key in el) {
+                return (
                     <tr key={key}>
-                        <td><p className='text-center'>{key}</p></td>
-                        {/* <td><p className='text-center text-blue-200'>{el[key].odd}</p></td> */}
-                        <td><p className={res[key] >= 65 ? green : res[key] < 65 && res[key] >= 50 ? blue : rose}>{res[key].toFixed(0)}</p></td>
-                        {/* <td><p className='text-center text-blue-200'>{el[key].money}</p></td> */}
+                        <td><p className='text-center'>{key.slice(-3)}</p></td>
+                        <td><p className='text-center text-blue-200'>{el[key].odd}</p></td>
+                        <td><p className='text-center text-blue-200'>{el[key].percent}</p></td>
+                        <td><p className='text-center text-blue-200'>{el[key].money}</p></td>
                     </tr>
-                );
-            };
+                )
+            }
+        })
 
-        return arr;
+        return elements;
     }
 
     const scores = correctScoreElementsScores(elemetnCorrectScore);
@@ -285,9 +284,9 @@ const MoneyWay = () => {
                     <thead>
                         <tr>
                             <th><p className='text-center'>Исход</p></th>
-                            {/* <th><p className='text-center'>Кэф</p></th> */}
+                            <th><p className='text-center'>Кэф</p></th>
                             <th><p className='text-center'>%</p></th>
-                            {/* <th><p className='text-center'>Деньги</p></th> */}
+                            <th><p className='text-center'>Деньги</p></th>
                         </tr>
                     </thead>
                     <tbody>

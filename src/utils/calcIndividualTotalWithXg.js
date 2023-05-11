@@ -134,6 +134,37 @@ export const calcIndividualTotalWithXg = async (data) => {
         .then(res => {
             console.log(res);
 
+            if(res[res.length - 1] !== undefined) {
+                let xg = 0;
+                let xgVs = 0;
+                let matchesCount = 0;
+                res.forEach(el => {
+                    if(el.stats[0]['21']) {
+                        xg += el.stats[0]['21'][0];
+                        xgVs += el.stats[0]['21'][1];
+                        matchesCount++;
+                    }
+                });
+                xg = xg / matchesCount;
+                xgVs = xgVs / matchesCount;
+                
+                return {
+                    xg,
+                    xgVs
+                }
+            } else {
+                return {
+                    xg: 0,
+                    xgVs: 0
+                }
+            }
+        })
+        .catch(err => console.error(err));
+
+    const resAway = await getDataLastMatches(matchesAwayFilter)
+    .then(res => {
+        console.log(res);
+        if(res[res.length - 1] !== undefined) {
             let xg = 0;
             let xgVs = 0;
             let matchesCount = 0;
@@ -151,45 +182,29 @@ export const calcIndividualTotalWithXg = async (data) => {
                 xg,
                 xgVs
             }
-            
-        })
-        .catch(err => console.error(err));
-
-    const resAway = await getDataLastMatches(matchesAwayFilter)
-    .then(res => {
-        console.log(res);
-
-        let xg = 0;
-        let xgVs = 0;
-        let matchesCount = 0;
-        res.forEach(el => {
-            if(el.stats[0]['21']) {
-                xg += el.stats[0]['21'][0];
-                xgVs += el.stats[0]['21'][1];
-                matchesCount++;
+        } else {
+            return {
+                xg: 0,
+                xgVs: 0
             }
-        });
-        xg = xg / matchesCount;
-        xgVs = xgVs / matchesCount;
-        
-        return {
-            xg,
-            xgVs
-        }
-        
+        } 
     })
     .catch(err => console.error(err)); 
 
     let individualTotalHome;
     let individualTotalAway;
 
-    if(resHome.xg > 0 && resAway.xgVs > 0 && resAway.xg > 0 && resHome.xgVs > 0) {
+    if(resHome.xg > 0 && resAway.xgVs > 0 && resAway.xg > 0 && resHome.xgVs > 0 && expectedGoalsHome >= 0.3 && expectedGoalsAway >= 0.3) {
         individualTotalHome = (((resHome.xg + resAway.xgVs) / 2) + expectedGoalsHome) / 2;
         individualTotalAway = (((resAway.xg + resHome.xgVs) / 2) + expectedGoalsAway) / 2;
     }
-    else {
+    else if(expectedGoalsHome >= 0.3 && expectedGoalsAway >= 0.3) {
         individualTotalHome = expectedGoalsHome;
         individualTotalAway = expectedGoalsAway;
+    }
+    else {
+        individualTotalHome = 0;
+        individualTotalAway = 0;
     }
 
     return {

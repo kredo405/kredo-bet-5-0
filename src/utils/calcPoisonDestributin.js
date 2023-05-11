@@ -43,8 +43,19 @@ export const calcPoisonDestribution = async (data) => {
     // Рассчитываем индивидуальный тотал Команд с помощью xg
     const expectedXg = await calcIndividualTotalWithXg(data);
 
-    const goalsHome = (expectedXg.individualTotalHome + expectedGoalsHome) / 2;
-    const goalsAway = (expectedXg.individualTotalAway + expectedGoalsAway) / 2;
+
+    let goalsHome = 0;
+    let goalsAway = 0;
+
+    if(expectedXg.individualTotalHome === 0 || expectedXg.individualTotalAway === 0) {
+        goalsHome = expectedGoalsHome;
+        goalsAway = expectedGoalsAway;
+    } else {
+        goalsHome = (expectedXg.individualTotalHome + expectedGoalsHome) / 2;
+        goalsAway = (expectedXg.individualTotalAway + expectedGoalsAway) / 2;
+    }
+
+
 
     console.log(goalsHome)
     console.log(goalsAway)

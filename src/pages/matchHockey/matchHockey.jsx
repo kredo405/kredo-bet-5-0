@@ -18,7 +18,7 @@ const errorModal = (message) => {
     });
 };
 
-const Match = () => {
+const MatchHockey = () => {
     const [info, setInfo] = useState({});
     const [predictions, setPredictions] = useState([]);
     const [oddsHistory, setOddsHistory] = useState([]);
@@ -27,21 +27,21 @@ const Match = () => {
     useEffect(() => {
         const getInfo = async () => {
             try {
-                const matchesInfo = await Soccer365Services.getAllMatches();
-                console.log(matchesInfo.data);
+                // const matchesInfo = await Soccer365Services.getAllMatchesHokey();
+                // console.log(matchesInfo.data);
 
-                const [matchesInfoNbbet, matchesPredictionsNbbet, historyOddsNbbet] = await Promise.all([
-                    nbbetServices.getMatchInfo(),
-                    nbbetServices.getMatchPredictions(),
-                    nbbetServices.getOddsHistory()
+                const [matchesInfoNbbet] = await Promise.all([
+                    nbbetServices.getMatchInfoHockey(),
+                    // nbbetServices.getMatchPredictions(),
+                    // nbbetServices.getOddsHistory()
                 ]);
 
                 console.log(matchesInfoNbbet);
-                console.log(matchesPredictionsNbbet);
+
 
                 setInfo(matchesInfoNbbet.data.match.data.match);
-                setPredictions(matchesPredictionsNbbet.data.match.data.tips);
-                setOddsHistory(historyOddsNbbet.data.match.data)
+                // setPredictions(matchesPredictionsNbbet.data.match.data.tips);
+                // setOddsHistory(historyOddsNbbet.data.match.data)
 
                 setIsLoading(true);
             } catch (error) {
@@ -58,7 +58,7 @@ const Match = () => {
         <div>
             <Header />
             <BackTop />
-            {isLoading ?
+            {/* {isLoading ?
                 <div className="container lg:px-52 mt-16">
                     <div className="flex justify-center mb-8 bg-neutral-50 p-3">
                         <h1 className='text-slate-700 font-mono text-xl text-center'>{info.tournament_name}</h1>
@@ -176,9 +176,9 @@ const Match = () => {
                 </div>
                 :
                 <Loading />
-            }
+            } */}
         </div>
     )
 }
 
-export default Match
+export default MatchHockey

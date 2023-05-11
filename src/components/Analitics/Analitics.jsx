@@ -10,7 +10,7 @@ import PredicitonsNbBet from "../PredicitonsNbBet/PredicitionsNbBet";
 import Predict from "../Predict/Predict";
 import { TeamRang } from "../../utils/calcTeamRang";
 
-const Analitics = ({ info, predictions }) => {
+const Analitics = ({ info, predictions, oddsHistory }) => {
     let relevanceTeam = {
         percentHome: 50,
         percentAway: 50
@@ -23,7 +23,6 @@ const Analitics = ({ info, predictions }) => {
     const teamRang = new TeamRang(info.table[0]);
     const outsiderRange = teamRang.calcOutsiderRange();
     const midleRange = teamRang.calcMidleRange();
-    const pretendersRange = teamRang.calcPretendersRange();
     const grandRange = teamRang.calcGrandRange();
     
 
@@ -77,8 +76,8 @@ const Analitics = ({ info, predictions }) => {
                     predictions={predictions}
                     outsiderRange={outsiderRange}
                     midleRange={midleRange}
-                    pretendersRange={pretendersRange}
                     grandRange={grandRange}
+                    oddsHistory={oddsHistory}
                 />
             </div>
         </>

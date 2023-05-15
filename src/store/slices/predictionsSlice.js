@@ -1,17 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    betzona: [{ link: '', homeName: '', awayName: '' }],
-    euroFootball: [{ link: '', homeName: '', awayName: '' }],
-    sportAndBets: [{ link: '', homeName: '', awayName: '' }],
-    legalbet: [{ link: '', homeName: '', awayName: '' }],
-    liveresult: [{ link: '', homeName: '', awayName: '' }],
-    stavkiprognozy: [{ link: '', homeName: '', awayName: '' }],
-    oddsRu: [{ link: '', homeName: '', awayName: '' }],
-}
+    betzona: [{ link: "", homeName: "", awayName: "" }],
+    euroFootball: [{ link: "", homeName: "", awayName: "" }],
+    sportAndBets: [{ link: "", homeName: "", awayName: "" }],
+    legalbet: [{ link: "", homeName: "", awayName: "" }],
+    liveresult: [{ link: "", homeName: "", awayName: "" }],
+    stavkiprognozy: [{ link: "", homeName: "", awayName: "" }],
+    oddsRu: [{ link: "", homeName: "", awayName: "" }],
+};
 
 const predictionsSlice = createSlice({
-    name: 'predictions',
+    name: "predictions",
     initialState,
     reducers: {
         setBetzona(state, action) {
@@ -29,8 +29,14 @@ const predictionsSlice = createSlice({
         setOddsRu(state, action) {
             state.oddsRu = action.payload;
         },
-    }
-})
+    },
+});
 
-export const { setBetzona, setLegalbet, setLiveresult, setStavkiprognozy, setOddsRu } = predictionsSlice.actions;
+export const {
+    setBetzona,
+    setLegalbet,
+    setLiveresult,
+    setStavkiprognozy,
+    setOddsRu,
+} = predictionsSlice.actions;
 export default predictionsSlice.reducer;

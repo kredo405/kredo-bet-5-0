@@ -1,20 +1,20 @@
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
-import { useEffect, useState } from 'react';
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
+import { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
-import { Progress, BackTop, Modal } from 'antd';
+import { Progress, BackTop, Modal } from "antd";
 import Bets from "../../components/Bets/Bets";
 import Form from "../../components/Form/Form";
-import { Loading } from '../../components/Loading/Loading';
+import { Loading } from "../../components/Loading/Loading";
 import LastMatches from "../../components/lastMatches/LastMatches";
 import { Soccer365Services } from "../../services/soccer365";
-import Analitics from '../../components/Analitics/Analitics';
-import { nbbetServices } from '../../services/nbbet';
-import findTeam from '../../utils/findTeam';
+import Analitics from "../../components/Analitics/Analitics";
+import { nbbetServices } from "../../services/nbbet";
+import findTeam from "../../utils/findTeam";
 
 const errorModal = (message) => {
     Modal.error({
-        title: message
+        title: message,
     });
 };
 
@@ -38,7 +38,6 @@ const MatchHockey = () => {
 
                 console.log(matchesInfoNbbet);
 
-
                 setInfo(matchesInfoNbbet.data.match.data.match);
                 // setPredictions(matchesPredictionsNbbet.data.match.data.tips);
                 // setOddsHistory(historyOddsNbbet.data.match.data)
@@ -51,7 +50,6 @@ const MatchHockey = () => {
         };
 
         getInfo();
-
     }, []);
 
     return (
@@ -178,7 +176,7 @@ const MatchHockey = () => {
                 <Loading />
             } */}
         </div>
-    )
-}
+    );
+};
 
-export default MatchHockey
+export default MatchHockey;

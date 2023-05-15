@@ -1,4 +1,4 @@
-import ProgressBar from 'react-bootstrap/ProgressBar';
+import ProgressBar from "react-bootstrap/ProgressBar";
 
 const TeamStrength = ({ relevanceTeam: { percentHome, percentAway } }) => (
     <>

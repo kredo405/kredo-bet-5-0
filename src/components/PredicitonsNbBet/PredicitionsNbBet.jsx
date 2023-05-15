@@ -10,31 +10,34 @@ const firebaseConfig = {
     storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
     messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID_,
     appId: process.env.REACT_APP_APP_ID,
-    measurementId: process.env.REACT_APP_MEASUREMENT_ID
+    measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);
 
-
 const PredicitonsNbBet = ({ predictions }) => {
-    const [odds, setOdds] = useState({ odds: [{ name: "Победа 1", odd: "1" }] });
-    const [elements, setElements] = useState(<>
-        <li className="flex justify-around border-y-2 border-gray-100 border-solid py-3">
-            <div className="font-semibold flex justify-center w-3/12">
-                <p className="text-center">Загрузка...</p>
-            </div>
-            <div className="font-semibold flex justify-center w-3/12 text-amber-900">
-                <p className="text-center">Загрузка...</p>
-            </div>
-            <div className="font-semibold flex justify-center w-3/12 text-indigo-600">
-                <p className="text-center">Загрузка...</p>
-            </div>
-            <div className="font-semibold flex justify-center w-3/12">
-                <p className="text-center">Загрузка...</p>
-            </div>
-        </li>
-    </>);
-    const [text, setText] = useState('')
+    const [odds, setOdds] = useState({
+        odds: [{ name: "Победа 1", odd: "1" }],
+    });
+    const [elements, setElements] = useState(
+        <>
+            <li className="flex justify-around border-y-2 border-gray-100 border-solid py-3">
+                <div className="font-semibold flex justify-center w-3/12">
+                    <p className="text-center">Загрузка...</p>
+                </div>
+                <div className="font-semibold flex justify-center w-3/12 text-amber-900">
+                    <p className="text-center">Загрузка...</p>
+                </div>
+                <div className="font-semibold flex justify-center w-3/12 text-indigo-600">
+                    <p className="text-center">Загрузка...</p>
+                </div>
+                <div className="font-semibold flex justify-center w-3/12">
+                    <p className="text-center">Загрузка...</p>
+                </div>
+            </li>
+        </>
+    );
+    const [text, setText] = useState("");
 
     useEffect(() => {
         const getDataOdds = async () => {
@@ -44,18 +47,18 @@ const PredicitonsNbBet = ({ predictions }) => {
 
             if (docSnap.exists()) {
                 console.log(docSnap.data());
-                setOdds(docSnap.data())
+                setOdds(docSnap.data());
             } else {
                 console.log("No such document!");
             }
-        }
+        };
 
         getDataOdds();
     }, []);
 
     useEffect(() => {
         const predictionsAndOdds = predictions.reduce((result, el) => {
-            const matchedOdd = odds.odds.find(item => +item.odd === el[2]);
+            const matchedOdd = odds.odds.find((item) => +item.odd === el[2]);
             if (matchedOdd) {
                 result.push({
                     rank: el[10],
@@ -70,16 +73,19 @@ const PredicitonsNbBet = ({ predictions }) => {
 
         console.log(predictionsAndOdds);
 
-        const newArr = getArrLargestValues(predictionsAndOdds, 'profit');
+        const newArr = getArrLargestValues(predictionsAndOdds, "profit");
 
-        function getArrLargestValues(target, byValue = 'profit') {
+        function getArrLargestValues(target, byValue = "profit") {
             return target.sort((a, b) => b[byValue] - a[byValue]);
         }
 
         const elements = newArr.map((el, i) => {
-            if(el.profit > 20) {
+            if (el.profit > 20) {
                 return (
-                    <li key={i} className="flex justify-around border-y-2 border-gray-100 border-solid py-3">
+                    <li
+                        key={i}
+                        className="flex justify-around border-y-2 border-gray-100 border-solid py-3"
+                    >
                         <div className="font-semibold flex justify-center w-3/12 text-amber-900">
                             <p className="text-center">{el.predict}</p>
                         </div>
@@ -90,51 +96,50 @@ const PredicitonsNbBet = ({ predictions }) => {
                             <p className="text-center">+{el.profit}%</p>
                         </div>
                     </li>
-                )
+                );
             }
         });
 
-        setElements(elements)
+        setElements(elements);
 
-        const predictionsTextFilter = newArr.filter(el => el.text);
+        const predictionsTextFilter = newArr.filter((el) => el.text);
 
-        const elementsPredictionsText = predictionsTextFilter.map(el => {
+        const elementsPredictionsText = predictionsTextFilter.map((el) => {
             return (
                 <div className="rounded-md border border-slate-100 border-solid shadow-md shadow-gray-100 p-4 mt-2">
-                    <div><span className="pr-3 font-bold">{el.predict}</span><span className="text-orange-700 font-semibold">{el.odd}</span> </div>
+                    <div>
+                        <span className="pr-3 font-bold">{el.predict}</span>
+                        <span className="text-orange-700 font-semibold">
+                            {el.odd}
+                        </span>{" "}
+                    </div>
                     <div>{el.text}</div>
                 </div>
-            )
-        })
+            );
+        });
 
-        setText(elementsPredictionsText)
+        setText(elementsPredictionsText);
     }, [odds]);
 
     return (
         <>
             <div className="flex justify-center mb-3">
-                <h2 className='text-center py-3 font-serif text-2xl font-bold text-slate-600'>Прогнозы</h2>
+                <h2 className="text-center py-3 font-serif text-2xl font-bold text-slate-600">
+                    Прогнозы
+                </h2>
             </div>
             <div className="flex justify-around w-full items-center mb-3 px-4">
-                <div className="font-bold w-3/12 text-center">
-                    Прогноз
-                </div>
-                <div className="font-bold w-3/12 text-center">
-                    Кэф
-                </div>
-                <div className="font-bold w-3/12 text-center">
-                    Прибыль
-                </div>
+                <div className="font-bold w-3/12 text-center">Прогноз</div>
+                <div className="font-bold w-3/12 text-center">Кэф</div>
+                <div className="font-bold w-3/12 text-center">Прибыль</div>
             </div>
             <ul className="flex flex-col overflow-y-scroll h-56 px-3">
                 {elements}
             </ul>
 
-            <div className="mt-5">
-                {text}
-            </div>
+            <div className="mt-5">{text}</div>
         </>
-    )
-}
+    );
+};
 
 export default PredicitonsNbBet;

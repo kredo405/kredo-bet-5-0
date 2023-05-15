@@ -4,10 +4,10 @@ const initialState = {
     correctScore: [],
     moneyWay1x2: {},
     moneyWayOverUnder: {},
-}
+};
 
 const moneyWaySlice = createSlice({
-    name: 'moneyWay',
+    name: "moneyWay",
     initialState,
     reducers: {
         setScore(state, action) {
@@ -19,8 +19,9 @@ const moneyWaySlice = createSlice({
         setMoneyOverUnder(state, action) {
             state.moneyWayOverUnder = action.payload;
         },
-    }
-})
+    },
+});
 
-export const { setScore, setMoney1x2, setMoneyOverUnder } = moneyWaySlice.actions;
+export const { setScore, setMoney1x2, setMoneyOverUnder } =
+    moneyWaySlice.actions;
 export default moneyWaySlice.reducer;

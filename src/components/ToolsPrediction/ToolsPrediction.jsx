@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
-import { Table } from 'react-bootstrap';
+import { Table } from "react-bootstrap";
 import { setOutcomes } from "../../store/slices/matchSlice";
 import Predictions from "../Predictions/Predictions";
 import { calcBigPercent } from "../../utils/calcBigPercent";
@@ -14,20 +14,23 @@ const firebaseConfig = {
     storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
     messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID_,
     appId: process.env.REACT_APP_APP_ID,
-    measurementId: process.env.REACT_APP_MEASUREMENT_ID
+    measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);
 
-
 const ToolsPrediction = ({ percentPoison, info }) => {
     const dispatch = useDispatch();
-    const [odds, setOdds] = useState({ odds: [{ name: "Победа 1", odd: "1" }] });
-    const [elementsPropobility, setElementsPropobility] = useState([{
-        outcomes: '',
-        odds: 0,
-        percent: 0
-    }]);
+    const [odds, setOdds] = useState({
+        odds: [{ name: "Победа 1", odd: "1" }],
+    });
+    const [elementsPropobility, setElementsPropobility] = useState([
+        {
+            outcomes: "",
+            odds: 0,
+            percent: 0,
+        },
+    ]);
 
     useEffect(() => {
         const getDataOdds = async () => {
@@ -41,39 +44,61 @@ const ToolsPrediction = ({ percentPoison, info }) => {
             } else {
                 console.log("No such document!");
             }
-        }
+        };
 
         getDataOdds();
-    }, [])
-
-    useEffect(() => {
-
-       
-
-        const getPercent = async () => {
-            const res = await percentPoison;
-            const outcomesBigPercent = calcBigPercent(res, odds.odds, info.current_odds);
-            dispatch(setOutcomes(outcomesBigPercent.arrOutcomesForPredictions));
-            setElementsPropobility(outcomesBigPercent.arrOutcomes);
-        }
-
-        getPercent();
-        
     }, []);
 
-    const green = 'bg-green-200 flex justify-center font-mono';
-    const rose = 'bg-rose-200 flex justify-center font-mono';
-    const blue = 'bg-sky-200 flex justify-center font-mono';
+    useEffect(() => {
+        const getPercent = async () => {
+            const res = await percentPoison;
+            const outcomesBigPercent = calcBigPercent(
+                res,
+                odds.odds,
+                info.current_odds
+            );
+            dispatch(setOutcomes(outcomesBigPercent.arrOutcomesForPredictions));
+            setElementsPropobility(outcomesBigPercent.arrOutcomes);
+        };
+
+        getPercent();
+    }, []);
+
+    const green = "bg-green-200 flex justify-center font-mono";
+    const rose = "bg-rose-200 flex justify-center font-mono";
+    const blue = "bg-sky-200 flex justify-center font-mono";
 
     const elements = elementsPropobility.map((el, i) => {
         return (
             <tr key={i}>
-                <td><p className="font-medium font-sans text-orange-900">{el.outcomes}</p></td>
-                <td><p className={el.percent >= 65 ? green : el.percent < 65 && el.percent >= 50 ? blue : rose}>{el.percent.toFixed(0)}%</p></td>
-                <td><p className={(100 / +el.odds) < el.percent ? green : rose}>{`${el.odds.toFixed(2)} (${el.odds ? (100 / +el.odds).toFixed(0) : 0}%)`}</p></td>
+                <td>
+                    <p className="font-medium font-sans text-orange-900">
+                        {el.outcomes}
+                    </p>
+                </td>
+                <td>
+                    <p
+                        className={
+                            el.percent >= 65
+                                ? green
+                                : el.percent < 65 && el.percent >= 50
+                                ? blue
+                                : rose
+                        }
+                    >
+                        {el.percent.toFixed(0)}%
+                    </p>
+                </td>
+                <td>
+                    <p
+                        className={100 / +el.odds < el.percent ? green : rose}
+                    >{`${el.odds.toFixed(2)} (${
+                        el.odds ? (100 / +el.odds).toFixed(0) : 0
+                    }%)`}</p>
+                </td>
             </tr>
-        )
-    })
+        );
+    });
 
     return (
         <>
@@ -86,13 +111,11 @@ const ToolsPrediction = ({ percentPoison, info }) => {
                             <th>Кэф/%</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {elements}
-                    </tbody>
+                    <tbody>{elements}</tbody>
                 </Table>
             </div>
         </>
-    )
-}
+    );
+};
 
 export default ToolsPrediction;

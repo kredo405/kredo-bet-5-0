@@ -1,5 +1,5 @@
-import Header from '../../components/header/Header';
-import Matches from '../../components/matches/Matches';
+import Header from "../../components/header/Header";
+import Matches from "../../components/matches/Matches";
 
 const Home = () => {
     return (
@@ -8,6 +8,6 @@ const Home = () => {
             <Matches />
         </>
     );
-}
+};
 
 export default Home;

@@ -11,7 +11,7 @@ export const store = configureStore({
         predictionsSlice,
         moneyWaySlice,
         matchSlice,
-        matchHockeySlice
+        matchHockeySlice,
     },
-    devTools: true
+    devTools: true,
 });

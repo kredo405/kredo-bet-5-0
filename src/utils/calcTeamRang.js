@@ -1,11 +1,11 @@
 export class TeamRang {
     constructor(table) {
-        this.table = table
+        this.table = table;
     }
 
     calcOutsiderRange() {
-        const arrTeam = this.table.filter(el => {
-            if(el[10] - el[11] <= -5) {
+        const arrTeam = this.table.filter((el) => {
+            if (el[10] - el[11] <= -5) {
                 return el;
             }
         });
@@ -14,8 +14,8 @@ export class TeamRang {
     }
 
     calcMidleRange() {
-        const arrTeam = this.table.filter(el => {
-            if(el[10] - el[11] > -5 && el[10] - el[11] <= 10) {
+        const arrTeam = this.table.filter((el) => {
+            if (el[10] - el[11] > -5 && el[10] - el[11] <= 10) {
                 return el;
             }
         });
@@ -24,8 +24,8 @@ export class TeamRang {
     }
 
     calcGrandRange() {
-        const arrTeam = this.table.filter(el => {
-            if(el[10] - el[11] > 10) {
+        const arrTeam = this.table.filter((el) => {
+            if (el[10] - el[11] > 10) {
                 return el;
             }
         });

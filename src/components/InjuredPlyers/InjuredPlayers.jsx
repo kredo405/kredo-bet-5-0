@@ -1,26 +1,58 @@
-import Table from 'react-bootstrap/Table';
+import Table from "react-bootstrap/Table";
 
 const InjuredPlayers = (props) => {
-    const playersHome = props.info.squads[0][2].map(el => {
+    const playersHome = props.info.squads[0][2].map((el) => {
         return (
             <tr key={el[2]}>
-                <td><p className='text-center font-bold text-sky-700'>{el[2]}</p></td>
-                <td><p className='text-center font-bold text-orange-900'>{el[3]}</p></td>
-                <td><p className='text-center font-bold text-orange-900'>{el[1]}</p></td>
-                <td><p className='text-center font-bold text-orange-900'>{el[5]}</p></td>
+                <td>
+                    <p className="text-center font-bold text-sky-700">
+                        {el[2]}
+                    </p>
+                </td>
+                <td>
+                    <p className="text-center font-bold text-orange-900">
+                        {el[3]}
+                    </p>
+                </td>
+                <td>
+                    <p className="text-center font-bold text-orange-900">
+                        {el[1]}
+                    </p>
+                </td>
+                <td>
+                    <p className="text-center font-bold text-orange-900">
+                        {el[5]}
+                    </p>
+                </td>
             </tr>
-        )
+        );
     });
 
-    const playersAway = props.info.squads[1][2].map(el => {
+    const playersAway = props.info.squads[1][2].map((el) => {
         return (
             <tr key={el[2]}>
-                <td><p className='text-center font-bold text-sky-700'>{el[2]}</p></td>
-                <td><p className='text-center font-bold text-orange-900'>{el[3]}</p></td>
-                <td><p className='text-center font-bold text-orange-900'>{el[1]}</p></td>
-                <td><p className='text-center font-bold text-orange-900'>{el[5]}</p></td>
+                <td>
+                    <p className="text-center font-bold text-sky-700">
+                        {el[2]}
+                    </p>
+                </td>
+                <td>
+                    <p className="text-center font-bold text-orange-900">
+                        {el[3]}
+                    </p>
+                </td>
+                <td>
+                    <p className="text-center font-bold text-orange-900">
+                        {el[1]}
+                    </p>
+                </td>
+                <td>
+                    <p className="text-center font-bold text-orange-900">
+                        {el[5]}
+                    </p>
+                </td>
             </tr>
-        )
+        );
     });
 
     return (
@@ -63,7 +95,7 @@ const InjuredPlayers = (props) => {
                 </div>
             </div> */}
         </>
-    )
-}
+    );
+};
 
 export default InjuredPlayers;

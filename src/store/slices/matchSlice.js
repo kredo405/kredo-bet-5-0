@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = { allMatches: [], outcomes: {} };
 
 const matchSlice = createSlice({
-    name: 'match',
+    name: "match",
     initialState,
     reducers: {
         setMatches(state, action) {
@@ -17,4 +17,3 @@ const matchSlice = createSlice({
 
 export const { setMatches, setOutcomes } = matchSlice.actions;
 export default matchSlice.reducer;
-

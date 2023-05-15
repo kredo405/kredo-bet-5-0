@@ -1,4 +1,4 @@
-import { List } from 'antd';
+import { List } from "antd";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { useState } from "react";
@@ -11,14 +11,16 @@ const firebaseConfig = {
     storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
     messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID_,
     appId: process.env.REACT_APP_APP_ID,
-    measurementId: process.env.REACT_APP_MEASUREMENT_ID
+    measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);
 
 const Facts = ({ info }) => {
-    const [odds, setOdds] = useState({ odds: [{ name: "Победа 1", odd: "1" }] });
-    const [elements, setElements] = useState([['Загрузка...', '...']]);
+    const [odds, setOdds] = useState({
+        odds: [{ name: "Победа 1", odd: "1" }],
+    });
+    const [elements, setElements] = useState([["Загрузка...", "..."]]);
 
     useEffect(() => {
         const getDataOdds = async () => {
@@ -30,51 +32,51 @@ const Facts = ({ info }) => {
                 console.log(docSnap.data());
                 setOdds(docSnap.data());
 
-                const newArrFacts = info.facts.map(el => {
-                    const arr1 = el[0].split('>');
-                    const arr2 = arr1.map(item => {
-                        if (item === '<strong') {
-                            return '';
+                const newArrFacts = info.facts.map((el) => {
+                    const arr1 = el[0].split(">");
+                    const arr2 = arr1.map((item) => {
+                        if (item === "<strong") {
+                            return "";
                         }
-                        const pos1 = item.indexOf('<strong');
-                        let str1 = '';
+                        const pos1 = item.indexOf("<strong");
+                        let str1 = "";
 
                         if (pos1 !== -1) {
                             str1 = item.slice(0, pos1);
-                        };
-
-                        if (str1 === '') {
-                            return item
                         }
-                        if (str1 !== '') {
-                            return str1
+
+                        if (str1 === "") {
+                            return item;
+                        }
+                        if (str1 !== "") {
+                            return str1;
                         }
                     });
-                    const arr3 = arr2.map(item => {
-                        if (item === '</strong') {
-                            return '';
+                    const arr3 = arr2.map((item) => {
+                        if (item === "</strong") {
+                            return "";
                         }
-                        const pos1 = item.indexOf('</strong');
-                        let str1 = '';
+                        const pos1 = item.indexOf("</strong");
+                        let str1 = "";
 
                         if (pos1 !== -1) {
                             str1 = item.slice(0, pos1);
-                        };
-
-                        if (str1 === '') {
-                            return item
                         }
-                        if (str1 !== '') {
-                            return str1
+
+                        if (str1 === "") {
+                            return item;
+                        }
+                        if (str1 !== "") {
+                            return str1;
                         }
                     });
 
-                    return [arr3.join(' '), el[1]];
+                    return [arr3.join(" "), el[1]];
                 });
 
-                const elements = newArrFacts.map(el => {
+                const elements = newArrFacts.map((el) => {
                     const arr = [];
-                    docSnap.data().odds.forEach(element => {
+                    docSnap.data().odds.forEach((element) => {
                         if (+element.odd === el[1]) {
                             arr.push(el[0]);
                             arr.push(element.name);
@@ -83,22 +85,23 @@ const Facts = ({ info }) => {
 
                     return arr;
                 });
-                console.log(elements)
+                console.log(elements);
 
                 setElements(elements);
             } else {
                 console.log("No such document!");
             }
-        }
+        };
 
         getDataOdds();
-
     }, []);
 
     return (
         <>
             <div className="flex justify-center mb-3">
-                <h2 className='text-center py-3 font-serif text-xl font-bold text-slate-600'>Факты</h2>
+                <h2 className="text-center py-3 font-serif text-xl font-bold text-slate-600">
+                    Факты
+                </h2>
             </div>
             <div>
                 <List
@@ -107,7 +110,11 @@ const Facts = ({ info }) => {
                     renderItem={(item) => (
                         <List.Item>
                             <List.Item.Meta
-                                title={<p className='font-lg font-semibold'>{item[0]}</p>}
+                                title={
+                                    <p className="font-lg font-semibold">
+                                        {item[0]}
+                                    </p>
+                                }
                                 description={item[1]}
                             />
                         </List.Item>
@@ -115,7 +122,7 @@ const Facts = ({ info }) => {
                 />
             </div>
         </>
-    )
-}
+    );
+};
 
 export default Facts;

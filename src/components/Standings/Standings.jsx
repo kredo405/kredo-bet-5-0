@@ -1,26 +1,26 @@
-import { Table } from 'antd';
+import { Table } from "antd";
 
 const Standings = ({ info }) => {
     const columns = [
         {
-            title: 'Rank',
-            dataIndex: 'rank',
-            key: 'rank',
+            title: "Rank",
+            dataIndex: "rank",
+            key: "rank",
         },
         {
-            title: 'Team',
-            dataIndex: 'team',
-            key: 'team',
+            title: "Team",
+            dataIndex: "team",
+            key: "team",
         },
         {
-            title: 'Goals',
-            dataIndex: 'goals',
-            key: 'goals',
+            title: "Goals",
+            dataIndex: "goals",
+            key: "goals",
         },
         {
-            title: 'Points',
-            dataIndex: 'points',
-            key: 'points',
+            title: "Points",
+            dataIndex: "points",
+            key: "points",
         },
     ];
 
@@ -29,11 +29,7 @@ const Standings = ({ info }) => {
         rank: i + 1,
         team: (
             <div className="flex justify-start items-center">
-                <img
-                    className="w-2/12 sm:w-[20px]"
-                    src={el[3]}
-                    alt="logo"
-                />
+                <img className="w-2/12 sm:w-[20px]" src={el[3]} alt="logo" />
                 <span className="pl-3">{el[2]}</span>
             </div>
         ),
@@ -44,7 +40,9 @@ const Standings = ({ info }) => {
     return (
         <>
             <div className="flex justify-center mb-3">
-                <h2 className="text-center py-3 font-serif text-2xl font-bold text-slate-600">Таблица</h2>
+                <h2 className="text-center py-3 font-serif text-2xl font-bold text-slate-600">
+                    Таблица
+                </h2>
             </div>
             <Table columns={columns} dataSource={data} />
         </>

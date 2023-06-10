@@ -14,7 +14,7 @@ const Header = () => {
     const navigate = useNavigate();
     const [navigation, setNavigation] = useState([
         { name: "Футбол", href: "/home", current: true },
-        // { name: 'Хокей', href: '/hockey', current: false },
+        { name: "Прогнозы", href: "/predict", current: false },
     ]);
 
     const logOut = () => {

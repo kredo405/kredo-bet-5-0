@@ -1,17 +1,14 @@
 import { Link } from "react-router-dom";
 import { Popover } from "@headlessui/react";
-import { predictionsServices } from "../../services/predctions";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { Modal } from "antd";
+// import { Modal } from "antd";
 import logo from "./Kredo-bet.png";
 import fon2 from "./fon2.png";
 
-const errorModal = (message) => {
-    Modal.error({
-        title: message,
-    });
-};
+// const errorModal = (message) => {
+//     Modal.error({
+//         title: message,
+//     });
+// };
 
 export default function Velcome() {
     return (
@@ -86,7 +83,7 @@ export default function Velcome() {
                                     топовых сайтов, а также математические
                                     прогнозы на основе теории вероятности
                                 </p>
-                                <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
+                                <div className="mt-5 sm:mt-8 sm:flex sm:justify-center flex-wrap lg:justify-start">
                                     <div className="rounded-md shadow">
                                         <Link
                                             to="/registration"
@@ -101,6 +98,14 @@ export default function Velcome() {
                                             className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10"
                                         >
                                             Войти
+                                        </Link>
+                                    </div>
+                                    <div className="mt-3 sm:mt-0 sm:ml-3">
+                                        <Link
+                                            to="/home"
+                                            className="w-full flex items-center justify-center px-8 py-3  text-base font-medium  text-orange-700 bg-white hover:text-orange-800 md:py-4 md:text-lg md:px-10"
+                                        >
+                                            Продолжить без регистрации
                                         </Link>
                                     </div>
                                 </div>

@@ -3,9 +3,6 @@ import Velcome from "./pages/velcome/Velcome";
 import Authorization from "./pages/authorization/Authorization";
 import Registration from "./pages/registration/Registration";
 import Match from "./pages/match/match";
-import MatchHockey from "./pages/matchHockey/matchHockey";
-import MatchesHokey from "./components/MatchesHokey/MatchesHockey";
-import ScorePredict from "./pages/scorePredict/ScorePredict";
 import { Routes, Route } from "react-router-dom";
 
 function App(props) {
@@ -21,10 +18,7 @@ function App(props) {
                     element={<Registration app={app} />}
                 />
                 <Route path="/home" element={<Home />} />
-                <Route path="/predict" element={<ScorePredict />} />
                 <Route path="/match" element={<Match />} />
-                <Route path="/matchHockey" element={<MatchHockey />} />
-                <Route path="/hockey" element={<MatchesHokey />} />
             </Routes>
         </div>
     );

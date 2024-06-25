@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import logo from "./kredi-logo.png";
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
@@ -14,13 +14,12 @@ const Header = () => {
     const navigate = useNavigate();
     const [navigation, setNavigation] = useState([
         { name: "Футбол", href: "/home", current: true },
-        { name: "Прогнозы", href: "/predict", current: false },
     ]);
 
-    const logOut = () => {
-        localStorage.clear();
-        navigate("/", { replace: true });
-    };
+    // const logOut = () => {
+    //     localStorage.clear();
+    //     navigate("/", { replace: true });
+    // };
 
     return (
         <div className="relative">

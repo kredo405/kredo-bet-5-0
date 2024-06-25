@@ -1,4 +1,4 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { nbbetServices } from "../../services/nbbet";
@@ -15,32 +15,35 @@ const errorModal = (message) => {
 const Matches = () => {
     const [arrMatches, setArrayMatches] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const state = useSelector((state) => state);
     const dispatch = useDispatch();
     const history = useNavigate();
 
     useEffect(() => {
-        if (state.firebaseSlice.token === "") {
-            history("/");
-        }
+        // if (state.firebaseSlice.token === "") {
+        //     history("/");
+        // }
 
         const getData = async () => {
             try {
                 const allMatches = await nbbetServices.getAllMatches();
 
-                const filterMatches =
-                    allMatches.data.matches.data.leagues.filter((el) => {
-                        const arrayMatches = el["4"].filter(
-                            (item) => item["4"] >= Date.now()
-                        );
-                        el[4] = arrayMatches;
-                        if (arrayMatches.length > 0) {
-                            return el;
-                        }
-                    });
+                console.log(allMatches.data);
 
-                setArrayMatches(filterMatches);
-                dispatch(setMatches(filterMatches));
+                // const filterMatches =
+                //     allMatches.data.matches.data.leagues.filter((el) => {
+                //         const arrayMatches = el["4"].filter(
+                //             (item) => item["4"] >= Date.now()
+                //         );
+                //         el[4] = arrayMatches;
+                //         if (arrayMatches.length > 0) {
+                //             return true;
+                //         } else {
+                //             return false;
+                //         }
+                //     });
+
+                setArrayMatches(allMatches.data.matches.data.leagues);
+                dispatch(setMatches(allMatches.data.matches.data.leagues));
                 setIsLoading(true);
             } catch (error) {
                 console.error(error);
@@ -85,7 +88,7 @@ const Matches = () => {
                                 {item["15"]}
                             </span>
                         </div>
-                        <div className="flex flex-col md:flex-row">
+                        <div className="flex flex-col md:flex-row justify-end items-end w-2/12">
                             <span className="text-xs md:text-base lg:text-lg lg:font-bold px-1 lg:px-2 font-mono text-green-600">
                                 {item["5"]
                                     ? item["5"]["1"]

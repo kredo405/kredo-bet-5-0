@@ -100,10 +100,10 @@ export default function Velcome() {
                                             Войти
                                         </Link>
                                     </div>
-                                    <div className="mt-3 sm:mt-0 sm:ml-3">
+                                    <div className="mt-3 sm:mt-0 flex justify-center">
                                         <Link
                                             to="/home"
-                                            className="w-full flex items-center justify-center px-8 py-3  text-base font-medium  text-orange-700 bg-white hover:text-orange-800 md:py-4 md:text-lg md:px-10"
+                                            className="w-full flex items-center text-center justify-center px-8 py-3  text-base font-medium  text-orange-700 bg-white hover:text-orange-800 md:py-4 md:text-lg md:px-10"
                                         >
                                             Продолжить без регистрации
                                         </Link>

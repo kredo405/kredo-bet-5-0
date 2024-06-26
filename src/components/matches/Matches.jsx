@@ -31,9 +31,9 @@ const Matches = () => {
 
                 const filterMatches =
                     allMatches.data.matches.data.leagues.filter((el) => {
-                        const arrayMatches = el["4"].filter(
-                            (item) => item["4"] >= Date.now()
-                        );
+                        const arrayMatches = el["4"].filter((item) => {
+                            return item["4"] >= Date.now();
+                        });
                         el[4] = arrayMatches;
                         if (arrayMatches.length > 0) {
                             return true;

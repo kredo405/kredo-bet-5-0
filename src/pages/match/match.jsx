@@ -12,12 +12,21 @@ const errorModal = (message) => {
     });
 };
 
-const showInfo = (data, text) => {
+const showInfo = (data, text, textWeight) => {
     Modal.info({
-        title: `Прогноз на матч: ${data.name}`,
+        title: `Прогноз на матч: ${data.closestBet.name},  ${data.closestBetWeight.name}`,
         content: (
             <div>
+                <span className="font-sans text-sky-800 font-medium">
+                    Без веса
+                </span>{" "}
                 <p className="font-sans text-orange-800 font-medium">{text}</p>
+                <span className="font-sans text-sky-800 font-medium">
+                    С весом
+                </span>{" "}
+                <p className="font-sans text-orange-800 font-medium">
+                    {textWeight}
+                </p>
             </div>
         ),
         onOk() {},
@@ -33,8 +42,9 @@ const Match = () => {
 
     const getPredict = () => {
         const res = calcPredictions(predictions, odds);
-        const text = `Наиболее близкий исход: ${res.name} с коэффициентом ${res.odd}`;
-        showInfo(res, text);
+        const text = `Наиболее близкий исход: ${res.closestBet.name} с коэффициентом ${res.closestBet.odd}`;
+        const textWeight = `Наиболее близкий исход: ${res.closestBetWeight.name} с коэффициентом ${res.closestBetWeight.odd}`;
+        showInfo(res, text, textWeight);
     };
 
     useEffect(() => {

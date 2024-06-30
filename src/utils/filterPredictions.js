@@ -1,10 +1,10 @@
 export default function filterPredictions(predictions, odds) {
-    const filteredPredictions = predictions.filter(
-        (prediction) => prediction[4] !== null
-    );
+    const filteredPredictions = predictions.filter((prediction) => {
+        return prediction[4] !== null;
+    });
 
-    const filteredTopPredictions = filteredPredictions.filter(
-        (prediction) => prediction[6] >= 30
+    const filteredTopPredictions = predictions.filter(
+        (prediction) => prediction[6] >= 250 && prediction[10] <= 50
     );
 
     console.log(filteredTopPredictions);

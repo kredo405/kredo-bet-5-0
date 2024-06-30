@@ -5,6 +5,7 @@ import { Loading } from "../../components/Loading/Loading";
 import { nbbetServices } from "../../services/nbbet";
 import getOdds from "../../utils/getOdds";
 import { calcPredictions } from "../../utils/calcPredictions";
+import calcPredictionNew from "../../utils/calcPredictionNew";
 import filterPredictions from "../../utils/filterPredictions";
 import { Empty } from "antd";
 
@@ -19,29 +20,64 @@ const showInfo = (
     text,
     textWeight,
     weightedAverageProbability,
-    sample
+    sample,
+    dataNew
 ) => {
     Modal.info({
-        title: `Прогноз на матч: ${data.closestBet.name},  ${data.closestBetWeight.name}`,
+        title: `Прогноз на матч: ${data.closestBetWeight.name},  ${dataNew.name}`,
         content: (
-            <div>
-                <span className="font-sans text-sky-800 font-medium">
-                    Без веса
-                </span>{" "}
-                <p className="font-sans text-orange-800 font-medium">{text}</p>
-                <span className="font-sans text-sky-800 font-medium">
-                    С весом
-                </span>{" "}
-                <p className="font-sans text-orange-800 font-medium">
-                    {textWeight}
-                </p>
-                <p className="font-sans text-orange-800 font-medium">
-                    {weightedAverageProbability}
-                </p>
-                <p className="font-sans text-orange-800 font-medium">
-                    {sample}
-                </p>
-            </div>
+            <>
+                {" "}
+                {sample >= 50 ? (
+                    <>
+                        <div>
+                            <h1 className="text-center py-2 font-bold text-orange-900 text-xl">
+                                Старый метод
+                            </h1>
+                            <span className="font-sans text-sky-800 font-medium">
+                                Без веса
+                            </span>{" "}
+                            <p className="font-sans text-orange-800 font-medium">
+                                {text}
+                            </p>
+                            <span className="font-sans text-sky-800 font-medium">
+                                С весом
+                            </span>{" "}
+                            <p className="font-sans text-orange-800 font-medium">
+                                {textWeight}
+                            </p>
+                            <p className="font-sans text-orange-800 font-medium">
+                                {weightedAverageProbability}
+                            </p>
+                            <p className="font-sans text-orange-800 font-medium">
+                                {sample}
+                            </p>
+                        </div>
+                        <div>
+                            <h1 className="text-center py-2 font-bold text-orange-900 text-xl">
+                                Новый метод
+                            </h1>
+                            <p className="font-sans text-xl text-emerald-800 font-medium">
+                                {dataNew.name}
+                            </p>
+                            <p className="font-sans text-sky-700 font-medium">
+                                {`Кэф: ${dataNew.odd}`}
+                            </p>
+                            <p className="font-sans text-indigo-800 font-medium">
+                                {`Вероятность: ${dataNew.probability.toFixed(
+                                    1
+                                )}%`}
+                            </p>
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <h1 className="text-center py-2 font-bold text-orange-900 text-xl">
+                            Мало данных для прогноза
+                        </h1>
+                    </>
+                )}
+            </>
         ),
         onOk() {},
     });
@@ -53,6 +89,7 @@ const Match = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [odds, setOdds] = useState({});
     const [summary, setSummary] = useState({});
+    const [historyOdds, setHistoryOdds] = useState({});
     const [topPredictions, setTopPredictions] = useState({
         topPredictions: [
             {
@@ -72,18 +109,34 @@ const Match = () => {
     });
 
     const getPredict = () => {
-        const res = calcPredictions(predictions, odds, summary, info);
+        const preditionCopy = JSON.parse(JSON.stringify(predictions));
+        const oddsCopy = JSON.parse(JSON.stringify(odds));
+        const historyOddsCopy = JSON.parse(JSON.stringify(historyOdds));
+
+        const res = calcPredictions(preditionCopy, oddsCopy, summary, info);
+        const resNew = calcPredictionNew(
+            preditionCopy,
+            oddsCopy,
+            historyOddsCopy
+        );
         const text = `Наиболее близкий исход: ${res.closestBet.name} с коэффициентом ${res.closestBet.odd}`;
         const textWeight = `Наиболее близкий исход: ${res.closestBetWeight.name} с коэффициентом ${res.closestBetWeight.odd}`;
         const weightedAverageProbability = `Взвешенная средняя вероятность: ${
             res.weightedAverageProbability * 100
         }%`;
         const sample = `Выборка: ${res.sample}`;
-        showInfo(res, text, textWeight, weightedAverageProbability, sample);
+        showInfo(
+            res,
+            text,
+            textWeight,
+            weightedAverageProbability,
+            sample,
+            resNew
+        );
     };
 
-    const elements = topPredictions.topPredictions.map((el) => (
-        <div key={el.profit} className=" border-b border-slate-300 py-2 mt-4">
+    const elements = topPredictions.topPredictions.map((el, idx) => (
+        <div key={idx} className=" border-b border-slate-300 py-2 mt-4">
             <span className="text-slate-800">{el.text}</span>
             <div className="flex justify-between mt-3">
                 <div>
@@ -125,30 +178,38 @@ const Match = () => {
             try {
                 const [
                     matchesInfoNbbet,
-                    matchesPredictionsNbbet,
+                    matchesPredictionsNbbet1,
+                    matchesPredictionsNbbet2,
+                    matchesPredictionsNbbet3,
+                    matchesPredictionsNbbet4,
+                    historyOdds,
                     odds,
                     summary,
                 ] = await Promise.all([
                     nbbetServices.getMatchInfo(),
-                    nbbetServices.getMatchPredictions(),
+                    nbbetServices.getMatchPredictions(1),
+                    nbbetServices.getMatchPredictions(2),
+                    nbbetServices.getMatchPredictions(3),
+                    nbbetServices.getMatchPredictions(4),
+                    nbbetServices.getHistoryOdds(),
                     getOdds(),
                     nbbetServices.getSummary(),
                 ]);
 
-                console.log(matchesInfoNbbet);
-                console.log(matchesPredictionsNbbet);
-                // console.log(odds);
-                // console.log(summary);
+                const matchesPredictionsNbbet = [
+                    ...matchesPredictionsNbbet1.data.match.data["1"],
+                    ...matchesPredictionsNbbet2.data.match.data["1"],
+                    ...matchesPredictionsNbbet3.data.match.data["1"],
+                    ...matchesPredictionsNbbet4.data.match.data["1"],
+                ];
 
                 setInfo(matchesInfoNbbet.data.match.data.match);
-                setPredictions(matchesPredictionsNbbet.data.match.data["1"]);
+                setPredictions(matchesPredictionsNbbet);
                 setOdds(odds.odds);
-                setSummary(summary);
+                setSummary(summary.data.match.data);
+                setHistoryOdds(historyOdds.data.match.data);
                 setTopPredictions(
-                    filterPredictions(
-                        matchesPredictionsNbbet.data.match.data["1"],
-                        odds.odds
-                    )
+                    filterPredictions(matchesPredictionsNbbet, odds.odds)
                 );
 
                 setIsLoading(true);

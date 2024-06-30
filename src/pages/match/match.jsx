@@ -125,12 +125,13 @@ const Match = () => {
             res.weightedAverageProbability * 100
         }%`;
         const sample = `Выборка: ${res.sample}`;
+        console.log(sample);
         showInfo(
             res,
             text,
             textWeight,
             weightedAverageProbability,
-            sample,
+            res.sample,
             resNew
         );
     };

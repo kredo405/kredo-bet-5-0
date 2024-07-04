@@ -24,7 +24,7 @@ const showInfo = (
     dataNew
 ) => {
     Modal.info({
-        title: `Прогноз на матч: ${data.closestBetWeight.name},  ${dataNew.name}`,
+        title: `Прогноз на матч: ${data.closestBetWeight.name},  ${dataNew[0].name}`,
         content: (
             <>
                 {" "}
@@ -50,24 +50,49 @@ const showInfo = (
                                 {weightedAverageProbability}
                             </p>
                             <p className="font-sans text-orange-800 font-medium">
-                                {sample}
+                                {`Выборка: ${sample}`}
                             </p>
                         </div>
                         <div>
                             <h1 className="text-center py-2 font-bold text-orange-900 text-xl">
                                 Новый метод
                             </h1>
+                            <div>
                             <p className="font-sans text-xl text-emerald-800 font-medium">
-                                {dataNew.name}
+                                {dataNew[0].name}
                             </p>
                             <p className="font-sans text-sky-700 font-medium">
-                                {`Кэф: ${dataNew.odd}`}
+                                {`Кэф: ${dataNew[0].odd}`}
                             </p>
                             <p className="font-sans text-indigo-800 font-medium">
-                                {`Вероятность: ${dataNew.probability.toFixed(
+                                {`Вероятность: ${dataNew[0].probability.toFixed(
                                     1
                                 )}%`}
                             </p>
+                            <p className="font-sans text-indigo-800 font-medium">
+                                {`Ценность: ${dataNew[0].value.toFixed(
+                                    0
+                                )}`}
+                            </p>
+                            </div>
+                            <div>
+                            <p className="font-sans text-xl text-emerald-800 font-medium">
+                                {dataNew[1].name}
+                            </p>
+                            <p className="font-sans text-sky-700 font-medium">
+                                {`Кэф: ${dataNew[1].odd}`}
+                            </p>
+                            <p className="font-sans text-indigo-800 font-medium">
+                                {`Вероятность: ${dataNew[1].probability.toFixed(
+                                    1
+                                )}%`}
+                            </p>
+                            <p className="font-sans text-indigo-800 font-medium">
+                                {`Ценность: ${dataNew[1].value.toFixed(
+                                    0
+                                )}`}
+                            </p>
+                            </div>
                         </div>
                     </>
                 ) : (
@@ -155,8 +180,9 @@ const Match = () => {
             </div>
         </div>
     ));
-    const elementsWeight = topPredictions.topPredictionsWeight.map((el) => (
-        <div key={el.profit} className=" border-b border-slate-300 py-2 mt-4">
+
+    const elementsWeight = topPredictions.topPredictionsWeight.map((el, idx) => (
+        <div key={idx} className=" border-b border-slate-300 py-2 mt-4">
             <div className="flex justify-between mt-3">
                 <div>
                     <span className="text-sky-600">Кэф</span>
@@ -175,6 +201,7 @@ const Match = () => {
     ));
 
     useEffect(() => {
+        // Получаем данные для прогноза
         const getInfo = async () => {
             try {
                 const [

@@ -1,70 +1,97 @@
 export default function calcPredictionNew(predictions, odds, historyOdds) {
-    const res = [];
+  const resNormalized = [];
+  const resOriginal = [];
 
-    // Функция для приведения прибыли к шкале от 0% до 100%
-    function normalizeProfit(profit) {
-        const normalized = (profit + 1000) / 20; // Приведение к шкале от 0 до 100
-        return Math.max(0, Math.min(normalized, 100)); // Ограничение значения от 0 до 100
-    }
+  // Функция для приведения прибыли к шкале от 0% до 100%
+  function normalizeProfit(profit) {
+    const normalized = (profit + 1000) / 20; // Приведение к шкале от 0 до 100
+    return Math.max(0, Math.min(normalized, 100)); // Ограничение значения от 0 до 100
+  }
 
-    // Создание массива объектов прогнозов с нормализованной прибылью и добавлением истории коэффициентов
-    predictions.forEach((prediction) => {
-        odds.forEach((odd) => {
-            if (+odd.odd === prediction[2]) {
-                res.push({
-                    odd: prediction[3],
-                    name: odd.name,
-                    probability: 1 / prediction[3] - 0.06,
-                    profit: normalizeProfit(prediction[6]), // Нормализация прибыли
-                    rating: prediction[10], // Добавление рейтинга прогнозиста
-                    historyOdds: historyOdds[`${odd.odd}`],
-                });
-            }
+  // Создание массива объектов прогнозов с нормализованной и оригинальной прибылью
+  predictions.forEach((prediction) => {
+    odds.forEach((odd) => {
+      if (+odd.odd === prediction[2]) {
+        const basePrediction = {
+          odd: prediction[3],
+          name: odd.name,
+          probability: 1 / prediction[3] - 0.06,
+          rating: prediction[10], // Добавление рейтинга прогнозиста
+          historyOdds: historyOdds[`${odd.odd}`],
+        };
+
+        resNormalized.push({
+          ...basePrediction,
+          profit: normalizeProfit(prediction[6]), // Нормализация прибыли
         });
+
+        resOriginal.push({
+          ...basePrediction,
+          profit: prediction[6], // Оригинальная прибыль
+        });
+      }
+    });
+  });
+
+  // Функция для расчета изменения коэффициентов
+  function calculateOddsChange(historyOdds) {
+    if (!historyOdds || historyOdds.length < 2) return 0;
+    const firstOdd = historyOdds[0][1];
+    const lastOdd = historyOdds[historyOdds.length - 1][1];
+    return (lastOdd - firstOdd) / firstOdd;
+  }
+
+  // Функция для расчета ценности ставки
+  function calculateBetValue(predictions) {
+    const betValues = {};
+
+    predictions.forEach((prediction) => {
+      const oddsChange = calculateOddsChange(prediction.historyOdds);
+      const value = prediction.profit * (1 + Math.abs(oddsChange));
+
+      if (!betValues[prediction.name]) {
+        betValues[prediction.name] = { ...prediction, value };
+      } else {
+        betValues[prediction.name].value += value;
+        betValues[prediction.name].probability = Math.max(
+          betValues[prediction.name].probability,
+          prediction.probability
+        );
+      }
     });
 
-    // Функция для расчета изменения коэффициентов
-    function calculateOddsChange(historyOdds) {
-        if (!historyOdds || historyOdds.length < 2) return 0;
-        const firstOdd = historyOdds[0][1];
-        const lastOdd = historyOdds[historyOdds.length - 1][1];
-        return (lastOdd - firstOdd) / firstOdd;
-    }
+    return Object.values(betValues);
+  }
 
-    // Функция для расчета ценности ставки
-    function calculateBetValue(predictions) {
-        const betValues = {};
+  // Основная функция для прогнозирования
+  function predictOutcome(predictionsNormalized, predictionsOriginal) {
+    const weightedPredictionsNormalized = calculateBetValue(
+      predictionsNormalized
+    );
+    const weightedPredictionsOriginal = calculateBetValue(predictionsOriginal);
 
-        predictions.forEach((prediction) => {
-            const normalizedProfit = prediction.profit;
-            const oddsChange = calculateOddsChange(prediction.historyOdds);
-            const value = normalizedProfit * (1 + Math.abs(oddsChange));
+    weightedPredictionsNormalized.sort((a, b) => b.value - a.value); // Сортировка по убыванию ценности ставки
+    weightedPredictionsOriginal.sort((a, b) => b.value - a.value); // Сортировка по убыванию ценности ставки
 
-            if (!betValues[prediction.name]) {
-                betValues[prediction.name] = { ...prediction, value };
-            } else {
-                betValues[prediction.name].value += value;
-                betValues[prediction.name].probability = Math.max(betValues[prediction.name].probability, prediction.probability);
-            }
-        });
+    const bestPredictionNormalized = weightedPredictionsNormalized[0];
+    const bestPredictionOriginal = weightedPredictionsOriginal[0];
 
-        return Object.values(betValues);
-    }
+    return [
+      {
+        name: bestPredictionNormalized.name,
+        odd: bestPredictionNormalized.odd,
+        probability: bestPredictionNormalized.probability * 100,
+        value: bestPredictionNormalized.value,
+      },
+      {
+        name: bestPredictionOriginal.name,
+        odd: bestPredictionOriginal.odd,
+        probability: bestPredictionOriginal.probability * 100,
+        value: bestPredictionOriginal.value,
+      },
+    ];
+  }
 
-    // Основная функция для прогнозирования
-    function predictOutcome(predictions) {
-        const weightedPredictions = calculateBetValue(predictions);
-        weightedPredictions.sort((a, b) => b.value - a.value); // Сортировка по убыванию ценности ставки
-        const bestPredictions = weightedPredictions.slice(0, 2); // Выбор двух лучших прогнозов
-
-        return bestPredictions.map(prediction => ({
-            name: prediction.name,
-            odd: prediction.odd,
-            probability: prediction.probability * 100,
-            value: prediction.value,
-        }));
-    }
-
-    console.log(predictOutcome(res));
-    return predictOutcome(res); // Возвращаем два лучших прогноза
+  console.log(predictOutcome(resNormalized, resOriginal));
+  return predictOutcome(resNormalized, resOriginal); // Возвращаем два лучших прогноза
 }

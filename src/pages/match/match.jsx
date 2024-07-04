@@ -226,13 +226,13 @@ const Match = () => {
       <BackTop />
       {isLoading ? (
         <div className="container lg:px-52 mt-16">
-          <div className="flex justify-center mb-8 bg-cyan-300 p-3 rounded-2xl">
-            <h1 className="text-slate-700 font-mono text-xl text-center">
+          <div className="flex justify-center mb-8 bg-cyan-300 p-3 rounded-2xl bg-opacity-20">
+            <h1 className="text-white font-mono text-xl text-center">
               {info[10][1]}
             </h1>
           </div>
 
-          <div className="flex justify-evenly item-center border-b-2 border-solid border-slate-900">
+          <div className="flex justify-evenly item-center">
             <div className="flex flex-col items-center w-5/12">
               <img className="w-6/12" src={info[7][2]} alt="логотип" />
               <span className="py-3 text-center font-mono text-clip text-lg text-white text-bold">

@@ -147,7 +147,7 @@ const Matches = () => {
   }
 
   return (
-    <div className="container lg:px-44 pt-20 bg-cover bg-[url('https://sportishka.com/uploads/posts/2022-08/1660150573_1-sportishka-com-p-futbolnii-fon-dlya-prezentatsii-sport-kras-1.jpg')]">
+    <div className="container lg:px-44 pt-20 ">
       <BackTop />
       {isLoading ? elements : <Loading />}
     </div>

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
-import { BackTop, Modal } from "antd";
+import { BackTop, Modal, Progress, Statistic } from "antd";
 import { Loading } from "../../components/Loading/Loading";
 import { nbbetServices } from "../../services/nbbet";
 import getOdds from "../../utils/getOdds";
 import { calcPredictions } from "../../utils/calcPredictions";
 import calcPredictionNew from "../../utils/calcPredictionNew";
+import calcPredictionCollective from "../../utils/calcPredictionsCollective";
 import filterPredictions from "../../utils/filterPredictions";
 import { Empty } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
@@ -16,79 +17,76 @@ const errorModal = (message) => {
   });
 };
 
-const showInfo = (
-  data,
-  text,
-  textWeight,
-  weightedAverageProbability,
-  sample,
-  dataNew
-) => {
+const showInfo = (data, sample, dataNew) => {
   Modal.info({
-    title: `Прогноз на матч: ${data.closestBetWeight.name},  ${dataNew[0].name}`,
+    title: `Прогноз на матч: ${data.prediction},  ${dataNew[1].name}`,
     content: (
       <>
         {" "}
         {sample >= 50 ? (
           <>
             <div>
-              <h1 className="text-center py-2 font-bold text-orange-900 text-xl">
-                Старый метод
-              </h1>
-              <span className="font-sans text-sky-800 font-medium">
-                Без веса
-              </span>{" "}
-              <p className="font-sans text-orange-800 font-medium">{text}</p>
-              <span className="font-sans text-sky-800 font-medium">
-                С весом
-              </span>{" "}
-              <p className="font-sans text-orange-800 font-medium">
-                {textWeight}
-              </p>
-              <p className="font-sans text-orange-800 font-medium">
-                {weightedAverageProbability}
-              </p>
-              <p className="font-sans text-orange-800 font-medium">
-                {`Выборка: ${sample}`}
-              </p>
-            </div>
-            <div>
-              <h1 className="text-center py-2 font-bold text-orange-900 text-xl">
-                Новый метод
-              </h1>
               <div>
-                <h2 className="py-2 font-bold text-emerald-800">
+                <h2 className="py-2 font-bold text-emerald-800 text-center">
                   С нормализацией прибыли
                 </h2>
-                <p className="font-sans text-xl text-emerald-800 font-medium">
-                  {dataNew[0].name}
+                <p className="font-sans text-xl text-red-800 font-medium text-center py-3">
+                  {data.prediction}
                 </p>
-                <p className="font-sans text-sky-700 font-medium">
-                  {`Кэф: ${dataNew[0].odd}`}
-                </p>
-                <p className="font-sans text-indigo-800 font-medium">
-                  {`Вероятность: ${dataNew[0].probability.toFixed(1)}%`}
-                </p>
-                <p className="font-sans text-indigo-800 font-medium">
-                  {`Ценность: ${dataNew[0].value.toFixed(0)}`}
-                </p>
+                <div className="flex justify-evenly items-center">
+                  <p className="font-sans text-sky-700 font-medium">
+                    <Statistic
+                      title="Кэф"
+                      value={data.odd}
+                      precision={2}
+                      valueStyle={{
+                        color: "#3f8600",
+                      }}
+                      // prefix={<ArrowUpOutlined />}
+                      suffix=""
+                    />
+                  </p>
+                  <p className="font-sans text-indigo-800 font-medium">
+                    <Progress
+                      type="dashboard"
+                      steps={8}
+                      percent={data.closestProbability.toFixed(0)}
+                      trailColor="rgba(0, 0, 0, 0.06)"
+                      strokeWidth={20}
+                    />
+                  </p>
+                </div>
               </div>
               <div>
-                <h2 className="py-2 font-bold text-emerald-800">
+                <h2 className="py-2 font-bold text-emerald-800 text-center">
                   Без нормалицации прибыли
                 </h2>
-                <p className="font-sans text-xl text-emerald-800 font-medium">
+                <p className="font-sans text-xl text-red-800 font-medium text-center py-3">
                   {dataNew[1].name}
                 </p>
-                <p className="font-sans text-sky-700 font-medium">
-                  {`Кэф: ${dataNew[1].odd}`}
-                </p>
-                <p className="font-sans text-indigo-800 font-medium">
-                  {`Вероятность: ${dataNew[1].probability.toFixed(1)}%`}
-                </p>
-                <p className="font-sans text-indigo-800 font-medium">
-                  {`Ценность: ${dataNew[1].value.toFixed(0)}`}
-                </p>
+                <div className="flex justify-evenly items-center">
+                  <p className="font-sans text-sky-700 font-medium">
+                    <Statistic
+                      title="Кэф"
+                      value={dataNew[1].odd}
+                      precision={2}
+                      valueStyle={{
+                        color: "#3f8600",
+                      }}
+                      // prefix={<ArrowUpOutlined />}
+                      suffix=""
+                    />
+                  </p>
+                  <p className="font-sans text-indigo-800 font-medium">
+                    <Progress
+                      type="dashboard"
+                      steps={8}
+                      percent={dataNew[1].probability.toFixed(0)}
+                      trailColor="rgba(0, 0, 0, 0.06)"
+                      strokeWidth={20}
+                    />
+                  </p>
+                </div>
               </div>
             </div>
           </>
@@ -127,42 +125,45 @@ const Match = () => {
     const oddsCopy = JSON.parse(JSON.stringify(odds));
     const historyOddsCopy = JSON.parse(JSON.stringify(historyOdds));
 
-    const res = calcPredictions(preditionCopy, oddsCopy, summary, info);
-    const resNew = calcPredictionNew(preditionCopy, oddsCopy, historyOddsCopy);
-    const text = `Наиболее близкий исход: ${res.closestBet.name} с коэффициентом ${res.closestBet.odd}`;
-    const textWeight = `Наиболее близкий исход: ${res.closestBetWeight.name} с коэффициентом ${res.closestBetWeight.odd}`;
-    const weightedAverageProbability = `Взвешенная средняя вероятность: ${
-      res.weightedAverageProbability * 100
-    }%`;
-    const sample = `Выборка: ${res.sample}`;
-    console.log(sample);
-    showInfo(
-      res,
-      text,
-      textWeight,
-      weightedAverageProbability,
-      res.sample,
-      resNew
+    const res = calcPredictions(
+      preditionCopy,
+      oddsCopy,
+      historyOddsCopy,
+      summary
     );
+    const resNew = calcPredictionNew(
+      preditionCopy,
+      oddsCopy,
+      historyOddsCopy,
+      summary
+    );
+    const res2 = calcPredictionCollective(
+      preditionCopy,
+      oddsCopy,
+      historyOddsCopy,
+      summary
+    );
+
+    showInfo(res, res.sample, resNew);
   };
 
   const elementsWeight = topPredictions.topPredictionsWeight.map((el, idx) => (
     <div
       key={idx}
-      className="flex items-center w-full border-b border-slate-300 py-2 mt-4 bg-sky-500 px-3 rounded-2xl"
+      className="flex items-center w-full py-2 mt-4 bg-sky-600 bg-opacity-40 px-3 rounded-2xl"
     >
       <div className="flex justify-between h-full  w-full items-center">
         <div>
-          <span className="text-white">Кэф</span>
-          <span className="text-orange-600 px-3">{el.odd}</span>
+          <span className="text-white font-bold">Кэф</span>
+          <span className="text-red-500 font-bold px-3">{el.odd}</span>
         </div>
         <div>
-          <span className="text-white">Ставка</span>
-          <span className="text-orange-600 px-3">{el.name}</span>
+          <span className="text-white font-bold">Ставка</span>
+          <span className="text-red-500 px-3 font-bold">{el.name}</span>
         </div>
         <div>
-          <span className="text-white">Прибыль</span>
-          <span className="text-orange-600 px-3">{el.profit}%</span>
+          <span className="text-white font-bold">Прибыль</span>
+          <span className="text-red-500 px-3 font-bold">{el.profit}%</span>
         </div>
       </div>
     </div>
@@ -221,7 +222,7 @@ const Match = () => {
   }, []);
 
   return (
-    <div className=" bg-[url('https://sportishka.com/uploads/posts/2022-08/1660150573_1-sportishka-com-p-futbolnii-fon-dlya-prezentatsii-sport-kras-1.jpg')] bg-cover bg-scroll bg-clip-border bg-repeat-y">
+    <div className="h-screen bg-[url('https://sportishka.com/uploads/posts/2022-08/1660150573_1-sportishka-com-p-futbolnii-fon-dlya-prezentatsii-sport-kras-1.jpg')] bg-cover bg-scroll bg-clip-border bg-repeat-y">
       <Header />
       <BackTop />
       {isLoading ? (

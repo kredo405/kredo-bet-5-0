@@ -1,4 +1,9 @@
-export default function calcPredictionNew(predictions, odds, historyOdds) {
+export default function calcPredictionNew(
+  predictions,
+  odds,
+  historyOdds,
+  summary
+) {
   const resNormalized = [];
   const resOriginal = [];
 
@@ -32,6 +37,21 @@ export default function calcPredictionNew(predictions, odds, historyOdds) {
       }
     });
   });
+
+  console.log(resOriginal);
+  console.log(historyOdds);
+  console.log(summary);
+
+  // const obj = {
+  //   individualTotalAvgHome: 1.6,
+  //   individualTotalAvgAway: 1.3,
+  //   individualTotalAvgHomeOpponent: 1.4,
+  //   individualTotalAvgAwayOpponent: 1.9,
+  //   possesionHome: 54,
+  //   possesionAway: 44,
+  //   possesionHomeOpponent: 46,
+  //   possesionAwayOpponent: 56,
+  // }
 
   // Функция для расчета изменения коэффициентов
   function calculateOddsChange(historyOdds) {

@@ -5,7 +5,7 @@ export const nbbetServices = {
     const timestamp = Date.now();
     const dateFix = Number(String(timestamp).slice(0, 8)) + 180;
 
-    const newTimestamp = +`${+dateFix + 200}99999`;
+    const newTimestamp = +`${+dateFix + 300}99999`;
     console.log(newTimestamp);
 
     console.log(newTimestamp);

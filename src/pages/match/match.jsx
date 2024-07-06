@@ -154,16 +154,17 @@ const Match = () => {
     >
       <div className="flex justify-between h-full  w-full items-center">
         <div>
-          <span className="text-white font-bold">Кэф</span>
-          <span className="text-red-500 font-bold px-3">{el.odd}</span>
+          <span className="text-white font-bold text-sm">Кэф</span>
+          <span className="text-red-500 font-bold px-3 text-sm">{el.odd}</span>
         </div>
         <div>
-          <span className="text-white font-bold">Ставка</span>
-          <span className="text-red-500 px-3 font-bold">{el.name}</span>
+          <span className="text-red-500 px-3 font-bold text-xs">{el.name}</span>
         </div>
         <div>
-          <span className="text-white font-bold">Прибыль</span>
-          <span className="text-red-500 px-3 font-bold">{el.profit}%</span>
+          <span className="text-white font-bold text-sm">Прибыль</span>
+          <span className="text-red-500 px-3 font-bold text-sm">
+            {el.profit}%
+          </span>
         </div>
       </div>
     </div>

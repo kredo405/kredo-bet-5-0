@@ -222,7 +222,7 @@ const Match = () => {
   }, []);
 
   return (
-    <div className="h-screen bg-[url('https://sportishka.com/uploads/posts/2022-08/1660150573_1-sportishka-com-p-futbolnii-fon-dlya-prezentatsii-sport-kras-1.jpg')] bg-cover bg-scroll bg-clip-border bg-repeat-y">
+    <div className=" bg-[url('https://sportishka.com/uploads/posts/2022-08/1660150573_1-sportishka-com-p-futbolnii-fon-dlya-prezentatsii-sport-kras-1.jpg')] bg-cover bg-fixed">
       <Header />
       <BackTop />
       {isLoading ? (

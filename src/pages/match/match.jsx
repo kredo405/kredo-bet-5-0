@@ -150,7 +150,7 @@ const Match = () => {
   const elementsWeight = topPredictions.topPredictionsWeight.map((el, idx) => (
     <div
       key={idx}
-      className="flex items-center w-full py-2 mt-4 bg-sky-600 bg-opacity-40 px-3 rounded-2xl"
+      className="flex items-center w-full py-2 mt-4 bg-sky-400 bg-opacity-20 px-3 rounded-2xl"
     >
       <div className="flex justify-between h-full  w-full items-center">
         <div>

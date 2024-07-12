@@ -17,7 +17,7 @@ const errorModal = (message) => {
   });
 };
 
-const showInfo = (data, sample, dataNew) => {
+const showInfo = (data, sample, dataNew, res2) => {
   Modal.info({
     title: `Прогноз на матч: ${data.prediction},  ${dataNew[1].name}`,
     content: (
@@ -88,6 +88,47 @@ const showInfo = (data, sample, dataNew) => {
                   </p>
                 </div>
               </div>
+              <div>
+                <h2 className="py-2 font-bold text-emerald-800 text-center">
+                  Коллективный интеллект
+                </h2>
+
+                <div className="flex justify-between items-center">
+                  <p className="font-sans text-sky-700 font-medium">
+                    <Statistic
+                      title="Кэф"
+                      value={res2[0].odd}
+                      precision={2}
+                      valueStyle={{
+                        color: "#3f8600",
+                      }}
+                      // prefix={<ArrowUpOutlined />}
+                      suffix=""
+                    />
+                  </p>
+                  <p className="font-sans text-xl text-red-800 font-medium text-center py-3">
+                    {res2[0].name}
+                  </p>
+                </div>
+
+                <div className="flex justify-between items-center">
+                  <p className="font-sans text-sky-700 font-medium">
+                    <Statistic
+                      title="Кэф"
+                      value={res2[1].odd}
+                      precision={2}
+                      valueStyle={{
+                        color: "#3f8600",
+                      }}
+                      // prefix={<ArrowUpOutlined />}
+                      suffix=""
+                    />
+                  </p>
+                  <p className="font-sans text-xl text-red-800 font-medium text-center py-3">
+                    {res2[1].name}
+                  </p>
+                </div>
+              </div>
             </div>
           </>
         ) : (
@@ -144,7 +185,7 @@ const Match = () => {
       summary
     );
 
-    showInfo(res, res.sample, resNew);
+    showInfo(res, res.sample, resNew, res2);
   };
 
   const elementsWeight = topPredictions.topPredictionsWeight.map((el, idx) => (
@@ -158,7 +199,9 @@ const Match = () => {
           <span className="text-red-500 font-bold px-3 text-sm">{el.odd}</span>
         </div>
         <div>
-          <span className="text-red-500 px-3 font-bold text-xs">{el.name}</span>
+          <span className="text-red-500 px-3 font-bold text-xs text-center">
+            {el.name}
+          </span>
         </div>
         <div>
           <span className="text-white font-bold text-sm">Прибыль</span>

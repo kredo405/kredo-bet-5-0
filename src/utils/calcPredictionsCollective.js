@@ -1,8 +1,10 @@
+import { ConstructionOutlined } from "@mui/icons-material";
 import {
   scoresMatch,
   scoresFirstTime,
   scoresSecondTime,
 } from "../variables/scores";
+import { calcAvgGolas } from "./calcAvgGoals";
 
 // Функция для расчета вероятности Пуассона
 function poissonProbability(lambda, k) {
@@ -48,16 +50,28 @@ function calculateCollectiveIntelligence(data) {
     scores.forEach((score) => {
       if (period === 1 && combinedScoresFirstTime.hasOwnProperty(score)) {
         combinedScoresFirstTime[score].quantity +=
-          (combinedScoresFirstTime[score].probability * 100 + profit) / 2;
+          ((combinedScoresFirstTime[score].probability * 100 +
+            combinedScoresFirstTime[score].worldProbabilty) /
+            2 +
+            profit) /
+          2;
       } else if (
         period === 2 &&
         combinedScoresSecondTime.hasOwnProperty(score)
       ) {
         combinedScoresSecondTime[score].quantity +=
-          (combinedScoresSecondTime[score].probability * 100 + profit) / 2;
+          ((combinedScoresSecondTime[score].probability * 100 +
+            combinedScoresSecondTime[score].worldProbabilty) /
+            2 +
+            profit) /
+          2;
       } else if (period === 3 && combinedScoresMatch.hasOwnProperty(score)) {
         combinedScoresMatch[score].quantity +=
-          (combinedScoresMatch[score].probability * 100 + profit) / 2;
+          ((combinedScoresMatch[score].probability * 100 +
+            combinedScoresMatch[score].worldProbabilty) /
+            2 +
+            profit) /
+          2;
       }
     });
   });
@@ -104,25 +118,103 @@ function normalizeProfit(profit) {
   return Math.max(0, Math.min(normalized, 100)); // Ограничение значения от 0 до 100
 }
 
+// Функция для нахождения элементов с наибольшим quantity
+function findTopElementsByQuantity(data, thresholdPercentage = 10) {
+  let maxQuantity = 0;
+  for (const score in data) {
+    if (data[score].quantity > maxQuantity) {
+      maxQuantity = data[score].quantity;
+    }
+  }
+
+  const threshold = (maxQuantity * thresholdPercentage) / 100;
+  const topElements = {};
+
+  for (const score in data) {
+    if (data[score].quantity >= maxQuantity - threshold) {
+      topElements[score] = data[score];
+    }
+  }
+
+  return topElements;
+}
+
+// Функция для нахождения топовых прогнозов по счетам
+function calcTopPredictionsByScore(
+  predictions,
+  scoresData,
+  thresholdPercentage = 10
+) {
+  // Найти топовые элементы по quantity
+  const topScores = findTopElementsByQuantity(scoresData, thresholdPercentage);
+  const topScoreKeys = Object.keys(topScores);
+
+  // Фильтровать прогнозы по счетам
+  const result = predictions.filter((prediction) => {
+    return topScoreKeys.every((topScore) =>
+      prediction.scores.includes(topScore)
+    );
+  });
+
+  return result;
+}
+
 // Основная функция для расчета прогнозов методом коллективного интеллекта
 export default function calcPredictionCollective(
   predictions,
   odds,
   historyOdds,
-  summary
+  summary,
+  lastMatches,
+  info
 ) {
   const data = [];
-  const avgGoals = (summary) => (summary[0][8] + summary[1][9]) / 2;
+  const avgGoals = (goalsFor, avgGoalsAgainst) =>
+    (goalsFor + avgGoalsAgainst) / 2;
+
+  console.log(lastMatches);
+  console.log(info);
+
+  // calcAvgGolas
 
   // Матч
-  const individualTotalAvgHome = avgGoals(summary[0]);
-  const individualTotalAvgAway = avgGoals(summary[0]);
+  const individualTotalHome = calcAvgGolas(
+    lastMatches[0],
+    lastMatches[2],
+    info["7"]["1"]
+  );
+  const individualTotalAway = calcAvgGolas(
+    lastMatches[1],
+    lastMatches[2],
+    info["8"]["1"]
+  );
+
+  const individualTotalAvgHome = avgGoals(
+    individualTotalHome.avgGoalsFor,
+    individualTotalAway.avgGoalsAgainst
+  );
+  const individualTotalAvgAway = avgGoals(
+    individualTotalAway.avgGoalsFor,
+    individualTotalHome.avgGoalsAgainst
+  );
   // 1 тайм
-  const individualTotalAvgHome1 = avgGoals(summary[1]);
-  const individualTotalAvgAway1 = avgGoals(summary[1]);
+  const individualTotalAvgHome1 = avgGoals(
+    individualTotalHome.avgGoalsForFirstTime,
+    individualTotalAway.avgGoalsAgainstFirstTime
+  );
+  const individualTotalAvgAway1 = avgGoals(
+    individualTotalAway.avgGoalsForFirstTime,
+    individualTotalHome.avgGoalsAgainstFirstTime
+  );
   // 2 тайм
-  const individualTotalAvgHome2 = avgGoals(summary[2]);
-  const individualTotalAvgAway2 = avgGoals(summary[2]);
+  const individualTotalAvgHome2 = avgGoals(
+    individualTotalHome.avgGoalsForSecondTime,
+    individualTotalAway.avgGoalsAgainstSecondTime
+  );
+  const individualTotalAvgAway2 = avgGoals(
+    individualTotalAway.avgGoalsForSecondTime,
+    individualTotalHome.avgGoalsAgainstSecondTime
+  );
 
   // Расчет вероятностей для матча
   calculatePoissonProbabilities(
@@ -162,8 +254,9 @@ export default function calcPredictionCollective(
     });
   });
 
-  const filterPredictionsByProfit = data.filter((item) => item.profit > -10);
-  const uniquePredictions = removeDuplicates(filterPredictionsByProfit);
+  const uniquePredictions = removeDuplicates(data);
+
+  console.log(uniquePredictions);
 
   const collectivePrediction =
     calculateCollectiveIntelligence(uniquePredictions);
@@ -192,8 +285,52 @@ export default function calcPredictionCollective(
     };
   });
 
-  const result = findTopByQuantity(dataWithQuantity);
-  const uniqueItems = removeDuplicatesName(result);
+  const dataMatch = dataWithQuantity.filter((item) => item.period === 3);
+  const dataFirstTime = dataWithQuantity.filter((item) => item.period === 1);
+  const dataSecondTime = dataWithQuantity.filter((item) => item.period === 2);
 
-  return uniqueItems.slice(0, 2);
+  const dataMatchByScore = calcTopPredictionsByScore(
+    dataMatch,
+    collectivePrediction.combinedScoresMatch
+  ).filter((el) => el.odd >= 1.5);
+
+  const uniquePredictionsMatchByScores = removeDuplicatesName(dataMatchByScore);
+
+  console.log(uniquePredictionsMatchByScores);
+  const dataFirstTimeByScore = calcTopPredictionsByScore(
+    dataFirstTime,
+    collectivePrediction.combinedScoresFirstTime
+  ).filter((el) => el.odd >= 1.5);
+  const uniquePredictionsFirstTimeByScores =
+    removeDuplicatesName(dataFirstTimeByScore);
+  const dataSecondTimeByScore = calcTopPredictionsByScore(
+    dataSecondTime,
+    collectivePrediction.combinedScoresSecondTime
+  ).filter((el) => el.odd >= 1.5);
+  const uniquePredictionsSecondTimeByScores = removeDuplicatesName(
+    dataSecondTimeByScore
+  );
+
+  const resultMatch = findTopByQuantity(dataMatch);
+  const resultFirstTime = findTopByQuantity(dataFirstTime);
+  const resultSecondTime = findTopByQuantity(dataSecondTime);
+
+  const uniqueItemsMatch = removeDuplicatesName(resultMatch).slice(0, 2);
+  const uniqueItemsFirstTime = removeDuplicatesName(resultFirstTime).slice(
+    0,
+    2
+  );
+  const uniqueItemsSecondTime = removeDuplicatesName(resultSecondTime).slice(
+    0,
+    2
+  );
+
+  return {
+    uniqueItemsMatch,
+    uniqueItemsFirstTime,
+    uniqueItemsSecondTime,
+    uniquePredictionsFirstTimeByScores,
+    uniquePredictionsSecondTimeByScores,
+    uniquePredictionsMatchByScores,
+  };
 }

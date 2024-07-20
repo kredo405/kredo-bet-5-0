@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
-import { BackTop, Modal, Progress, Statistic } from "antd";
+import { BackTop, Modal, Segmented } from "antd";
 import { Loading } from "../../components/Loading/Loading";
 import { nbbetServices } from "../../services/nbbet";
 import getOdds from "../../utils/getOdds";
@@ -10,6 +10,8 @@ import calcPredictionCollective from "../../utils/calcPredictionsCollective";
 import filterPredictions from "../../utils/filterPredictions";
 import { Empty } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
+import Facts from "../../components/facts/Facts";
+import LastMatches from "../../components/lastMatches/LastMatches";
 
 const errorModal = (message) => {
   Modal.error({
@@ -144,6 +146,7 @@ const Match = () => {
       },
     ],
   });
+  const [content, setContent] = useState("");
 
   const getPredict = () => {
     const preditionCopy = JSON.parse(JSON.stringify(predictions));
@@ -309,6 +312,7 @@ const Match = () => {
           getOdds(),
           nbbetServices.getSummary(),
         ]);
+        console.log(lastMatches);
 
         const matchesPredictionsNbbet = [
           ...matchesPredictionsNbbet1.data.match.data["1"],
@@ -349,6 +353,20 @@ const Match = () => {
             </h1>
           </div>
 
+          <div className="flex flex-col justify-center mb-8 ">
+            <div className="text-white font-mono font-bold text-center">
+              {info[18][2]}
+            </div>
+            <div className="flex justify-center mt-2">
+              <span className="text-white font-mono px-4 text-lg  text-center">
+                {info[18][3]}
+              </span>
+              <span className="text-white font-mono text-lg text-center">
+                {info[18][4]}
+              </span>
+            </div>
+          </div>
+
           <div className="flex justify-evenly item-center">
             <div className="flex flex-col items-center w-5/12">
               <img className="w-6/12" src={info[7][2]} alt="логотип" />
@@ -372,32 +390,84 @@ const Match = () => {
               </span>
             </div>
           </div>
+
           <div className="flex justify-center my-5">
-            <button
-              onClick={getPredict}
-              className="px-7 py-3 rounded-lg bg-orange-500 text-white font-mono font-bold"
-            >
-              Рассчитать прогноз
-            </button>
+            <Segmented
+              className="text-white font-bold bg-sky-400 bg-opacity-40"
+              options={["Прогноз", "Факты", "Матчи"]}
+              defaultValue="Прогноз"
+              onChange={(value) => {
+                if (value === "Прогноз") {
+                  setContent(
+                    <>
+                      <div className="flex justify-center my-5">
+                        <button
+                          onClick={getPredict}
+                          className="px-7 py-3 rounded-lg bg-orange-500 text-white font-mono font-bold"
+                        >
+                          Рассчитать прогноз
+                        </button>
+                      </div>
+                      <h2 className="text-white font-bold font-mono text-xl text-center mt-3">
+                        Топ прогнозы
+                      </h2>
+                      <div className="pb-10">
+                        {elementsWeight.length > 0 ? (
+                          elementsWeight
+                        ) : (
+                          <div className=" flex justify-center items-center">
+                            <Empty
+                              description={
+                                <span className="font-mono text-lg font-medium text-white">
+                                  На данный момент нет топ прогнозов
+                                </span>
+                              }
+                            ></Empty>
+                          </div>
+                        )}
+                      </div>
+                    </>
+                  );
+                } else if (value === "Факты") {
+                  setContent(<Facts info={info} />);
+                } else if (value === "Матчи") {
+                  setContent(<LastMatches matches={lastMatches} />);
+                }
+              }}
+            />
           </div>
-          <h2 className="text-white font-bold font-mono text-xl text-center mt-3">
-            Топ прогнозы
-          </h2>
-          <div className="pb-10">
-            {elementsWeight.length > 0 ? (
-              elementsWeight
-            ) : (
-              <div className=" flex justify-center items-center">
-                <Empty
-                  description={
-                    <span className="font-mono text-lg font-medium text-white">
-                      На данный момент нет топ прогнозов
-                    </span>
-                  }
-                ></Empty>
+          {content ? (
+            content
+          ) : (
+            <>
+              <div className="flex justify-center my-5">
+                <button
+                  onClick={getPredict}
+                  className="px-7 py-3 rounded-lg bg-orange-500 text-white font-mono font-bold"
+                >
+                  Рассчитать прогноз
+                </button>
               </div>
-            )}
-          </div>
+              <h2 className="text-white font-bold font-mono text-xl text-center mt-3">
+                Топ прогнозы
+              </h2>
+              <div className="pb-10">
+                {elementsWeight.length > 0 ? (
+                  elementsWeight
+                ) : (
+                  <div className=" flex justify-center items-center">
+                    <Empty
+                      description={
+                        <span className="font-mono text-lg font-medium text-white">
+                          На данный момент нет топ прогнозов
+                        </span>
+                      }
+                    ></Empty>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
         </div>
       ) : (
         <Loading />

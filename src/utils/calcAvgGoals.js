@@ -4,9 +4,9 @@ function dataConvqrsion(data) {
       homeTeam: el["7"],
       awayTeam: el["15"],
       homeGoals: Math.min(el["10"], 3),
-      awayGoals: Math.min(el["18"], 3),
-      homeGoalsFirstTime: Math.min(el["11"], 2),
-      awayGoalsFirstTime: Math.min(el["19"], 2),
+      awayGoals: Math.min(el["18"], 3) - 0.1,
+      homeGoalsFirstTime: Math.min(el["11"], 2) - 0.1,
+      awayGoalsFirstTime: Math.min(el["19"], 2) - 0.1,
       homeGoalsSecondTime: Math.min(el["10"] - el["11"], 2),
       awayGoalsSecondTime: Math.min(el["18"] - el["19"], 2),
     };
@@ -16,10 +16,6 @@ function dataConvqrsion(data) {
 }
 
 export function calcAvgGolas(matches, h2hMatches, team) {
-  console.log(matches);
-  console.log(h2hMatches);
-  console.log(team);
-
   const historicalMatches = dataConvqrsion(matches);
   const historicalH2HMatches = dataConvqrsion(h2hMatches);
   // Функция для расчета среднего количества голов за последние N матчей с учетом веса

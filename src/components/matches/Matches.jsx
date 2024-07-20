@@ -14,7 +14,9 @@ const errorModal = (message) => {
 
 const Matches = () => {
   const [arrMatches, setArrayMatches] = useState([]);
+  const [filteredMatches, setFilteredMatches] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const dispatch = useDispatch();
   const history = useNavigate();
 
@@ -44,6 +46,7 @@ const Matches = () => {
         );
 
         setArrayMatches(filterMatches);
+        setFilteredMatches(filterMatches);
         dispatch(setMatches(filterMatches));
         setIsLoading(true);
       } catch (error) {
@@ -53,12 +56,24 @@ const Matches = () => {
     };
 
     getData();
-  }, []);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setFilteredMatches(arrMatches);
+    } else {
+      const query = searchQuery.toLowerCase();
+      const filtered = arrMatches.filter((el) =>
+        el["1"].toLowerCase().includes(query)
+      );
+      setFilteredMatches(filtered);
+    }
+  }, [searchQuery, arrMatches]);
 
   let elements;
 
-  if (arrMatches.length > 0) {
-    elements = arrMatches.map((el, i) => {
+  if (filteredMatches.length > 0) {
+    elements = filteredMatches.map((el, i) => {
       let matchElements = el["4"].map((item, i) => {
         return (
           <div
@@ -137,7 +152,7 @@ const Matches = () => {
       <div className="h-screen flex justify-center items-center">
         <Empty
           description={
-            <span className="font-mono text-lg font-medium text-gray-700">
+            <span className="font-mono  text-lg font-medium text-gray-100">
               На данный момент нет матчей
             </span>
           }
@@ -147,9 +162,30 @@ const Matches = () => {
   }
 
   return (
-    <div className="container lg:px-44 pt-20 ">
-      <BackTop />
-      {isLoading ? elements : <Loading />}
+    <div>
+      <div className="container lg:px-44 pt-10 ">
+        <BackTop />
+
+        {isLoading ? (
+          <>
+            <div className="mb-10">
+              <form>
+                <input
+                  className="rounded-lg w-full md:w-5/12 px-3 py-2"
+                  placeholder="Введите название страны"
+                  type="search"
+                  name="search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </form>
+            </div>
+            {elements}
+          </>
+        ) : (
+          <Loading />
+        )}
+      </div>
     </div>
   );
 };

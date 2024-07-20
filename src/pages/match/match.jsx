@@ -12,6 +12,7 @@ import { Empty } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 import Facts from "../../components/facts/Facts";
 import LastMatches from "../../components/lastMatches/LastMatches";
+import PercentPredict from "../../components/percentPredict/PercentPredict";
 
 const errorModal = (message) => {
   Modal.error({
@@ -408,6 +409,12 @@ const Match = () => {
                           Рассчитать прогноз
                         </button>
                       </div>
+                      <h2 className="text-white font-bold font-mono text-xl text-center my-3">
+                        Прогнозы пользователей
+                      </h2>
+                      <div>
+                        <PercentPredict predictions={predictions} odds={odds} />
+                      </div>
                       <h2 className="text-white font-bold font-mono text-xl text-center mt-3">
                         Топ прогнозы
                       </h2>
@@ -447,6 +454,12 @@ const Match = () => {
                 >
                   Рассчитать прогноз
                 </button>
+              </div>
+              <h2 className="text-white font-bold font-mono text-xl text-center my-3">
+                Прогнозы пользователей
+              </h2>
+              <div>
+                <PercentPredict predictions={predictions} odds={odds} />
               </div>
               <h2 className="text-white font-bold font-mono text-xl text-center mt-3">
                 Топ прогнозы

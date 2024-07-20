@@ -343,7 +343,7 @@ const Match = () => {
   }, []);
 
   return (
-    <div className=" bg-[url('https://sportishka.com/uploads/posts/2022-08/1660150573_1-sportishka-com-p-futbolnii-fon-dlya-prezentatsii-sport-kras-1.jpg')] bg-cover bg-fixed">
+    <div className=" bg-[url('https://sportishka.com/uploads/posts/2022-08/1660150573_1-sportishka-com-p-futbolnii-fon-dlya-prezentatsii-sport-kras-1.jpg')] bg-auto bg-fixed">
       <Header />
       <BackTop />
       {isLoading ? (
@@ -401,14 +401,6 @@ const Match = () => {
                 if (value === "Прогноз") {
                   setContent(
                     <>
-                      <div className="flex justify-center my-5">
-                        <button
-                          onClick={getPredict}
-                          className="px-7 py-3 rounded-lg bg-orange-500 text-white font-mono font-bold"
-                        >
-                          Рассчитать прогноз
-                        </button>
-                      </div>
                       <h2 className="text-white font-bold font-mono text-xl text-center my-3">
                         Прогнозы пользователей
                       </h2>
@@ -433,6 +425,15 @@ const Match = () => {
                           </div>
                         )}
                       </div>
+                      <div className="flex justify-center my-3">
+                        <button
+                          onClick={getPredict}
+                          className="px-7 py-3 rounded-lg bg-orange-500 text-white font-mono font-bold"
+                        >
+                          Рассчитать прогноз
+                        </button>
+                      </div>
+                      <div className="mt-5">.</div>
                     </>
                   );
                 } else if (value === "Факты") {
@@ -447,14 +448,6 @@ const Match = () => {
             content
           ) : (
             <>
-              <div className="flex justify-center my-5">
-                <button
-                  onClick={getPredict}
-                  className="px-7 py-3 rounded-lg bg-orange-500 text-white font-mono font-bold"
-                >
-                  Рассчитать прогноз
-                </button>
-              </div>
               <h2 className="text-white font-bold font-mono text-xl text-center my-3">
                 Прогнозы пользователей
               </h2>
@@ -479,6 +472,15 @@ const Match = () => {
                   </div>
                 )}
               </div>
+              <div className="flex justify-center my-3 mb-5">
+                <button
+                  onClick={getPredict}
+                  className="px-7 py-3 rounded-lg bg-orange-500 text-white font-mono font-bold"
+                >
+                  Рассчитать прогноз
+                </button>
+              </div>
+              <div className="mt-5">.</div>
             </>
           )}
         </div>

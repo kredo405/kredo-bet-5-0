@@ -128,12 +128,20 @@ function findTopElementsByQuantity(data, thresholdPercentage = 10) {
   }
 
   const threshold = (maxQuantity * thresholdPercentage) / 100;
-  const topElements = {};
+  const topElementsArray = [];
 
   for (const score in data) {
     if (data[score].quantity >= maxQuantity - threshold) {
-      topElements[score] = data[score];
+      topElementsArray.push({ score: score, ...data[score] });
     }
+  }
+
+  topElementsArray.sort((a, b) => b.quantity - a.quantity);
+  const topElements = {};
+
+  for (let i = 0; i < Math.min(3, topElementsArray.length); i++) {
+    const element = topElementsArray[i];
+    topElements[element.score] = { quantity: element.quantity };
   }
 
   return topElements;

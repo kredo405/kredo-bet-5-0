@@ -172,11 +172,6 @@ export default function calcPredictionCollective(
   const avgGoals = (goalsFor, avgGoalsAgainst) =>
     (goalsFor + avgGoalsAgainst) / 2;
 
-  console.log(lastMatches);
-  console.log(info);
-
-  // calcAvgGolas
-
   // Матч
   const individualTotalHome = calcAvgGolas(
     lastMatches[0],
@@ -296,13 +291,20 @@ export default function calcPredictionCollective(
 
   const uniquePredictionsMatchByScores = removeDuplicatesName(dataMatchByScore);
 
-  console.log(uniquePredictionsMatchByScores);
+  const uniquePredictionsMatchByScoresSorted = findTopByQuantity(
+    uniquePredictionsMatchByScores
+  ).slice(0, 3);
+
   const dataFirstTimeByScore = calcTopPredictionsByScore(
     dataFirstTime,
     collectivePrediction.combinedScoresFirstTime
   ).filter((el) => el.odd >= 1.5);
   const uniquePredictionsFirstTimeByScores =
     removeDuplicatesName(dataFirstTimeByScore);
+
+  const uniquePredictionsFirstTimeByScoresSorted = findTopByQuantity(
+    uniquePredictionsFirstTimeByScores
+  ).slice(0, 3);
   const dataSecondTimeByScore = calcTopPredictionsByScore(
     dataSecondTime,
     collectivePrediction.combinedScoresSecondTime
@@ -310,6 +312,9 @@ export default function calcPredictionCollective(
   const uniquePredictionsSecondTimeByScores = removeDuplicatesName(
     dataSecondTimeByScore
   );
+  const uniquePredictionsSecondTimeByScoresSorted = findTopByQuantity(
+    uniquePredictionsSecondTimeByScores
+  ).slice(0, 3);
 
   const resultMatch = findTopByQuantity(dataMatch);
   const resultFirstTime = findTopByQuantity(dataFirstTime);
@@ -329,8 +334,8 @@ export default function calcPredictionCollective(
     uniqueItemsMatch,
     uniqueItemsFirstTime,
     uniqueItemsSecondTime,
-    uniquePredictionsFirstTimeByScores,
-    uniquePredictionsSecondTimeByScores,
-    uniquePredictionsMatchByScores,
+    uniquePredictionsFirstTimeByScoresSorted,
+    uniquePredictionsSecondTimeByScoresSorted,
+    uniquePredictionsMatchByScoresSorted,
   };
 }

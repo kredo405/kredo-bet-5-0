@@ -24,7 +24,10 @@ const showInfo = (
   res2,
   firstTimePredict,
   seconsdTimePredict,
-  matchPredict
+  matchPredict,
+  matchPredictNotScore,
+  firstTimePredictNotScore,
+  seconsdTimePredictNotScore
 ) => {
   Modal.info({
     title: `Прогноз на матч: ${data.prediction}`,
@@ -67,23 +70,7 @@ const showInfo = (
                   Доп.
                 </h4>
                 <div className="  border-2 border-solid border-lime-700 p-2 mt-2 rounded-xl">
-                  <div className="flex justify-between items-center">
-                    <p className="font-sans text-red-800 font-medium text-center py-2">
-                      {res2.uniqueItemsFirstTime[0].name}
-                    </p>
-                    <p className="font-sans text-sky-700 font-medium">
-                      {res2.uniqueItemsFirstTime[0].odd}
-                    </p>
-                  </div>
-
-                  <div className="flex justify-between items-center">
-                    <p className="font-sans  text-red-800 font-medium text-center py-2">
-                      {res2.uniqueItemsFirstTime[1].name}
-                    </p>
-                    <p className="font-sans text-sky-700 font-medium">
-                      {res2.uniqueItemsFirstTime[1].odd}
-                    </p>
-                  </div>
+                  {firstTimePredictNotScore}
                 </div>
                 <h3 className="py-2 font-bold text-2xl text-orange-600 text-center">
                   2 Тайм
@@ -102,23 +89,7 @@ const showInfo = (
                   Доп.
                 </h4>
                 <div className="  border-2 border-solid border-lime-700 p-2 mt-2 rounded-xl">
-                  <div className="flex justify-between items-center">
-                    <p className="font-sans text-red-800 font-medium text-center py-2">
-                      {res2.uniqueItemsSecondTime[0].name}
-                    </p>
-                    <p className="font-sans text-sky-700 font-medium">
-                      {res2.uniqueItemsSecondTime[0].odd}
-                    </p>
-                  </div>
-
-                  <div className="flex justify-between items-center">
-                    <p className="font-sans  text-red-800 font-medium text-center py-2">
-                      {res2.uniqueItemsSecondTime[1].name}
-                    </p>
-                    <p className="font-sans text-sky-700 font-medium">
-                      {res2.uniqueItemsSecondTime[1].odd}
-                    </p>
-                  </div>
+                  {seconsdTimePredictNotScore}
                 </div>
 
                 <h3 className="py-2 font-bold text-2xl text-orange-600 text-center">
@@ -138,23 +109,7 @@ const showInfo = (
                   Доп.
                 </h4>
                 <div className="  border-2 border-solid border-lime-700 p-2 mt-2 rounded-xl">
-                  <div className="flex justify-between items-center">
-                    <p className="font-sans text-red-800 font-medium text-center py-2">
-                      {res2.uniqueItemsMatch[0].name}
-                    </p>
-                    <p className="font-sans text-sky-700 font-medium">
-                      {res2.uniqueItemsMatch[0].odd}
-                    </p>
-                  </div>
-
-                  <div className="flex justify-between items-center">
-                    <p className="font-sans  text-red-800 font-medium text-center py-2">
-                      {res2.uniqueItemsMatch[1].name}
-                    </p>
-                    <p className="font-sans text-sky-700 font-medium">
-                      {res2.uniqueItemsMatch[1].odd}
-                    </p>
-                  </div>
+                  {matchPredictNotScore}
                 </div>
               </div>
             </div>
@@ -216,7 +171,35 @@ const Match = () => {
       info
     );
 
-    const firstTimePredict = res2.uniquePredictionsFirstTimeByScores.map(
+    console.log(res2);
+
+    const firstTimePredictByScore =
+      res2.uniquePredictionsFirstTimeByScoresSorted.map((el) => {
+        return (
+          <div className="flex justify-between items-center border-b-2 border-solid border-sky-700">
+            <p className="font-sans text-xl text-red-800 font-medium text-center py-3">
+              {el.name}
+            </p>
+            <p className="font-sans text-sky-700 font-medium text-xl">
+              {el.odd}
+            </p>
+          </div>
+        );
+      });
+    const seconsdTimePredictByScore =
+      res2.uniquePredictionsSecondTimeByScoresSorted.map((el) => {
+        return (
+          <div className="flex justify-between items-center border-b-2 border-solid border-sky-700">
+            <p className="font-sans text-xl text-red-800 font-medium text-center py-3">
+              {el.name}
+            </p>
+            <p className="font-sans text-sky-700 font-medium text-xl">
+              {el.odd}
+            </p>
+          </div>
+        );
+      });
+    const matchPredictByScore = res2.uniquePredictionsMatchByScoresSorted.map(
       (el) => {
         return (
           <div className="flex justify-between items-center border-b-2 border-solid border-sky-700">
@@ -230,27 +213,34 @@ const Match = () => {
         );
       }
     );
-    const seconsdTimePredict = res2.uniquePredictionsSecondTimeByScores.map(
-      (el) => {
-        return (
-          <div className="flex justify-between items-center border-b-2 border-solid border-sky-700">
-            <p className="font-sans text-xl text-red-800 font-medium text-center py-3">
-              {el.name}
-            </p>
-            <p className="font-sans text-sky-700 font-medium text-xl">
-              {el.odd}
-            </p>
-          </div>
-        );
-      }
-    );
-    const matchPredict = res2.uniquePredictionsMatchByScores.map((el) => {
+    const matchPredict = res2.uniqueItemsMatch.map((el) => {
       return (
-        <div className="flex justify-between items-center border-b-2 border-solid border-sky-700">
-          <p className="font-sans text-xl text-red-800 font-medium text-center py-3">
+        <div className="flex justify-between items-center">
+          <p className="font-sans text-red-800 font-medium text-center py-2">
             {el.name}
           </p>
-          <p className="font-sans text-sky-700 font-medium text-xl">{el.odd}</p>
+          <p className="font-sans text-sky-700 font-medium">{el.odd}</p>
+        </div>
+      );
+    });
+    const firstTimePredict = res2.uniqueItemsFirstTime.map((el) => {
+      return (
+        <div className="flex justify-between items-center">
+          <p className="font-sans text-red-800 font-medium text-center py-2">
+            {el.name}
+          </p>
+          <p className="font-sans text-sky-700 font-medium">{el.odd}</p>
+        </div>
+      );
+    });
+
+    const seconsdTimePredict = res2.uniqueItemsSecondTime.map((el) => {
+      return (
+        <div className="flex justify-between items-center">
+          <p className="font-sans text-red-800 font-medium text-center py-2">
+            {el.name}
+          </p>
+          <p className="font-sans text-sky-700 font-medium">{el.odd}</p>
         </div>
       );
     });
@@ -260,9 +250,12 @@ const Match = () => {
       res.sample,
       resNew,
       res2,
+      firstTimePredictByScore,
+      seconsdTimePredictByScore,
+      matchPredictByScore,
+      matchPredict,
       firstTimePredict,
-      seconsdTimePredict,
-      matchPredict
+      seconsdTimePredict
     );
   };
 

@@ -12,7 +12,7 @@ const Facts = ({ info }) => {
     return (
       <div
         key={i}
-        className="px-3 py-2 rounded-lg text-white font-mono mt-2 bg-cyan-300 rounded-2xl bg-opacity-40"
+        className="px-3 py-2 rounded-lg text-white font-mono mt-2 bg-cyan-700 rounded-2xl bg-opacity-80"
       >
         <span className="text-orange-300 font-bold px-2">{i}.</span>
         {el["1"]}

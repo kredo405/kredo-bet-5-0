@@ -1,3 +1,15 @@
+function removeDuplicatesName(data) {
+  const uniqueItems = new Set();
+  return data.filter((item) => {
+    const identifier = `${item.profit}`;
+    if (!uniqueItems.has(identifier)) {
+      uniqueItems.add(identifier);
+      return true;
+    }
+    return false;
+  });
+}
+
 export function calcPercentPredictions(predictions, odds) {
   const data = [];
 
@@ -16,14 +28,17 @@ export function calcPercentPredictions(predictions, odds) {
     });
   });
 
+  const dataFiltered = removeDuplicatesName(data);
+  console.log(dataFiltered);
+
   // Объект для хранения итогов
   const result = {};
 
   // Общий подсчет количества прогнозов
-  const totalPredictions = data.length;
+  const totalPredictions = dataFiltered.length;
 
   // Проходим по каждому прогнозу
-  data.forEach((prediction) => {
+  dataFiltered.forEach((prediction) => {
     const { name, probability, odd, profit } = prediction;
 
     // Если такой исход еще не записан в результатах

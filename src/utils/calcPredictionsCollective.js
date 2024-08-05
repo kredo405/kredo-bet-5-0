@@ -1,42 +1,9 @@
-import { ConstructionOutlined } from "@mui/icons-material";
 import {
   scoresMatch,
   scoresFirstTime,
   scoresSecondTime,
 } from "../variables/scores";
 import { calcAvgGolas } from "./calcAvgGoals";
-
-// Функция для расчета вероятности Пуассона
-function poissonProbability(lambda, k) {
-  return (Math.pow(lambda, k) * Math.exp(-lambda)) / factorial(k);
-}
-
-// Функция для расчета факториала
-function factorial(n) {
-  return n <= 1 ? 1 : n * factorial(n - 1);
-}
-
-// Функция для расчета вероятностей Пуассона для всех возможных счетов
-function calculatePoissonProbabilities(
-  scores,
-  avgGoalsHome,
-  avgGoalsAway,
-  maxGoals
-) {
-  for (let homeGoals = 0; homeGoals <= maxGoals; homeGoals++) {
-    for (let awayGoals = 0; awayGoals <= maxGoals; awayGoals++) {
-      const scoreKey = `${homeGoals}:${awayGoals}`;
-      const probHome = poissonProbability(avgGoalsHome, homeGoals);
-      const probAway = poissonProbability(avgGoalsAway, awayGoals);
-      const probability = probHome * probAway;
-      if (scores.hasOwnProperty(scoreKey)) {
-        scores[scoreKey].probability = probability;
-      } else {
-        scores[scoreKey] = { probability, quantity: 0 };
-      }
-    }
-  }
-}
 
 // Метод коллективного интеллекта
 function calculateCollectiveIntelligence(data) {
@@ -50,28 +17,16 @@ function calculateCollectiveIntelligence(data) {
     scores.forEach((score) => {
       if (period === 1 && combinedScoresFirstTime.hasOwnProperty(score)) {
         combinedScoresFirstTime[score].quantity +=
-          ((combinedScoresFirstTime[score].probability * 100 +
-            combinedScoresFirstTime[score].worldProbabilty) /
-            2 +
-            profit) /
-          2;
+          combinedScoresFirstTime[score].worldProbabilty;
       } else if (
         period === 2 &&
         combinedScoresSecondTime.hasOwnProperty(score)
       ) {
         combinedScoresSecondTime[score].quantity +=
-          ((combinedScoresSecondTime[score].probability * 100 +
-            combinedScoresSecondTime[score].worldProbabilty) /
-            2 +
-            profit) /
-          2;
+          combinedScoresSecondTime[score].worldProbabilty;
       } else if (period === 3 && combinedScoresMatch.hasOwnProperty(score)) {
         combinedScoresMatch[score].quantity +=
-          ((combinedScoresMatch[score].probability * 100 +
-            combinedScoresMatch[score].worldProbabilty) /
-            2 +
-            profit) /
-          2;
+          combinedScoresMatch[score].worldProbabilty;
       }
     });
   });
@@ -171,76 +126,9 @@ function calcTopPredictionsByScore(
 export default function calcPredictionCollective(
   predictions,
   odds,
-  historyOdds,
-  summary,
-  lastMatches,
-  info
+  historyOdds
 ) {
   const data = [];
-  const avgGoals = (goalsFor, avgGoalsAgainst) =>
-    (goalsFor + avgGoalsAgainst) / 2;
-
-  // Матч
-  const individualTotalHome = calcAvgGolas(
-    lastMatches[0],
-    lastMatches[2],
-    info["7"]["1"]
-  );
-  const individualTotalAway = calcAvgGolas(
-    lastMatches[1],
-    lastMatches[2],
-    info["8"]["1"]
-  );
-
-  const individualTotalAvgHome = avgGoals(
-    individualTotalHome.avgGoalsFor,
-    individualTotalAway.avgGoalsAgainst
-  );
-  const individualTotalAvgAway = avgGoals(
-    individualTotalAway.avgGoalsFor,
-    individualTotalHome.avgGoalsAgainst
-  );
-  // 1 тайм
-  const individualTotalAvgHome1 = avgGoals(
-    individualTotalHome.avgGoalsForFirstTime,
-    individualTotalAway.avgGoalsAgainstFirstTime
-  );
-  const individualTotalAvgAway1 = avgGoals(
-    individualTotalAway.avgGoalsForFirstTime,
-    individualTotalHome.avgGoalsAgainstFirstTime
-  );
-  // 2 тайм
-  const individualTotalAvgHome2 = avgGoals(
-    individualTotalHome.avgGoalsForSecondTime,
-    individualTotalAway.avgGoalsAgainstSecondTime
-  );
-  const individualTotalAvgAway2 = avgGoals(
-    individualTotalAway.avgGoalsForSecondTime,
-    individualTotalHome.avgGoalsAgainstSecondTime
-  );
-
-  // Расчет вероятностей для матча
-  calculatePoissonProbabilities(
-    scoresMatch,
-    individualTotalAvgHome,
-    individualTotalAvgAway,
-    3
-  );
-  // Расчет вероятностей для 1 тайма
-  calculatePoissonProbabilities(
-    scoresFirstTime,
-    individualTotalAvgHome1,
-    individualTotalAvgAway1,
-    2
-  );
-  // Расчет вероятностей для 2 тайма
-  calculatePoissonProbabilities(
-    scoresSecondTime,
-    individualTotalAvgHome2,
-    individualTotalAvgAway2,
-    2
-  );
-
   // Собираем данные из прогнозов и коэффициентов
   predictions.forEach((prediction) => {
     odds.forEach((odd) => {
@@ -301,7 +189,7 @@ export default function calcPredictionCollective(
 
   const uniquePredictionsMatchByScoresSorted = findTopByQuantity(
     uniquePredictionsMatchByScores
-  ).slice(0, 3);
+  ).slice(0, 2);
 
   const dataFirstTimeByScore = calcTopPredictionsByScore(
     dataFirstTime,
@@ -312,7 +200,7 @@ export default function calcPredictionCollective(
 
   const uniquePredictionsFirstTimeByScoresSorted = findTopByQuantity(
     uniquePredictionsFirstTimeByScores
-  ).slice(0, 3);
+  ).slice(0, 2);
   const dataSecondTimeByScore = calcTopPredictionsByScore(
     dataSecondTime,
     collectivePrediction.combinedScoresSecondTime
@@ -322,7 +210,7 @@ export default function calcPredictionCollective(
   );
   const uniquePredictionsSecondTimeByScoresSorted = findTopByQuantity(
     uniquePredictionsSecondTimeByScores
-  ).slice(0, 3);
+  ).slice(0, 2);
 
   const resultMatch = findTopByQuantity(dataMatch);
   const resultFirstTime = findTopByQuantity(dataFirstTime);

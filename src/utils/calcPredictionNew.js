@@ -4,114 +4,73 @@ export default function calcPredictionNew(
   historyOdds,
   summary
 ) {
-  const resNormalized = [];
-  const resOriginal = [];
+  const resNormalized = []; // Нормализация прибыли к шкале от 0% до 100%
 
-  // Функция для приведения прибыли к шкале от 0% до 100%
   function normalizeProfit(profit) {
-    const normalized = (profit + 1000) / 20; // Приведение к шкале от 0 до 100
-    return Math.max(0, Math.min(normalized, 100)); // Ограничение значения от 0 до 100
+    const normalized = Math.max(0, Math.min((profit + 1000) / 20, 100));
+    return normalized;
   }
 
-  // Создание массива объектов прогнозов с нормализованной и оригинальной прибылью
   predictions.forEach((prediction) => {
     odds.forEach((odd) => {
       if (+odd.odd === prediction[2]) {
-        const basePrediction = {
+        resNormalized.push({
           odd: prediction[3],
           name: odd.name,
           probability: 1 / prediction[3] - 0.06,
-          rating: prediction[10], // Добавление рейтинга прогнозиста
+          rating: prediction[10],
           historyOdds: historyOdds[`${odd.odd}`],
-        };
-
-        resNormalized.push({
-          ...basePrediction,
-          profit: normalizeProfit(prediction[6]), // Нормализация прибыли
-        });
-
-        resOriginal.push({
-          ...basePrediction,
-          profit: prediction[6], // Оригинальная прибыль
+          profit: normalizeProfit(prediction[6]),
         });
       }
     });
-  });
+  }); // Рассчитываем изменение коэффициентов
 
-  console.log(resOriginal);
-  console.log(historyOdds);
-  console.log(summary);
-
-  // const obj = {
-  //   individualTotalAvgHome: 1.6,
-  //   individualTotalAvgAway: 1.3,
-  //   individualTotalAvgHomeOpponent: 1.4,
-  //   individualTotalAvgAwayOpponent: 1.9,
-  //   possesionHome: 54,
-  //   possesionAway: 44,
-  //   possesionHomeOpponent: 46,
-  //   possesionAwayOpponent: 56,
-  // }
-
-  // Функция для расчета изменения коэффициентов
   function calculateOddsChange(historyOdds) {
     if (!historyOdds || historyOdds.length < 2) return 0;
-    const firstOdd = historyOdds[0][1];
-    const lastOdd = historyOdds[historyOdds.length - 1][1];
-    return (lastOdd - firstOdd) / firstOdd;
-  }
+    return (
+      (historyOdds[historyOdds.length - 1][1] - historyOdds[0][1]) /
+      historyOdds[0][1]
+    );
+  } // Рассчитываем ценность ставки
 
-  // Функция для расчета ценности ставки
   function calculateBetValue(predictions) {
-    const betValues = {};
+    const betValues = new Map();
 
     predictions.forEach((prediction) => {
       const oddsChange = calculateOddsChange(prediction.historyOdds);
       const value = prediction.profit * (1 + Math.abs(oddsChange));
 
-      if (!betValues[prediction.name]) {
-        betValues[prediction.name] = { ...prediction, value };
-      } else {
-        betValues[prediction.name].value += value;
-        betValues[prediction.name].probability = Math.max(
-          betValues[prediction.name].probability,
-          prediction.probability
-        );
+      if (!betValues.has(prediction.name)) {
+        betValues.set(prediction.name, { ...prediction, value });
+        return;
       }
+
+      const existing = betValues.get(prediction.name);
+      existing.value += value;
+      existing.probability = Math.max(
+        existing.probability,
+        prediction.probability
+      );
     });
 
-    return Object.values(betValues);
-  }
+    return Array.from(betValues.values());
+  } // Основная функция прогнозирования
 
-  // Основная функция для прогнозирования
-  function predictOutcome(predictionsNormalized, predictionsOriginal) {
+  function predictOutcome(predictionsNormalized) {
     const weightedPredictionsNormalized = calculateBetValue(
       predictionsNormalized
     );
-    const weightedPredictionsOriginal = calculateBetValue(predictionsOriginal);
+    weightedPredictionsNormalized.sort((a, b) => b.value - a.value); // Удаление дубликатов
 
-    weightedPredictionsNormalized.sort((a, b) => b.value - a.value); // Сортировка по убыванию ценности ставки
-    weightedPredictionsOriginal.sort((a, b) => b.value - a.value); // Сортировка по убыванию ценности ставки
+    const uniquePredictions = Array.from(
+      new Map(weightedPredictionsNormalized.map((p) => [p.name, p])).values()
+    );
 
-    const bestPredictionNormalized = weightedPredictionsNormalized[0];
-    const bestPredictionOriginal = weightedPredictionsOriginal[0];
-
-    return [
-      {
-        name: bestPredictionNormalized.name,
-        odd: bestPredictionNormalized.odd,
-        probability: bestPredictionNormalized.probability * 100,
-        value: bestPredictionNormalized.value,
-      },
-      {
-        name: bestPredictionOriginal.name,
-        odd: bestPredictionOriginal.odd,
-        probability: bestPredictionOriginal.probability * 100,
-        value: bestPredictionOriginal.value,
-      },
-    ];
+    return uniquePredictions.slice(0, 2);
   }
 
-  console.log(predictOutcome(resNormalized, resOriginal));
-  return predictOutcome(resNormalized, resOriginal); // Возвращаем два лучших прогноза
+  const bestTwoPredictions = predictOutcome(resNormalized);
+  console.log(bestTwoPredictions);
+  return bestTwoPredictions;
 }

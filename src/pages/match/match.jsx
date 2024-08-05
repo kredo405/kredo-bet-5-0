@@ -13,6 +13,7 @@ import { MoreOutlined } from "@ant-design/icons";
 import Facts from "../../components/facts/Facts";
 import LastMatches from "../../components/lastMatches/LastMatches";
 import PercentPredict from "../../components/percentPredict/PercentPredict";
+import calcMonteCarlo from "../../utils/calcMonteCarlo";
 
 const errorModal = (message) => {
   Modal.error({
@@ -37,12 +38,12 @@ const showInfo = (
     content: (
       <>
         {" "}
-        {sample >= 80 ? (
+        {sample >= 30 ? (
           <>
             <div>
               <div>
                 <h2 className="py-2 font-bold text-emerald-800 text-center">
-                  Старый метод
+                  Метод 1
                 </h2>
                 <div className="flex justify-between items-center">
                   <p className="font-sans text-xl text-red-800 font-medium text-center py-3">
@@ -55,49 +56,21 @@ const showInfo = (
               </div>
               <div>
                 <h2 className="py-2 font-bold text-emerald-800 text-center">
+                  Метод 2
+                </h2>
+                <div className="flex justify-between items-center">
+                  <p className="font-sans text-xl text-red-800 font-medium text-center py-3">
+                    {dataNew[0].name}
+                  </p>
+                  <p className="font-sans text-sky-700 font-medium text-xl">
+                    {dataNew[0].odd}
+                  </p>
+                </div>
+              </div>
+              <div>
+                <h2 className="py-2 font-bold text-emerald-800 text-center">
                   Коллективный интеллект
                 </h2>
-                <h3 className="py-2 font-bold text-2xl text-orange-600 text-center">
-                  1 Тайм
-                </h3>
-                <div>
-                  {firstTimePredict.length < 1 ? (
-                    <p className="py-2 font-bold text-orange-600 text-center">
-                      Мало данных
-                    </p>
-                  ) : (
-                    firstTimePredict
-                  )}
-                </div>
-                <h4 className="py-2 font-bold text-orange-600 text-center">
-                  Доп.
-                </h4>
-                <div className="  border-2 border-solid border-lime-700 p-2 mt-2 rounded-xl">
-                  {firstTimePredictNotScore}
-                </div>
-                <h3 className="py-2 font-bold text-2xl text-orange-600 text-center">
-                  2 Тайм
-                </h3>
-                <div>
-                  {seconsdTimePredict.length < 1 ? (
-                    <p className="py-2 font-bold text-orange-600 text-center">
-                      Мало данных
-                    </p>
-                  ) : (
-                    seconsdTimePredict
-                  )}
-                </div>
-
-                <h4 className="py-2 font-bold text-orange-600 text-center">
-                  Доп.
-                </h4>
-                <div className="  border-2 border-solid border-lime-700 p-2 mt-2 rounded-xl">
-                  {seconsdTimePredictNotScore}
-                </div>
-
-                <h3 className="py-2 font-bold text-2xl text-orange-600 text-center">
-                  Матч
-                </h3>
                 <div>
                   {matchPredict.length < 1 ? (
                     <p className="py-2 font-bold text-orange-600 text-center">

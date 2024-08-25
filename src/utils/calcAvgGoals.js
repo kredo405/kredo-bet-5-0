@@ -3,12 +3,8 @@ function dataConvqrsion(data) {
     return {
       homeTeam: el["7"],
       awayTeam: el["15"],
-      homeGoals: Math.min(el["10"], 3),
+      homeGoals: Math.min(el["10"], 3) + 0.1,
       awayGoals: Math.min(el["18"], 3) - 0.1,
-      homeGoalsFirstTime: Math.min(el["11"], 2) - 0.1,
-      awayGoalsFirstTime: Math.min(el["19"], 2) - 0.1,
-      homeGoalsSecondTime: Math.min(el["10"] - el["11"], 2),
-      awayGoalsSecondTime: Math.min(el["18"] - el["19"], 2),
     };
   });
 
@@ -18,7 +14,14 @@ function dataConvqrsion(data) {
 export function calcAvgGolas(matches, h2hMatches, team) {
   const historicalMatches = dataConvqrsion(matches);
   const historicalH2HMatches = dataConvqrsion(h2hMatches);
-  // Функция для расчета среднего количества голов за последние N матчей с учетом веса
+
+  // Функция для расчета экспоненциального веса
+  function exponentialWeight(index, totalMatches) {
+    const decay = 0.9; // Коэффициент затухания (можно настроить)
+    return Math.pow(decay, totalMatches - index);
+  }
+
+  // Улучшенная функция для расчета среднего количества голов
   function calculateAvgGoals(team, matches, h2hMatches, numMatches) {
     const teamMatches = matches
       .filter((match) => match.homeTeam === team || match.awayTeam === team)
@@ -29,7 +32,7 @@ export function calcAvgGolas(matches, h2hMatches, team) {
       : teamMatches;
 
     const totalGoalsFor = combinedMatches.reduce((sum, match, index) => {
-      const weight = index < 5 ? 1.5 : 1;
+      const weight = exponentialWeight(index, combinedMatches.length);
       if (match.homeTeam === team) {
         return sum + match.homeGoals * weight;
       } else if (match.awayTeam === team) {
@@ -39,7 +42,7 @@ export function calcAvgGolas(matches, h2hMatches, team) {
     }, 0);
 
     const totalGoalsAgainst = combinedMatches.reduce((sum, match, index) => {
-      const weight = index < 5 ? 1.5 : 1;
+      const weight = exponentialWeight(index, combinedMatches.length);
       if (match.homeTeam === team) {
         return sum + match.awayGoals * weight;
       } else if (match.awayTeam === team) {
@@ -48,78 +51,18 @@ export function calcAvgGolas(matches, h2hMatches, team) {
       return sum;
     }, 0);
 
-    const avgGoalsFor = totalGoalsFor / (combinedMatches.length * 1.25);
-    const avgGoalsAgainst = totalGoalsAgainst / (combinedMatches.length * 1.25);
-
-    const totalGoalsForFirstTime = combinedMatches.reduce(
-      (sum, match, index) => {
-        const weight = index < 5 ? 1.5 : 1;
-        if (match.homeTeam === team) {
-          return sum + match.homeGoalsFirstTime * weight;
-        } else if (match.awayTeam === team) {
-          return sum + match.awayGoalsFirstTime * weight;
-        }
-        return sum;
-      },
+    // Учитываем вес при расчете среднего количества голов
+    const totalWeight = combinedMatches.reduce(
+      (sum, _, index) => sum + exponentialWeight(index, combinedMatches.length),
       0
     );
 
-    const totalGoalsAgainstFirstTime = combinedMatches.reduce(
-      (sum, match, index) => {
-        const weight = index < 5 ? 1.5 : 1;
-        if (match.homeTeam === team) {
-          return sum + match.awayGoalsFirstTime * weight;
-        } else if (match.awayTeam === team) {
-          return sum + match.homeGoalsFirstTime * weight;
-        }
-        return sum;
-      },
-      0
-    );
-
-    const avgGoalsForFirstTime =
-      totalGoalsForFirstTime / (combinedMatches.length * 1.25);
-    const avgGoalsAgainstFirstTime =
-      totalGoalsAgainstFirstTime / (combinedMatches.length * 1.25);
-
-    const totalGoalsForSecondTime = combinedMatches.reduce(
-      (sum, match, index) => {
-        const weight = index < 5 ? 1.5 : 1;
-        if (match.homeTeam === team) {
-          return sum + match.homeGoalsSecondTime * weight;
-        } else if (match.awayTeam === team) {
-          return sum + match.awayGoalsSecondTime * weight;
-        }
-        return sum;
-      },
-      0
-    );
-
-    const totalGoalsAgainstSecondTime = combinedMatches.reduce(
-      (sum, match, index) => {
-        const weight = index < 5 ? 1.5 : 1;
-        if (match.homeTeam === team) {
-          return sum + match.awayGoalsSecondTime * weight;
-        } else if (match.awayTeam === team) {
-          return sum + match.homeGoalsSecondTime * weight;
-        }
-        return sum;
-      },
-      0
-    );
-
-    const avgGoalsForSecondTime =
-      totalGoalsForSecondTime / (combinedMatches.length * 1.25);
-    const avgGoalsAgainstSecondTime =
-      totalGoalsAgainstSecondTime / (combinedMatches.length * 1.25);
+    const avgGoalsFor = totalGoalsFor / totalWeight;
+    const avgGoalsAgainst = totalGoalsAgainst / totalWeight;
 
     return {
       avgGoalsFor,
       avgGoalsAgainst,
-      avgGoalsForFirstTime,
-      avgGoalsAgainstFirstTime,
-      avgGoalsForSecondTime,
-      avgGoalsAgainstSecondTime,
     };
   }
 
@@ -129,6 +72,5 @@ export function calcAvgGolas(matches, h2hMatches, team) {
     historicalH2HMatches,
     10
   );
-  console.log(res);
   return res;
 }

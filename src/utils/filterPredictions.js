@@ -1,11 +1,8 @@
 export default function filterPredictions(predictions, odds) {
-  console.log(predictions);
-
   const filteredTopPredictions = predictions.filter(
     (prediction) => prediction[6] >= 200 && prediction[10] <= 100
   );
 
-  console.log(filteredTopPredictions);
   const uniqueIndexes = new Set();
 
   const filterFromDublicated = filteredTopPredictions.filter((item) => {
@@ -16,8 +13,6 @@ export default function filterPredictions(predictions, odds) {
       return true;
     }
   });
-
-  console.log(filterFromDublicated);
 
   const sortedTopPredictions = filterFromDublicated.sort((a, b) => b[6] - a[6]);
 
@@ -34,8 +29,6 @@ export default function filterPredictions(predictions, odds) {
   const topPredictionsWeight = mapedTopPredictions.filter(
     (predictions) => predictions.name !== ""
   );
-
-  console.log(topPredictionsWeight);
 
   return { topPredictionsWeight };
 }

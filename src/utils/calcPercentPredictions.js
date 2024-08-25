@@ -29,7 +29,6 @@ export function calcPercentPredictions(predictions, odds) {
   });
 
   const dataFiltered = removeDuplicatesName(data);
-  console.log(dataFiltered);
 
   // Объект для хранения итогов
   const result = {};
@@ -71,5 +70,5 @@ export function calcPercentPredictions(predictions, odds) {
     })
     .sort((a, b) => b.profit - a.profit);
 
-  return finalResult;
+  return { finalResult, totalPredictions };
 }

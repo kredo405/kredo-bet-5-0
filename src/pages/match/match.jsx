@@ -5,15 +5,12 @@ import { Loading } from "../../components/Loading/Loading";
 import { nbbetServices } from "../../services/nbbet";
 import getOdds from "../../utils/getOdds";
 import { calcPredictions } from "../../utils/calcPredictions";
-import calcPredictionNew from "../../utils/calcPredictionNew";
-import calcPredictionCollective from "../../utils/calcPredictionsCollective";
 import filterPredictions from "../../utils/filterPredictions";
 import { Empty } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 import Facts from "../../components/facts/Facts";
 import LastMatches from "../../components/lastMatches/LastMatches";
 import PercentPredict from "../../components/percentPredict/PercentPredict";
-import calcMonteCarlo from "../../utils/calcMonteCarlo";
 
 const errorModal = (message) => {
   Modal.error({
@@ -21,73 +18,17 @@ const errorModal = (message) => {
   });
 };
 
-const showInfo = (
-  data,
-  sample,
-  dataNew,
-  res2,
-  firstTimePredict,
-  seconsdTimePredict,
-  matchPredict,
-  matchPredictNotScore,
-  firstTimePredictNotScore,
-  seconsdTimePredictNotScore
-) => {
+const showInfo = (data, sample, predictionsElements) => {
   Modal.info({
-    title: `Прогноз на матч: ${data.prediction}`,
+    title: `Прогноз на матч: ${data.topBets[0].name}`,
     content: (
       <>
         {" "}
-        {sample >= 30 ? (
+        {sample >= 70 ? (
           <>
             <div>
-              <div>
-                <h2 className="py-2 font-bold text-emerald-800 text-center">
-                  Метод 1
-                </h2>
-                <div className="flex justify-between items-center">
-                  <p className="font-sans text-xl text-red-800 font-medium text-center py-3">
-                    {data.prediction}
-                  </p>
-                  <p className="font-sans text-sky-700 font-medium text-xl">
-                    {data.odd}
-                  </p>
-                </div>
-              </div>
-              <div>
-                <h2 className="py-2 font-bold text-emerald-800 text-center">
-                  Метод 2
-                </h2>
-                <div className="flex justify-between items-center">
-                  <p className="font-sans text-xl text-red-800 font-medium text-center py-3">
-                    {dataNew[0].name}
-                  </p>
-                  <p className="font-sans text-sky-700 font-medium text-xl">
-                    {dataNew[0].odd}
-                  </p>
-                </div>
-              </div>
-              <div>
-                <h2 className="py-2 font-bold text-emerald-800 text-center">
-                  Коллективный интеллект
-                </h2>
-                <div>
-                  {matchPredict.length < 1 ? (
-                    <p className="py-2 font-bold text-orange-600 text-center">
-                      Мало данных
-                    </p>
-                  ) : (
-                    matchPredict
-                  )}
-                </div>
-
-                <h4 className="py-2 font-bold text-orange-600 text-center">
-                  Доп.
-                </h4>
-                <div className="  border-2 border-solid border-lime-700 p-2 mt-2 rounded-xl">
-                  {matchPredictNotScore}
-                </div>
-              </div>
+              <div>Кол-во прогнозистов {sample}</div>
+              <div>{predictionsElements}</div>
             </div>
           </>
         ) : (
@@ -131,109 +72,37 @@ const Match = () => {
       preditionCopy,
       oddsCopy,
       historyOddsCopy,
-      summary
-    );
-    const resNew = calcPredictionNew(
-      preditionCopy,
-      oddsCopy,
-      historyOddsCopy,
-      summary
-    );
-    const res2 = calcPredictionCollective(
-      preditionCopy,
-      oddsCopy,
-      historyOddsCopy,
-      summary,
-      lastMatches,
-      info
+      info,
+      lastMatches
     );
 
-    console.log(res2);
-
-    const firstTimePredictByScore =
-      res2.uniquePredictionsFirstTimeByScoresSorted.map((el) => {
-        return (
-          <div className="flex justify-between items-center border-b-2 border-solid border-sky-700">
-            <p className="font-sans text-xl text-red-800 font-medium text-center py-3">
-              {el.name}
-            </p>
-            <p className="font-sans text-sky-700 font-medium text-xl">
-              {el.odd}
-            </p>
+    const predictionsElements = res.topBets.map((el, idx) => (
+      <div
+        key={idx}
+        className="flex items-center w-full py-2 mt-4 bg-sky-400 bg-opacity-20 px-3 rounded-2xl"
+      >
+        <div className="flex justify-between h-full  w-full items-center">
+          <div className="w-4/12">
+            <span className="text-green-600 font-bold text-sm">Кэф</span>
+            <span className="text-red-500 font-bold px-3 text-sm">
+              {el.odd.toFixed(2)}
+            </span>
           </div>
-        );
-      });
-    const seconsdTimePredictByScore =
-      res2.uniquePredictionsSecondTimeByScoresSorted.map((el) => {
-        return (
-          <div className="flex justify-between items-center border-b-2 border-solid border-sky-700">
-            <p className="font-sans text-xl text-red-800 font-medium text-center py-3">
-              {el.name}
-            </p>
-            <p className="font-sans text-sky-700 font-medium text-xl">
-              {el.odd}
-            </p>
+          <div className="w-4/12">
+            <span className="text-orange-700 px-3 font-bold text-xs text-center">
+              {el.probability.toFixed(0)}%
+            </span>
           </div>
-        );
-      });
-    const matchPredictByScore = res2.uniquePredictionsMatchByScoresSorted.map(
-      (el) => {
-        return (
-          <div className="flex justify-between items-center border-b-2 border-solid border-sky-700">
-            <p className="font-sans text-xl text-red-800 font-medium text-center py-3">
+          <div className="w-4/12">
+            <span className="text-yellow-700 px-3 font-bold text-xs text-center">
               {el.name}
-            </p>
-            <p className="font-sans text-sky-700 font-medium text-xl">
-              {el.odd}
-            </p>
+            </span>
           </div>
-        );
-      }
-    );
-    const matchPredict = res2.uniqueItemsMatch.map((el) => {
-      return (
-        <div className="flex justify-between items-center">
-          <p className="font-sans text-red-800 font-medium text-center py-2">
-            {el.name}
-          </p>
-          <p className="font-sans text-sky-700 font-medium">{el.odd}</p>
         </div>
-      );
-    });
-    const firstTimePredict = res2.uniqueItemsFirstTime.map((el) => {
-      return (
-        <div className="flex justify-between items-center">
-          <p className="font-sans text-red-800 font-medium text-center py-2">
-            {el.name}
-          </p>
-          <p className="font-sans text-sky-700 font-medium">{el.odd}</p>
-        </div>
-      );
-    });
+      </div>
+    ));
 
-    const seconsdTimePredict = res2.uniqueItemsSecondTime.map((el) => {
-      return (
-        <div className="flex justify-between items-center">
-          <p className="font-sans text-red-800 font-medium text-center py-2">
-            {el.name}
-          </p>
-          <p className="font-sans text-sky-700 font-medium">{el.odd}</p>
-        </div>
-      );
-    });
-
-    showInfo(
-      res,
-      res.sample,
-      resNew,
-      res2,
-      firstTimePredictByScore,
-      seconsdTimePredictByScore,
-      matchPredictByScore,
-      matchPredict,
-      firstTimePredict,
-      seconsdTimePredict
-    );
+    showInfo(res, res.sample, predictionsElements);
   };
 
   const elementsWeight = topPredictions.topPredictionsWeight.map((el, idx) => (
@@ -286,7 +155,6 @@ const Match = () => {
           getOdds(),
           nbbetServices.getSummary(),
         ]);
-        console.log(lastMatches);
 
         const matchesPredictionsNbbet = [
           ...matchesPredictionsNbbet1.data.match.data["1"],

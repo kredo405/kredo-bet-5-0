@@ -20,12 +20,12 @@ export const nbbetServices = {
 
     return axios.request(options);
   },
-  async getMatchInfo() {
+  async getMatchInfo(link = sessionStorage.getItem("link")) {
     const options = {
       method: "GET",
       url: "https://node-api-ochre.vercel.app/nbBet/nbbetMatch",
       params: {
-        link: `${sessionStorage.getItem("link")}`,
+        link: `${link}`,
         // link: '972530-manchester-siti-tottenhem-hotspur-prognoz-na-match'
       },
     };

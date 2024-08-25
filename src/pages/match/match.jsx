@@ -11,6 +11,7 @@ import { MoreOutlined } from "@ant-design/icons";
 import Facts from "../../components/facts/Facts";
 import LastMatches from "../../components/lastMatches/LastMatches";
 import PercentPredict from "../../components/percentPredict/PercentPredict";
+import { CookieSharp } from "@mui/icons-material";
 
 const errorModal = (message) => {
   Modal.error({
@@ -24,7 +25,7 @@ const showInfo = (data, sample, predictionsElements) => {
     content: (
       <>
         {" "}
-        {sample >= 70 ? (
+        {sample >= 30 ? (
           <>
             <div>
               <div>Кол-во прогнозистов {sample}</div>
@@ -62,6 +63,8 @@ const Match = () => {
     ],
   });
   const [content, setContent] = useState("");
+  const [lastMatchesInfoHome, setLastMatchesInfoHome] = useState({});
+  const [lastMatchesInfoAway, setLastMatchesInfoAway] = useState({});
 
   const getPredict = () => {
     const preditionCopy = JSON.parse(JSON.stringify(predictions));
@@ -73,7 +76,8 @@ const Match = () => {
       oddsCopy,
       historyOddsCopy,
       info,
-      lastMatches
+      lastMatchesInfoHome,
+      lastMatchesInfoAway
     );
 
     const predictionsElements = res.topBets.map((el, idx) => (
@@ -162,6 +166,36 @@ const Match = () => {
           ...matchesPredictionsNbbet3.data.match.data["1"],
           ...matchesPredictionsNbbet4.data.match.data["1"],
         ];
+        console.log(lastMatches.data.match.data);
+
+        const LastMatchesInfoHome = lastMatches.data.match.data[0]
+          .slice(0, 7)
+          .map((el) => {
+            return nbbetServices.getMatchInfo(el["3"]);
+          });
+        const LastMatchesInfoAway = lastMatches.data.match.data[1]
+          .slice(0, 7)
+          .map((el) => {
+            return nbbetServices.getMatchInfo(el["3"]);
+          });
+
+        console.log(LastMatchesInfoAway);
+
+        // Используем Promise.all для ожидания выполнения всех промисов
+        Promise.all([
+          Promise.all(LastMatchesInfoHome),
+          Promise.all(LastMatchesInfoAway),
+        ])
+          .then(([homeResults, awayResults]) => {
+            // homeResults и awayResults содержат массивы с результатами
+            console.log("Home matches info:", homeResults);
+            console.log("Away matches info:", awayResults);
+            setLastMatchesInfoHome(homeResults);
+            setLastMatchesInfoAway(awayResults);
+          })
+          .catch((error) => {
+            console.error("Ошибка получения данных матчей:", error);
+          });
 
         setInfo(matchesInfoNbbet.data.match.data.match);
         setPredictions(matchesPredictionsNbbet);

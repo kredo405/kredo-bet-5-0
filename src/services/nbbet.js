@@ -26,7 +26,6 @@ export const nbbetServices = {
       url: "https://node-api-ochre.vercel.app/nbBet/nbbetMatch",
       params: {
         link: `${link}`,
-        // link: '972530-manchester-siti-tottenhem-hotspur-prognoz-na-match'
       },
     };
 

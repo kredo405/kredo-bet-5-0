@@ -5,7 +5,7 @@ export function calcIndividualTotalByPredictions(predictions) {
 
   predictions.forEach((prediction) => {
     if (prediction.period === 3) {
-      if (prediction.length >= 80) {
+      if (prediction.length >= 40) {
         let totalHome = 0;
         let totalAway = 0;
         prediction

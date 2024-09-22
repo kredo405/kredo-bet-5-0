@@ -12,7 +12,7 @@ export function monteCarloScoreSimulation(
       k++;
       p *= Math.random();
     } while (p > L && k <= limit);
-    return Math.min(k - 1, limit);
+    return Math.max(0, Math.min(k - 1, limit)); // Гарантируем, что результат не будет отрицательным
   }
 
   let scoreProbabilities = {};

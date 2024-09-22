@@ -31,23 +31,23 @@ const Matches = () => {
 
         console.log(allMatches.data);
 
-        const filterMatches = allMatches.data.matches.data.leagues.filter(
-          (el) => {
-            const arrayMatches = el["4"].filter((item) => {
-              return item["4"] >= Date.now();
-            });
-            el[4] = arrayMatches;
-            if (arrayMatches.length > 0) {
-              return true;
-            } else {
-              return false;
-            }
-          }
-        );
+        // const filterMatches = allMatches.data.matches.data.leagues.filter(
+        //   (el) => {
+        //     const arrayMatches = el["4"].filter((item) => {
+        //       return item["4"] >= Date.now();
+        //     });
+        //     el[4] = arrayMatches;
+        //     if (arrayMatches.length > 0) {
+        //       return true;
+        //     } else {
+        //       return false;
+        //     }
+        //   }
+        // );
 
-        setArrayMatches(filterMatches);
-        setFilteredMatches(filterMatches);
-        dispatch(setMatches(filterMatches));
+        setArrayMatches(allMatches.data.matches.data.leagues);
+        setFilteredMatches(allMatches.data.matches.data.leagues);
+        dispatch(setMatches(allMatches.data.matches.data.leagues));
         setIsLoading(true);
       } catch (error) {
         console.error(error);
@@ -141,6 +141,7 @@ const Matches = () => {
                   </span>
                 </div>
               </div>
+
               <div>{matchElements}</div>
             </div>
           ) : null}

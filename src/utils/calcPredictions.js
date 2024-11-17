@@ -1,5 +1,5 @@
 import {
-  scoresMatch,
+  scoresMatchCopy,
   scoresFirstTime,
   scoresSecondTime,
 } from "../variables/scores";
@@ -8,6 +8,10 @@ import { monteCarloScoreSimulation } from "./calcMonteCarlo";
 import { changeProbabilityIntoHistoryOdds } from "./historyOdds";
 import { removeDuplicateByProfit } from "./removeDublicates";
 import { updateScoresBasedOnOdds } from "./updateScoresBasedOnOdds";
+import { calculateTeamForm } from "./calculateTeamForm";
+import { CodeSandboxCircleFilled } from "@ant-design/icons";
+import { calculateAverageXG } from "./calculateAverageXG";
+import { calculateTeamStrength } from "./calculateTeamStrength";
 
 export const calcPredictions = (
   predictions,
@@ -22,19 +26,31 @@ export const calcPredictions = (
   const teamHomeName = info["7"]["1"];
   const teamAwayName = info["8"]["1"];
 
+  const teamHomeGoalsAvgFor = info["27"]["8"][0]["5"] / info["27"]["8"][0]["1"];
+  const teamAwayGoalsAvgFor = info["27"]["8"][1]["5"] / info["27"]["8"][1]["1"];
+  const scoresMatchCopy = JSON.parse(JSON.stringify(scoresMatchCopy));
+
+  const teamHomeGoalsAvgAgainst =
+    info["27"]["8"][0]["6"] / info["27"]["8"][0]["6"];
+  const teamAwayGoalsAvgAgainst =
+    info["27"]["8"][1]["6"] / info["27"]["8"][1]["6"];
+
   console.log(info);
 
-  // function findKeysByValue(obj, value) {
-  //   const keys = [];
-  //   for (const key in obj) {
-  //     if (obj[key] === value) {
-  //       keys.push(key);
-  //     }
-  //   }
-  //   return keys;
-  // }
-
-  // console.log(findKeysByValue(info["5"], 4.65));
+  predictions.forEach((prediction) => {
+    odds.forEach((odd) => {
+      // Добавляем все прогнозы
+      if (+odd.odd === prediction[2]) {
+        data.push({
+          odd: prediction[3],
+          name: odd.name,
+          historyOdds: historyOdds[`${odd.odd}`],
+          period: odd.period,
+          scores: odd.scores,
+        });
+      }
+    });
+  });
 
   const lastMatchesHome = lastMatchesInfoHome.map((el) => {
     return {
@@ -78,6 +94,7 @@ export const calcPredictions = (
         : null,
     };
   });
+
   const lastMatchesAway = lastMatchesInfoAway.map((el) => {
     return {
       homeTeam: el.data.match.data.match["7"]["1"],
@@ -121,7 +138,7 @@ export const calcPredictions = (
     };
   });
 
-  // Рассчитывем индивидуальные тоталы команд
+  // Рассчитываем индивидуальные тоталы команд
   const avgGoalsHome = calcAvgGolas(lastMatchesHome, teamHomeName);
   const avgGoalsAway = calcAvgGolas(lastMatchesAway, teamAwayName);
 
@@ -129,209 +146,104 @@ export const calcPredictions = (
     (avgGoalsHome.avgGoalsFor + avgGoalsAway.avgGoalsAgainst) / 2;
   const individualTotalAway =
     (avgGoalsAway.avgGoalsFor + avgGoalsHome.avgGoalsAgainst) / 2;
-  const individualTotalHomeFirstHalf =
-    (avgGoalsHome.avgGoalsFirstHalfFor +
-      avgGoalsAway.avgGoalsFirstHalfAgainst) /
-    2;
-  const individualTotalAwayFirstHalf =
-    (avgGoalsHome.avgGoalsFirstHalfAgainst +
-      avgGoalsAway.avgGoalsFirstHalfFor) /
-    2;
-  const individualTotalHomeSeondHalf =
-    (avgGoalsHome.avgGoalsSecondHalfFor +
-      avgGoalsAway.avgGoalsSecondHalfAgainst) /
-    2;
-  const individualTotalAwaySecondHalf =
-    (avgGoalsHome.avgGoalsSecondHalfAgainst +
-      avgGoalsAway.avgGoalsSecondHalfFor) /
-    2;
 
-  // Рассчитываем вероятности счетов методом распределения паунсона и метода монтекарло
+  // const homeForm = calculateTeamForm(lastMatchesHome, 5, teamHomeName);
+  // const awayForm = calculateTeamForm(lastMatchesAway, 5, teamAwayName);
+
+  // const avgXGHome = calculateAverageXG(lastMatchesHome, 5, teamHomeName);
+  // const avgXGAway = calculateAverageXG(lastMatchesAway, 5, teamAwayName);
+
+  // const strengthsHome = calculateTeamStrength(lastMatchesHome, teamHomeName);
+  // const strengthsAway = calculateTeamStrength(lastMatchesAway, teamAwayName);
+
+  // console.log(strengthsHome);
+  // console.log(strengthsAway);
+
+  // Рассчитываем вероятности счетов методом Монте-Карло
 
   const probabilities = monteCarloScoreSimulation(
     individualTotalHome,
-    individualTotalAway
+    individualTotalAway,
+    100000
   );
 
-  const probabilitiesFitstTime = monteCarloScoreSimulation(
-    individualTotalHomeFirstHalf,
-    individualTotalAwayFirstHalf
-  );
+  console.log(probabilities);
 
-  const probabilitiesSecondTime = monteCarloScoreSimulation(
-    individualTotalHomeSeondHalf,
-    individualTotalAwaySecondHalf
-  );
-
-  // Соединяем дааные вероятностей с мировыми данными
+  // Соединяем данные вероятностей с мировыми данными
 
   for (let score in probabilities) {
-    for (let worldScore in scoresMatch) {
+    for (let worldScore in scoresMatchCopy) {
       if (score === worldScore) {
-        scoresMatch[worldScore].probability =
-          (probabilities[score] + scoresMatch[worldScore].worldProbabilty) / 2;
+        scoresMatchCopy[worldScore].probability =
+          (probabilities[score] + scoresMatchCopy[worldScore].worldProbabilty) /
+          2;
       }
     }
   }
 
-  for (let score in probabilitiesFitstTime) {
-    for (let worldScore in scoresFirstTime) {
-      if (score === worldScore) {
-        scoresFirstTime[worldScore].probability = probabilitiesFitstTime[score];
-      }
+  data.forEach((el) => {
+    if (el.period === 3) {
+      el.scores.forEach((score) => {
+        scoresMatchCopy[score].quantity += scoresMatchCopy[score].probability;
+      });
     }
+  });
+
+  console.log(scoresMatchCopy);
+
+  function findTop3ByQuantity(scoresMatchCopy) {
+    // Преобразуем объект в массив, чтобы сортировать
+    const entries = Object.entries(scoresMatchCopy);
+
+    // Сортируем массив по значению `quantity` в порядке убывания
+    entries.sort((a, b) => b[1].quantity - a[1].quantity);
+
+    // Берём первые 3 результата и возвращаем их в виде объекта
+    const top3 = entries.slice(0, 3);
+
+    // Преобразуем массив обратно в объект
+    return Object.fromEntries(top3);
   }
 
-  for (let score in probabilitiesSecondTime) {
-    for (let worldScore in scoresSecondTime) {
-      if (score === worldScore) {
-        scoresSecondTime[worldScore].probability =
-          probabilitiesSecondTime[score];
-      }
+  // Пример использования
+  const top3Scores = findTop3ByQuantity(scoresMatchCopy);
+
+  const top3ScoresKeys = Object.keys(top3Scores);
+  console.log(top3ScoresKeys);
+
+  const topPredictions = odds.map((el) => {
+    if (
+      el.scores.find((el) => el === top3ScoresKeys[0]) &&
+      el.scores.find((el) => el === top3ScoresKeys[1]) &&
+      el.scores.find((el) => el === top3ScoresKeys[1]) &&
+      el.period === 3
+    ) {
+      return {
+        ...el,
+        historyOdds: historyOdds[`${el.odd}`],
+        probability: el.scores.reduce(
+          (acc, el) => acc + scoresMatchCopy[el].probability,
+          0
+        ),
+      };
     }
-  }
+  });
 
-  // Пример использования функции
-  const currentOdds = { home: info["5"]["1"], away: info["5"]["2"] }; // текущие коэффициенты
-  const homeStatus = info["27"]["4"][0].current_match_text.split("-")[1].trim();
-  const awayStatus = info["27"]["4"][1].current_match_text.split("-")[1].trim();
+  const topPredictionsFiltered = topPredictions.filter((el) => {
+    return el !== undefined && el.historyOdds
+      ? el.historyOdds[el.historyOdds.length - 1][1] > 1.4
+      : false;
+  });
 
-  const lastScores = updateScoresBasedOnOdds(
-    lastMatchesHome,
-    lastMatchesAway,
-    homeStatus,
-    awayStatus,
-    teamHomeName,
-    teamAwayName,
-    currentOdds
+  console.log(topPredictionsFiltered);
+
+  const topredicionSorted = topPredictionsFiltered.sort(
+    (a, b) => b.probability - a.probability
   );
 
-  console.log(lastScores);
-
-  // Собираем данные из прогнозов и коэффициентов
-  predictions.forEach((prediction) => {
-    odds.forEach((odd) => {
-      // Добавляем все прогнозы
-      if (+odd.odd === prediction[2]) {
-        data.push({
-          odd: prediction[3],
-          name: odd.name,
-          historyOdds: historyOdds[`${odd.odd}`],
-          profit: prediction[6],
-          period: odd.period,
-          scores: odd.scores,
-        });
-      }
-    });
-  });
-
-  const dataFiltered = removeDuplicateByProfit(data);
-
-  // Рассчитаываем Коэфиценты прогноза для Счетов
-  dataFiltered.forEach((prediction) => {
-    const countScores = prediction.scores.length;
-    const normalizationFactor = 1 / countScores; // Нормализующий коэффициент
-    const profitOnScores =
-      (prediction.profit / countScores) * normalizationFactor;
-
-    if (prediction.period === 3) {
-      prediction.scores.forEach((score) => {
-        scoresMatch[score].quantity += profitOnScores;
-      });
-    } else if (prediction.period === 1) {
-      prediction.scores.forEach((score) => {
-        scoresFirstTime[score].quantity += profitOnScores;
-      });
-    } else if (prediction.period === 2) {
-      prediction.scores.forEach((score) => {
-        scoresSecondTime[score].quantity += profitOnScores;
-      });
-    }
-  });
-
-  odds.forEach((odd) => {
-    let probabilityBet = 0;
-
-    if (odd.period === 3) {
-      odd.scores.forEach((score) => {
-        probabilityBet += scoresMatch[score].probability;
-      });
-    } else if (odd.period === 1) {
-      odd.scores.forEach((score) => {
-        probabilityBet += scoresFirstTime[score].probability;
-      });
-    } else if (odd.period === 2) {
-      odd.scores.forEach((score) => {
-        probabilityBet += scoresSecondTime[score].probability;
-      });
-    }
-
-    const predictOdd = odd.scores.reduce((acc, curr) => {
-      if (odd.period === 3) {
-        return acc + scoresMatch[curr].quantity;
-      }
-      if (odd.period === 1) {
-        return acc + scoresFirstTime[curr].quantity;
-      }
-      if (odd.period === 2) {
-        return acc + scoresSecondTime[curr].quantity;
-      }
-    }, 0);
-
-    const scores =
-      odd.period === 3
-        ? odd.scores.map((score) => ({
-            name: score,
-            quantity: scoresMatch[score].quantity,
-            probability: scoresMatch[score].probability,
-          }))
-        : odd.period === 1
-        ? odd.scores.map((score) => ({
-            name: score,
-            quantity: scoresFirstTime[score].quantity,
-            probability: scoresFirstTime[score].probability,
-          }))
-        : odd.scores.map((score) => ({
-            name: score,
-            quantity: scoresSecondTime[score].quantity,
-            probability: scoresSecondTime[score].probability,
-          }));
-
-    if (odd.period === 3 || odd.period === 1) {
-      allBets.push({
-        name: odd.name,
-        probability: probabilityBet,
-        period: odd.period,
-        odd: historyOdds[`${odd.odd}`]
-          ? historyOdds[`${odd.odd}`][historyOdds[`${odd.odd}`].length - 1][1]
-          : null,
-        historyOdds: historyOdds[`${odd.odd}`],
-        predictOdd,
-        scores,
-      });
-    }
-  });
-
-  console.log(allBets);
-  // Фильтруем ставки чтобы коэфициент был больше чем 1.55
-  const betsFilter = allBets.filter((bet) => bet.odd > 1.5);
-  const betsSorted = betsFilter
-    .sort((a, b) => {
-      if (a.predictOdd > b.predictOdd) {
-        return -1;
-      } else if (a.predictOdd < b.predictOdd) {
-        return 1;
-      } else {
-        return 0;
-      }
-    })
-    .slice(0, 3);
-  console.log(betsSorted);
-
   return {
-    sample: dataFiltered.length,
-    betsSorted,
+    sample: data.length,
+    topredicionSorted,
     info: info[27][3],
-    lastScores,
   };
 };

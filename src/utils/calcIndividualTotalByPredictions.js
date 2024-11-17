@@ -8,12 +8,10 @@ export function calcIndividualTotalByPredictions(predictions) {
       if (prediction.length >= 40) {
         let totalHome = 0;
         let totalAway = 0;
-        prediction
-          .filter((el) => el.profit > -5)
-          .scores.forEach((score) => {
-            totalHome += +score.slice(0, 1);
-            totalAway += +score.slice(2);
-          });
+        prediction.scores.forEach((score) => {
+          totalHome += +score.slice(0, 1);
+          totalAway += +score.slice(2);
+        });
         scoreHome += totalHome / prediction.scores.length;
         scoreAway += totalAway / prediction.scores.length;
         count++;

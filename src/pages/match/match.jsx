@@ -19,16 +19,9 @@ const errorModal = (message) => {
   });
 };
 
-const showInfo = (
-  data,
-  sample,
-  predictionsElements,
-  facts,
-  lastMatchesHome,
-  lastMatchesAway
-) => {
+const showInfo = (data, sample, predictionsElements, facts) => {
   Modal.info({
-    title: `Прогноз на матч: ${data.betsSorted[0].name}`,
+    title: `Прогноз на матч: ${data.topredicionSorted[0].name}`,
     content: (
       <>
         {" "}
@@ -38,17 +31,6 @@ const showInfo = (
               <div>Кол-во прогнозистов {sample}</div>
               <div>{facts}</div>
               <div>{predictionsElements}</div>
-              <h2 className="text-orange-700 font-bold font-mono text-xl text-center my-3">
-                Похожие матчи
-              </h2>
-              <h3 className="text-sky-700 font-bold font-mono text-lg text-center my-3">
-                Домашняя команда
-              </h3>
-              {lastMatchesHome}
-              <h3 className="text-sky-700 font-bold font-mono text-lg text-center my-3">
-                Гостевая команда
-              </h3>
-              {lastMatchesAway}
             </div>
           </>
         ) : (
@@ -99,7 +81,7 @@ const Match = () => {
       lastMatchesInfoAway
     );
 
-    const predictionsElements = res.betsSorted.map((el, idx) => (
+    const predictionsElements = res.topredicionSorted.map((el, idx) => (
       <div
         key={idx}
         className={
@@ -112,7 +94,7 @@ const Match = () => {
           <div className="w-4/12">
             <span className="text-green-600 font-bold text-sm">Кэф</span>
             <span className="text-red-500 font-bold px-3 text-sm">
-              {el.odd.toFixed(2)}
+              {el.historyOdds[el.historyOdds.length - 1][1].toFixed(2)}
             </span>
           </div>
           <div className="w-4/12">
@@ -150,74 +132,7 @@ const Match = () => {
       );
     });
 
-    const lastMatchesHome = res.lastScores.homeScoresMatch.map((match, i) => {
-      return res.lastScores.homeScoresMatch.length > 0 ? (
-        <div
-          key={i}
-          className="flex justify-between items-center px-1 py-2 rounded-lg text-white font-mono mt-2 bg-cyan-700 rounded-2xl bg-opacity-80"
-        >
-          <div className="flex items-center w-5/12">
-            <img className="pr-2 w-4/12 md:w-2/12" src={match.logoHome} />
-            <div>{match.homeTeamName}</div>
-          </div>
-          <div className="w-2/12 text-center text-orange-200 font-bold">
-            {match.score}
-          </div>
-          <div className="flex items-center w-5/12 justify-end">
-            <div>{match.awayTeamName}</div>
-            <img className="pr-2 w-4/12 md:w-2/12" src={match.logoAway} />
-          </div>
-        </div>
-      ) : (
-        <div
-          key={i}
-          className="flex justify-between items-center px-1 py-2 rounded-lg text-white font-mono mt-2 bg-cyan-700 rounded-2xl bg-opacity-80"
-        >
-          <div className=" text-center text-orange-500 font-bold">
-            Нет похожих матчей
-          </div>
-        </div>
-      );
-    });
-
-    const lastMatchesAway = res.lastScores.awayScoresMatch.map((match, i) => {
-      return res.lastScores.awayScoresMatch.length > 0 ? (
-        <div
-          key={i}
-          className="flex justify-between items-center px-1 py-2 rounded-lg text-white font-mono mt-2 bg-cyan-700 rounded-2xl bg-opacity-80"
-        >
-          <div className="flex items-center w-5/12">
-            <img className="pr-2 w-4/12 md:w-2/12" src={match.logoHome} />
-            <div>{match.homeTeamName}</div>
-          </div>
-          <div className="w-2/12 text-center text-orange-200 font-bold">
-            {match.score}
-          </div>
-          <div className="flex items-center w-5/12 justify-end">
-            <div>{match.awayTeamName}</div>
-            <img className="pr-2 w-4/12 md:w-2/12" src={match.logoAway} />
-          </div>
-        </div>
-      ) : (
-        <div
-          key={i}
-          className="flex justify-between items-center px-1 py-2 rounded-lg text-white font-mono mt-2 bg-cyan-700 rounded-2xl bg-opacity-80"
-        >
-          <div className=" text-center text-orange-500 font-bold">
-            Нет похожих матчей
-          </div>
-        </div>
-      );
-    });
-
-    showInfo(
-      res,
-      res.sample,
-      predictionsElements,
-      facts,
-      lastMatchesHome,
-      lastMatchesAway
-    );
+    showInfo(res, res.sample, predictionsElements, facts);
   };
 
   const elementsWeight = topPredictions.topPredictionsWeight.map((el, idx) => (

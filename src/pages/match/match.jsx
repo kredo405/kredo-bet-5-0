@@ -19,7 +19,13 @@ const errorModal = (message) => {
   });
 };
 
-const showInfo = (data, sample, predictionsElements, facts) => {
+const showInfo = (
+  data,
+  sample,
+  predictionsElements,
+  facts,
+  expenctedScores
+) => {
   Modal.info({
     title: `Прогноз на матч: ${data.topredicionSorted[0].name}`,
     content: (
@@ -30,7 +36,27 @@ const showInfo = (data, sample, predictionsElements, facts) => {
             <div>
               <div>Кол-во прогнозистов {sample}</div>
               <div>{facts}</div>
-              <div>{predictionsElements}</div>
+              <div>
+                <h2 className="text-center py-2 font-bold text-orange-900 text-xl">
+                  Возможные счета
+                </h2>
+                <div className="flex justify-center">{expenctedScores}</div>
+              </div>
+              <h2 className="text-center py-2 font-bold text-orange-900 text-xl">
+                Топ прогнозы
+              </h2>
+              <div>
+                {predictionsElements ? (
+                  predictionsElements
+                ) : (
+                  <h1 className="text-center py-2 font-bold text-orange-900 text-xl">
+                    Нет прогнозов
+                  </h1>
+                )}
+              </div>
+              <h2 className="text-center py-2 font-bold text-orange-900 text-xl">
+                Все прогнозы
+              </h2>
             </div>
           </>
         ) : (
@@ -80,6 +106,14 @@ const Match = () => {
       lastMatchesInfoHome,
       lastMatchesInfoAway
     );
+
+    const expenctedScores = res.top3ScoresKeys.map((el) => {
+      return (
+        <div className="flex items-center bg-sky-400 bg-opacity-20 px-3 rounded-2xl">
+          <span className="text-orange-600 font-bold text-lg px-3">{el}</span>
+        </div>
+      );
+    });
 
     const predictionsElements = res.topredicionSorted.map((el, idx) => (
       <div
@@ -132,7 +166,7 @@ const Match = () => {
       );
     });
 
-    showInfo(res, res.sample, predictionsElements, facts);
+    showInfo(res, res.sample, predictionsElements, facts, expenctedScores);
   };
 
   const elementsWeight = topPredictions.topPredictionsWeight.map((el, idx) => (

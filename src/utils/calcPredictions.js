@@ -191,6 +191,40 @@ export const calcPredictions = (
 
   console.log(scoresMatchCopy);
 
+  // Функция нормализации вероятностей, чтобы сумма равнялась 100%
+  function normalizeProbabilities(probabilities) {
+    const total = Object.values(probabilities).reduce(
+      (acc, val) => acc + val,
+      0
+    );
+    Object.keys(probabilities).forEach((key) => {
+      probabilities[key] = (probabilities[key] / total) * 100;
+    });
+    return probabilities;
+  }
+
+  // Нормализуем вероятности Монте-Карло
+  const normalizedProbabilities = normalizeProbabilities(probabilities);
+
+  // Рассчитываем итоговые вероятности с учетом мировых данных
+  for (let score in normalizedProbabilities) {
+    if (scoresMatchCopy[score]) {
+      scoresMatchCopy[score].probability =
+        (normalizedProbabilities[score] +
+          scoresMatchCopy[score].worldProbabilty) /
+        2;
+    }
+  }
+
+  // Обновляем quantity на основе обновленных вероятностей
+  data.forEach((el) => {
+    if (el.period === 3) {
+      el.scores.forEach((score) => {
+        scoresMatchCopy[score].quantity += scoresMatchCopy[score].probability;
+      });
+    }
+  });
+
   function findTop3ByQuantity(scoresMatchCopy) {
     // Преобразуем объект в массив, чтобы сортировать
     const entries = Object.entries(scoresMatchCopy);
@@ -245,5 +279,6 @@ export const calcPredictions = (
     sample: data.length,
     topredicionSorted,
     info: info[27][3],
+    top3ScoresKeys,
   };
 };

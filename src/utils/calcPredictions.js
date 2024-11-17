@@ -215,7 +215,7 @@ export const calcPredictions = (
     if (
       el.scores.find((el) => el === top3ScoresKeys[0]) &&
       el.scores.find((el) => el === top3ScoresKeys[1]) &&
-      el.scores.find((el) => el === top3ScoresKeys[1]) &&
+      el.scores.find((el) => el === top3ScoresKeys[2]) &&
       el.period === 3
     ) {
       return {

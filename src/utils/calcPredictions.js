@@ -1,5 +1,5 @@
 import {
-  scoresMatchCopy,
+  scoresMatch,
   scoresFirstTime,
   scoresSecondTime,
 } from "../variables/scores";
@@ -28,7 +28,7 @@ export const calcPredictions = (
 
   const teamHomeGoalsAvgFor = info["27"]["8"][0]["5"] / info["27"]["8"][0]["1"];
   const teamAwayGoalsAvgFor = info["27"]["8"][1]["5"] / info["27"]["8"][1]["1"];
-  const scoresMatchCopy = JSON.parse(JSON.stringify(scoresMatchCopy));
+  const scoresMatchCopy = JSON.parse(JSON.stringify(scoresMatch));
 
   const teamHomeGoalsAvgAgainst =
     info["27"]["8"][0]["6"] / info["27"]["8"][0]["6"];

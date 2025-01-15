@@ -110,7 +110,7 @@ const Match = () => {
     const expenctedScores = res.top3ScoresKeys.map((el) => {
       return (
         <div className="flex items-center bg-sky-400 bg-opacity-20 px-3 rounded-2xl">
-          <span className="text-orange-600 font-bold text-lg px-3">{el}</span>
+          <span className="text-orange -600 font-bold text-lg px-3">{el}</span>
         </div>
       );
     });

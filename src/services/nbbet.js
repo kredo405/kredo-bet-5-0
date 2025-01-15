@@ -5,14 +5,14 @@ export const nbbetServices = {
     const timestamp = Date.now();
     const dateFix = Number(String(timestamp).slice(0, 8)) + 180;
 
-    const newTimestamp = +`${+dateFix + 300}99999`;
+    const newTimestamp = +`${+dateFix + 800}99999`;
     console.log(newTimestamp);
 
     console.log(newTimestamp);
 
     const options = {
       method: "GET",
-      url: "https://node-api-ochre.vercel.app/nbBet/nbbetMatches",
+      url: "https://kredo-bet-api.vercel.app/nbBet/nbbetMatches",
       params: {
         timestamp: newTimestamp,
       },
@@ -23,7 +23,7 @@ export const nbbetServices = {
   async getMatchInfo(link = sessionStorage.getItem("link")) {
     const options = {
       method: "GET",
-      url: "https://node-api-ochre.vercel.app/nbBet/nbbetMatch",
+      url: "https://kredo-bet-api.vercel.app/nbBet/nbbetMatch",
       params: {
         link: `${link}`,
       },
@@ -34,7 +34,7 @@ export const nbbetServices = {
   async getLastMatchInfo(link) {
     const options = {
       method: "GET",
-      url: "https://node-api-ochre.vercel.app/nbBet/nbbetMatch",
+      url: "https://kredo-bet-api.vercel.app/nbBet/nbbetMatch",
       params: {
         link: link,
         // link: '972530-manchester-siti-tottenhem-hotspur-prognoz-na-match'
@@ -47,7 +47,7 @@ export const nbbetServices = {
   async getMatchPredictions(id) {
     const options = {
       method: "GET",
-      url: "https://node-api-ochre.vercel.app/nbBet/nbbetPredict",
+      url: "https://kredo-bet-api.vercel.app/nbBet/nbbetPredict",
       params: {
         link: `${sessionStorage.getItem("link")}/${id}`,
       },
@@ -58,7 +58,7 @@ export const nbbetServices = {
   async getSummary() {
     const options = {
       method: "GET",
-      url: `https://node-api-ochre.vercel.app/nbBet/nbbetSummary`,
+      url: `https://kredo-bet-api.vercel.app/nbBet/nbbetSummary`,
       params: {
         link: `${sessionStorage.getItem("link")}`,
       },
@@ -69,7 +69,7 @@ export const nbbetServices = {
   async getHistoryOdds() {
     const options = {
       method: "GET",
-      url: `https://node-api-ochre.vercel.app/nbBet/historyOdds`,
+      url: `https://kredo-bet-api.vercel.app/nbBet/historyOdds`,
       params: {
         link: `${sessionStorage.getItem("link")}`,
       },
@@ -80,7 +80,7 @@ export const nbbetServices = {
   async getLastMatches() {
     const options = {
       method: "GET",
-      url: `https://node-api-ochre.vercel.app/nbBet/nbbetLastMatches`,
+      url: `https://kredo-bet-api.vercel.app/nbBet/nbbetLastMatches`,
       params: {
         link: `${sessionStorage.getItem("link")}`,
       },

@@ -24,6 +24,7 @@ const Match = () => {
   const [odds, setOdds] = useState({});
   const [summary, setSummary] = useState({});
   const [historyOdds, setHistoryOdds] = useState([]);
+  const [lastMatches, setLastMatches] = useState([]);
   const [strengthsHome, setStrengthsHome] = useState("");
   const [strengthsAway, setStrengthsAway] = useState("");
   const [weaknessesHome, setWeaknessesHome] = useState("");
@@ -128,11 +129,20 @@ const Match = () => {
       return `${el.name} - ${el.odd}`
     })
 
-    console.log(oddsAll)
+   const lastMatchesHome = lastMatches[0].splice(0, 5).map(el => {
+     return `${new Date(el["4"]).toDateString()} ${el["7"]} ${el["10"]} - ${el["18"]} ${el["15"]}`
+   })
+
+   const lastMatchesAway = lastMatches[1].splice(0, 5).map(el => {
+    return `${new Date(el["4"]).toDateString()} ${el["7"]} ${el["10"]} - ${el["18"]} ${el["15"]}`
+  })
 
     const result = `
     Составь прогноз на матч, проанализируй все, проведи все возможные рассчеты, и выбери саму лучшую ставку. Матч ${info[7][1]}-${info[8][1]}
     Превью: ${preview};
+    Стадион: ${info[18][2]};
+    Температура воздуха: ${info[18][3]};
+    Погода: ${info[18][4]};
     Факты: ${facts};
     Мотивация ${info[7][1]}: 
     Текущий матч: ${motivationHome.currentMatch};
@@ -144,6 +154,8 @@ const Match = () => {
     Следующий матч: ${motivationAway.nextMatch.team1_name} - ${motivationAway.nextMatch.team2_name}: ${motivationAway.nextMatch.text};
     Травмы: ${injuries};
     Матчи между собой: ${lastMatchesH2h};
+    Последние 5 матчей ${info[7][1]}: ${lastMatchesHome};
+    Последние 5 матчей ${info[8][1]}: ${lastMatchesAway};
     Статистика: Ср. забитые голы ${info[7][1]}: ${stats.avgGoalsForHome} ; Ср. пропущенные голы ${info[7][1]}: ${stats.avgGoalsAgHome}; Ср. забитые голы ${info[8][1]}: ${stats.avgGoalsForHome}; Ср. пропущенные голы ${info[8][1]}: ${stats.avgGoalsAgAway};
     Ставки и коэффициенты: ${oddsAll}
     ${strengthsHome ? `Сильные стороны ${info[7][1]}: ${strengthsHome}` : ""} 
@@ -166,23 +178,27 @@ const Match = () => {
           matchesInfoNbbet,
           odds,
           summary,
-          historyOdds
+          historyOdds,
+          lastMatches
         ] = await Promise.all([
           nbbetServices.getMatchInfo(),
           getOdds(),
           nbbetServices.getSummary(),
           nbbetServices.getHistoryOdds(),
+          nbbetServices.getLastMatches()
         ]);
 
         console.log(matchesInfoNbbet)
         console.log(odds)
         console.log(summary)
         console.log(historyOdds)
+        console.log(lastMatches)
 
         setInfo(matchesInfoNbbet.data.match.data.match);
         setOdds(odds.odds);
         setSummary(summary.data.match.data);
         setHistoryOdds(historyOdds.data.match.data)
+        setLastMatches(lastMatches.data.match.data)
 
         setIsLoading(true);
       } catch (error) {
@@ -250,6 +266,7 @@ const Match = () => {
                 <input 
                   type="text" 
                   value={strengthsHome}
+                  className="px-2 py-2 rounded-lg w-[200px]"
                   onChange={handleStrengthsHomeChange}
                 />
               </div>
@@ -260,6 +277,7 @@ const Match = () => {
                 <input 
                   type="text" 
                   value={weaknessesHome}
+                  className="px-2 py-2 rounded-lg w-[200px]"
                   onChange={handleWeaknessesHomeChange}
                 />
               </div>
@@ -270,6 +288,7 @@ const Match = () => {
                 <input 
                   type="text" 
                   value={playStyleHome}
+                  className="px-2 py-2 rounded-lg w-[200px]"
                   onChange={handlePlayStyleHomeChange}
                 />
               </div>
@@ -280,6 +299,7 @@ const Match = () => {
                 <input 
                   type="text" 
                   value={strengthsAway}
+                  className="px-2 py-2 rounded-lg w-[200px]"
                   onChange={handleStrengthsAwayChange}
                 />
               </div>
@@ -290,6 +310,7 @@ const Match = () => {
                 <input 
                   type="text" 
                   value={weaknessesAway}
+                  className="px-2 py-2 rounded-lg w-[200px]"
                   onChange={handleWeaknessesAwayChange}
                 />
               </div>
@@ -300,6 +321,7 @@ const Match = () => {
                 <input 
                   type="text" 
                   value={playStyleAway}
+                  className="px-2 py-2 rounded-lg w-[200px]"
                   onChange={handlePlayStyleAwayChange}
                 />
               </div>
@@ -310,6 +332,7 @@ const Match = () => {
                 <input 
                   type="text" 
                   value={description}
+                  className="px-2 py-2 rounded-lg w-[200px]"
                   onChange={handleDescriptionChange}
                 />
               </div>

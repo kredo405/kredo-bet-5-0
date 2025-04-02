@@ -1,17 +1,12 @@
 import { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
-import { BackTop, Modal, Segmented } from "antd";
+import { BackTop, Modal } from "antd";
 import { Loading } from "../../components/Loading/Loading";
 import { nbbetServices } from "../../services/nbbet";
 import getOdds from "../../utils/getOdds";
-import { calcPredictions } from "../../utils/calcPredictions";
-import filterPredictions from "../../utils/filterPredictions";
-import { Empty } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
-import Facts from "../../components/facts/Facts";
-import LastMatches from "../../components/lastMatches/LastMatches";
-import PercentPredict from "../../components/percentPredict/PercentPredict";
-import { CookieSharp } from "@mui/icons-material";
+import { current } from "@reduxjs/toolkit";
+import { div } from "@tensorflow/tfjs";
 
 const errorModal = (message) => {
   Modal.error({
@@ -19,180 +14,149 @@ const errorModal = (message) => {
   });
 };
 
-const showInfo = (
-  data,
-  sample,
-  predictionsElements,
-  facts,
-  expenctedScores
-) => {
-  Modal.info({
-    title: `Прогноз на матч: ${data.topredicionSorted[0].name}`,
-    content: (
-      <>
-        {" "}
-        {sample >= 30 ? (
-          <>
-            <div>
-              <div>Кол-во прогнозистов {sample}</div>
-              <div>{facts}</div>
-              <div>
-                <h2 className="text-center py-2 font-bold text-orange-900 text-xl">
-                  Возможные счета
-                </h2>
-                <div className="flex justify-center">{expenctedScores}</div>
-              </div>
-              <h2 className="text-center py-2 font-bold text-orange-900 text-xl">
-                Топ прогнозы
-              </h2>
-              <div>
-                {predictionsElements ? (
-                  predictionsElements
-                ) : (
-                  <h1 className="text-center py-2 font-bold text-orange-900 text-xl">
-                    Нет прогнозов
-                  </h1>
-                )}
-              </div>
-              <h2 className="text-center py-2 font-bold text-orange-900 text-xl">
-                Все прогнозы
-              </h2>
-            </div>
-          </>
-        ) : (
-          <>
-            <h1 className="text-center py-2 font-bold text-orange-900 text-xl">
-              Мало данных для прогноза
-            </h1>
-          </>
-        )}
-      </>
-    ),
-    onOk() {},
-  });
+const removeStrongTags = (str) => {
+  return str.replace(/<\/?strong>/g, "");
 };
 
 const Match = () => {
   const [info, setInfo] = useState({});
-  const [lastMatches, setLastMatches] = useState({});
-  const [predictions, setPredictions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [odds, setOdds] = useState({});
   const [summary, setSummary] = useState({});
-  const [historyOdds, setHistoryOdds] = useState({});
-  const [topPredictions, setTopPredictions] = useState({
-    topPredictionsWeight: [
-      {
-        odd: 0,
-        profit: 0,
-        name: "",
-      },
-    ],
-  });
-  const [content, setContent] = useState("");
-  const [lastMatchesInfoHome, setLastMatchesInfoHome] = useState({});
-  const [lastMatchesInfoAway, setLastMatchesInfoAway] = useState({});
+  const [historyOdds, setHistoryOdds] = useState([]);
+  const [strengthsHome, setStrengthsHome] = useState("");
+  const [strengthsAway, setStrengthsAway] = useState("");
+  const [weaknessesHome, setWeaknessesHome] = useState("");
+  const [weaknessesAway, setWeaknessesAway] = useState("");
+  const [playStyleHome, setPlayStyleHome] = useState("");
+  const [playStyleAway, setPlayStyleAway] = useState("");
+  const [description, setDescription] = useState("");
+  const [result, setResult] = useState("");
 
-  const getPredict = () => {
-    const preditionCopy = JSON.parse(JSON.stringify(predictions));
-    const oddsCopy = JSON.parse(JSON.stringify(odds));
-    const historyOddsCopy = JSON.parse(JSON.stringify(historyOdds));
-
-    const res = calcPredictions(
-      preditionCopy,
-      oddsCopy,
-      historyOddsCopy,
-      info,
-      lastMatchesInfoHome,
-      lastMatchesInfoAway
-    );
-
-    const expenctedScores = res.top3ScoresKeys.map((el) => {
-      return (
-        <div className="flex items-center bg-sky-400 bg-opacity-20 px-3 rounded-2xl">
-          <span className="text-orange -600 font-bold text-lg px-3">{el}</span>
-        </div>
-      );
-    });
-
-    const predictionsElements = res.topredicionSorted.map((el, idx) => (
-      <div
-        key={idx}
-        className={
-          idx < 1
-            ? "flex items-center w-full py-2 mt-4 bg-green-400 bg-opacity-20 px-3 rounded-2xl"
-            : "flex items-center w-full py-2 mt-4 bg-sky-400 bg-opacity-20 px-3 rounded-2xl"
-        }
-      >
-        <div className="flex justify-between h-full  w-full items-center">
-          <div className="w-4/12">
-            <span className="text-green-600 font-bold text-sm">Кэф</span>
-            <span className="text-red-500 font-bold px-3 text-sm">
-              {el.historyOdds[el.historyOdds.length - 1][1].toFixed(2)}
-            </span>
-          </div>
-          <div className="w-4/12">
-            <span className="text-orange-700 px-3 font-bold text-xs text-center">
-              {el.probability.toFixed(0)}%
-            </span>
-          </div>
-          <div className="w-4/12">
-            <span className="text-yellow-700 px-3 font-bold text-xs text-center">
-              {el.name}
-            </span>
-          </div>
-        </div>
-      </div>
-    ));
-
-    const removeStrongTags = (str) => {
-      return str.replace(/<\/?strong>/g, "");
-    };
-    const cleanedData = res.info.map((item) => {
-      return {
-        ...item,
-        1: removeStrongTags(item[1]),
-      };
-    });
-    const facts = cleanedData.map((el, i) => {
-      return (
-        <div
-          key={i}
-          className="px-3 py-2 rounded-lg text-white font-mono mt-2 bg-cyan-700 rounded-2xl bg-opacity-80"
-        >
-          <span className="text-orange-300 font-bold px-2">{i}.</span>
-          {el["1"]}
-        </div>
-      );
-    });
-
-    showInfo(res, res.sample, predictionsElements, facts, expenctedScores);
+  // Обработчики изменений для input
+  const handleStrengthsHomeChange = (e) => {
+    setStrengthsHome(e.target.value);
   };
 
-  const elementsWeight = topPredictions.topPredictionsWeight.map((el, idx) => (
-    <div
-      key={idx}
-      className="flex items-center w-full py-2 mt-4 bg-sky-400 bg-opacity-20 px-3 rounded-2xl"
-    >
-      <div className="flex justify-between h-full  w-full items-center">
-        <div>
-          <span className="text-white font-bold text-sm">Кэф</span>
-          <span className="text-red-500 font-bold px-3 text-sm">{el.odd}</span>
-        </div>
-        <div>
-          <span className="text-red-500 px-3 font-bold text-xs text-center">
-            {el.name}
-          </span>
-        </div>
-        <div>
-          <span className="text-white font-bold text-sm">Прибыль</span>
-          <span className="text-red-500 px-3 font-bold text-sm">
-            {el.profit}%
-          </span>
-        </div>
-      </div>
-    </div>
-  ));
+  const handleStrengthsAwayChange = (e) => {
+    setStrengthsAway(e.target.value);
+  };
+
+  const handleWeaknessesHomeChange = (e) => {
+    setWeaknessesHome(e.target.value);
+  };
+
+  const handleWeaknessesAwayChange = (e) => {
+    setWeaknessesAway(e.target.value);
+  };
+
+  const handlePlayStyleHomeChange = (e) => {
+    setPlayStyleHome(e.target.value);
+  };
+
+  const handlePlayStyleAwayChange = (e) => {
+    setPlayStyleAway(e.target.value);
+  };
+
+  const handleDescriptionChange = (e) => {
+    setDescription(e.target.value);
+  };
+
+  const getPredict = () => {
+    const preview = removeStrongTags(info["27"]['1'])
+   
+    const facts = info["27"]["3"].map(el => {
+      return removeStrongTags(el['1'])
+    })
+
+    const motivationHome = {
+      currentMatch: removeStrongTags(info["27"]["4"][0].current_match_text),
+      lastMatch: {
+        team1_name: info["27"]["4"][0].last_match.team1_name,
+        team2_name: info["27"]["4"][0].last_match.team2_name,
+        text: removeStrongTags(info["27"]["4"][0].last_match.text)
+      },
+      nextMatch: {
+        team1_name: info["27"]["4"][0].next_match.team1_name,
+        team2_name: info["27"]["4"][0].next_match.team2_name,
+        text: removeStrongTags(info["27"]["4"][0].next_match.text)
+      },
+    }
+
+    const motivationAway = {
+      currentMatch: removeStrongTags(info["27"]["4"][1].current_match_text),
+      lastMatch: {
+        team1_name: info["27"]["4"][1].last_match.team1_name,
+        team2_name: info["27"]["4"][1].last_match.team2_name,
+        text: removeStrongTags(info["27"]["4"][1].last_match.text)
+      },
+      nextMatch: {
+        team1_name: info["27"]["4"][1].next_match.team1_name,
+        team2_name: info["27"]["4"][1].next_match.team2_name,
+        text: removeStrongTags(info["27"]["4"][1].next_match.text)
+      },
+    }
+
+    const injuries = info["27"]["5"]
+
+    const lastMatchesH2h = info["27"]["7"].map(el => {
+
+      return `${new Date(el["4"]).toDateString()} ${el["7"]} ${el["10"]} - ${el["18"]} ${el["15"]}`
+    })
+
+    const stats = {
+      avgGoalsForHome: summary[0][0]["8"],
+      avgGoalsForAway: summary[0][1]["8"],
+      avgGoalsAgHome: summary[0][0]["9"],
+      avgGoalsAgAway: summary[0][1]["9"],
+    }
+
+    const oddsAll = Object.entries(historyOdds).map(([key, value]) => {
+      return {
+        key: key,
+        odd: value[0][1]
+      }
+    })
+    .filter(el => el.odd > 1.6 && el.odd < 5) 
+    .map(el => {
+      const filteredOdds = odds.filter(item => item.period === 3)
+      const matchedItem = filteredOdds.find(item => el.key === item.odd); 
+      return matchedItem ? { name: matchedItem.name, odd: el.odd } : undefined;
+    })
+    .filter(el => el !== undefined)
+    .map(el => {
+      return `${el.name} - ${el.odd}`
+    })
+
+    console.log(oddsAll)
+
+    const result = `
+    Составь прогноз на матч, проанализируй все, проведи все возможные рассчеты, и выбери саму лучшую ставку. Матч ${info[7][1]}-${info[8][1]}
+    Превью: ${preview};
+    Факты: ${facts};
+    Мотивация ${info[7][1]}: 
+    Текущий матч: ${motivationHome.currentMatch};
+    Прошедший матч: ${motivationHome.lastMatch.team1_name} - ${motivationHome.lastMatch.team2_name}: ${motivationHome.lastMatch.text};
+    Следующий матч: ${motivationHome.nextMatch.team1_name} - ${motivationHome.nextMatch.team2_name}: ${motivationHome.nextMatch.text};
+    Мотивация ${info[8][1]}: 
+    Текущий матч: ${motivationAway.currentMatch};
+    Прошедший матч: ${motivationAway.lastMatch.team1_name} - ${motivationAway.lastMatch.team2_name}: ${motivationAway.lastMatch.text};
+    Следующий матч: ${motivationAway.nextMatch.team1_name} - ${motivationAway.nextMatch.team2_name}: ${motivationAway.nextMatch.text};
+    Травмы: ${injuries};
+    Матчи между собой: ${lastMatchesH2h};
+    Статистика: Ср. забитые голы ${info[7][1]}: ${stats.avgGoalsForHome} ; Ср. пропущенные голы ${info[7][1]}: ${stats.avgGoalsAgHome}; Ср. забитые голы ${info[8][1]}: ${stats.avgGoalsForHome}; Ср. пропущенные голы ${info[8][1]}: ${stats.avgGoalsAgAway};
+    Ставки и коэффициенты: ${oddsAll}
+    Сильные стороны ${info[7][1]}: ${strengthsHome};
+    Сильные стороны ${info[8][1]}: ${strengthsAway};
+    Слабые стороны ${info[7][1]}: ${weaknessesHome};
+    Слабые стороны ${info[8][1]}: ${weaknessesAway};
+    Стиль игры ${info[7][1]}: ${playStyleHome};
+    Стиль игры ${info[8][1]}: ${playStyleAway};
+    Описание матча: ${description}.
+    `
+
+    setResult(result)
+  };
 
   useEffect(() => {
     // Получаем данные для прогноза
@@ -200,72 +164,25 @@ const Match = () => {
       try {
         const [
           matchesInfoNbbet,
-          matchesPredictionsNbbet1,
-          matchesPredictionsNbbet2,
-          matchesPredictionsNbbet3,
-          matchesPredictionsNbbet4,
-          historyOdds,
-          lastMatches,
           odds,
           summary,
+          historyOdds
         ] = await Promise.all([
           nbbetServices.getMatchInfo(),
-          nbbetServices.getMatchPredictions(1),
-          nbbetServices.getMatchPredictions(2),
-          nbbetServices.getMatchPredictions(3),
-          nbbetServices.getMatchPredictions(4),
-          nbbetServices.getHistoryOdds(),
-          nbbetServices.getLastMatches(),
           getOdds(),
           nbbetServices.getSummary(),
+          nbbetServices.getHistoryOdds(),
         ]);
 
-        const matchesPredictionsNbbet = [
-          ...matchesPredictionsNbbet1.data.match.data["1"],
-          ...matchesPredictionsNbbet2.data.match.data["1"],
-          ...matchesPredictionsNbbet3.data.match.data["1"],
-          ...matchesPredictionsNbbet4.data.match.data["1"],
-        ];
-        console.log(lastMatches.data.match.data);
-
-        const LastMatchesInfoHome = lastMatches.data.match.data[0]
-          .slice(0, 15)
-          .map((el) => {
-            return nbbetServices.getMatchInfo(el["3"]);
-          });
-        const LastMatchesInfoAway = lastMatches.data.match.data[1]
-          .slice(0, 15)
-          .map((el) => {
-            return nbbetServices.getMatchInfo(el["3"]);
-          });
-
-        console.log(LastMatchesInfoAway);
-
-        // Используем Promise.all для ожидания выполнения всех промисов
-        Promise.all([
-          Promise.all(LastMatchesInfoHome),
-          Promise.all(LastMatchesInfoAway),
-        ])
-          .then(([homeResults, awayResults]) => {
-            // homeResults и awayResults содержат массивы с результатами
-            console.log("Home matches info:", homeResults);
-            console.log("Away matches info:", awayResults);
-            setLastMatchesInfoHome(homeResults);
-            setLastMatchesInfoAway(awayResults);
-          })
-          .catch((error) => {
-            console.error("Ошибка получения данных матчей:", error);
-          });
+        console.log(matchesInfoNbbet)
+        console.log(odds)
+        console.log(summary)
+        console.log(historyOdds)
 
         setInfo(matchesInfoNbbet.data.match.data.match);
-        setPredictions(matchesPredictionsNbbet);
         setOdds(odds.odds);
         setSummary(summary.data.match.data);
-        setHistoryOdds(historyOdds.data.match.data);
-        setLastMatches(lastMatches.data.match.data);
-        setTopPredictions(
-          filterPredictions(matchesPredictionsNbbet, odds.odds)
-        );
+        setHistoryOdds(historyOdds.data.match.data)
 
         setIsLoading(true);
       } catch (error) {
@@ -326,98 +243,89 @@ const Match = () => {
               </span>
             </div>
           </div>
-
-          <div className="flex justify-center my-5">
-            <Segmented
-              className="text-white font-bold bg-sky-400 bg-opacity-40"
-              options={["Прогноз", "Факты", "Матчи"]}
-              defaultValue="Прогноз"
-              onChange={(value) => {
-                if (value === "Прогноз") {
-                  setContent(
-                    <>
-                      <h2 className="text-white font-bold font-mono text-xl text-center my-3">
-                        Прогнозы пользователей
-                      </h2>
-                      <div>
-                        <PercentPredict predictions={predictions} odds={odds} />
-                      </div>
-                      <h2 className="text-white font-bold font-mono text-xl text-center mt-3">
-                        Топ прогнозы
-                      </h2>
-                      <div className="pb-10">
-                        {elementsWeight.length > 0 ? (
-                          elementsWeight
-                        ) : (
-                          <div className=" flex justify-center items-center">
-                            <Empty
-                              description={
-                                <span className="font-mono text-lg font-medium text-white">
-                                  На данный момент нет топ прогнозов
-                                </span>
-                              }
-                            ></Empty>
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex justify-center my-3">
-                        <button
-                          onClick={getPredict}
-                          className="px-7 py-3 rounded-lg bg-orange-500 text-white font-mono font-bold"
-                        >
-                          Рассчитать прогноз
-                        </button>
-                      </div>
-                      <div className="mt-5">.</div>
-                    </>
-                  );
-                } else if (value === "Факты") {
-                  setContent(<Facts info={info} />);
-                } else if (value === "Матчи") {
-                  setContent(<LastMatches matches={lastMatches} />);
-                }
-              }}
-            />
+          <div>
+            <div>
+              <h2 className="text-center font-bold text-slate-200">Сильные стороны Домашней команды</h2>
+              <div className="flex justify-evenly my-3">
+                <input 
+                  type="text" 
+                  value={strengthsHome}
+                  onChange={handleStrengthsHomeChange}
+                />
+              </div>
+            </div>
+            <div>
+              <h2 className="text-center font-bold text-slate-200">Слабые стороны Домашней команды</h2>
+              <div className="flex justify-evenly my-3">
+                <input 
+                  type="text" 
+                  value={weaknessesHome}
+                  onChange={handleWeaknessesHomeChange}
+                />
+              </div>
+            </div>
+            <div>
+              <h2 className="text-center font-bold text-slate-200">Стиль игры Домашней команды</h2>
+              <div className="flex justify-evenly my-3">
+                <input 
+                  type="text" 
+                  value={playStyleHome}
+                  onChange={handlePlayStyleHomeChange}
+                />
+              </div>
+            </div>
+            <div>
+              <h2 className="text-center font-bold text-slate-200">Сильные стороны Гостевой команды</h2>
+              <div className="flex justify-evenly my-3">
+                <input 
+                  type="text" 
+                  value={strengthsAway}
+                  onChange={handleStrengthsAwayChange}
+                />
+              </div>
+            </div>
+            <div>
+              <h2 className="text-center font-bold text-slate-200">Слабые стороны Гостевой команды</h2>
+              <div className="flex justify-evenly my-3">
+                <input 
+                  type="text" 
+                  value={weaknessesAway}
+                  onChange={handleWeaknessesAwayChange}
+                />
+              </div>
+            </div>
+            <div>
+              <h2 className="text-center font-bold text-slate-200">Стиль игры Гостевой команды</h2>
+              <div className="flex justify-evenly my-3">
+                <input 
+                  type="text" 
+                  value={playStyleAway}
+                  onChange={handlePlayStyleAwayChange}
+                />
+              </div>
+            </div>
+            <div>
+              <h2 className="text-center font-bold text-slate-200">Описание матча</h2>
+              <div className="flex justify-evenly my-3">
+                <input 
+                  type="text" 
+                  value={description}
+                  onChange={handleDescriptionChange}
+                />
+              </div>
+            </div>
+            <div className="flex justify-center mt-10"> 
+              <button 
+                className="px-5 py-2 bg-green-500 text-slate-100 font-bold rounded-xl" 
+                onClick={getPredict}
+              >
+                Составить промт
+              </button>
+            </div>
+            <div className="mt-4 bg-slate-700 text-white px-3 py-3">
+              {result}
+            </div>
           </div>
-          {content ? (
-            content
-          ) : (
-            <>
-              <h2 className="text-white font-bold font-mono text-xl text-center my-3">
-                Прогнозы пользователей
-              </h2>
-              <div>
-                <PercentPredict predictions={predictions} odds={odds} />
-              </div>
-              <h2 className="text-white font-bold font-mono text-xl text-center mt-3">
-                Топ прогнозы
-              </h2>
-              <div className="pb-10">
-                {elementsWeight.length > 0 ? (
-                  elementsWeight
-                ) : (
-                  <div className=" flex justify-center items-center">
-                    <Empty
-                      description={
-                        <span className="font-mono text-lg font-medium text-white">
-                          На данный момент нет топ прогнозов
-                        </span>
-                      }
-                    ></Empty>
-                  </div>
-                )}
-              </div>
-              <div className="flex justify-center my-3 mb-5">
-                <button
-                  onClick={getPredict}
-                  className="px-7 py-3 rounded-lg bg-orange-500 text-white font-mono font-bold"
-                >
-                  Рассчитать прогноз
-                </button>
-              </div>
-              <div className="mt-5">.</div>
-            </>
-          )}
         </div>
       ) : (
         <Loading />

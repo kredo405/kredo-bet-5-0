@@ -14,11 +14,6 @@ const Header = () => {
 
   const navigation = [
     {
-      name: "Топ",
-      link: "/home/top",
-      logo: "https://img.icons8.com/?size=100&id=9ShNnttFUTZA&format=png&color=000000",
-    },
-    {
       name: "Футбол",
       link: "/home/football",
       logo: "https://img.icons8.com/?size=100&id=9820&format=png&color=209BFF",

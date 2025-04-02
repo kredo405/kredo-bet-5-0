@@ -146,13 +146,13 @@ const Match = () => {
     Матчи между собой: ${lastMatchesH2h};
     Статистика: Ср. забитые голы ${info[7][1]}: ${stats.avgGoalsForHome} ; Ср. пропущенные голы ${info[7][1]}: ${stats.avgGoalsAgHome}; Ср. забитые голы ${info[8][1]}: ${stats.avgGoalsForHome}; Ср. пропущенные голы ${info[8][1]}: ${stats.avgGoalsAgAway};
     Ставки и коэффициенты: ${oddsAll}
-    Сильные стороны ${info[7][1]}: ${strengthsHome};
-    Сильные стороны ${info[8][1]}: ${strengthsAway};
-    Слабые стороны ${info[7][1]}: ${weaknessesHome};
-    Слабые стороны ${info[8][1]}: ${weaknessesAway};
-    Стиль игры ${info[7][1]}: ${playStyleHome};
-    Стиль игры ${info[8][1]}: ${playStyleAway};
-    Описание матча: ${description}.
+    ${strengthsHome ? `Сильные стороны ${info[7][1]}: ${strengthsHome}` : ""} 
+    ${strengthsAway ? `Сильные стороны ${info[8][1]}: ${strengthsAway}`: ""}
+    ${weaknessesHome ? `Слабые стороны ${info[7][1]}: ${weaknessesHome};` : ""}
+    ${weaknessesAway ? `Слабые стороны ${info[8][1]}: ${weaknessesAway};` : ""}
+    ${playStyleHome ? `Стиль игры ${info[7][1]}: ${playStyleHome};` : ""}
+    ${playStyleAway ? `Стиль игры ${info[8][1]}: ${playStyleAway};` : ""}
+    ${description ? `Описание матча: ${description}.` : ""}
     `
 
     setResult(result)

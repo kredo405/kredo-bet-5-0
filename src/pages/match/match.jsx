@@ -5,8 +5,6 @@ import { Loading } from "../../components/Loading/Loading";
 import { nbbetServices } from "../../services/nbbet";
 import getOdds from "../../utils/getOdds";
 import { MoreOutlined } from "@ant-design/icons";
-import { current } from "@reduxjs/toolkit";
-import { div } from "@tensorflow/tfjs";
 
 const errorModal = (message) => {
   Modal.error({
@@ -32,6 +30,10 @@ const Match = () => {
   const [playStyleHome, setPlayStyleHome] = useState("");
   const [playStyleAway, setPlayStyleAway] = useState("");
   const [description, setDescription] = useState("");
+  const [xgHome, setXgHome] = useState("");
+  const [xgAgHome, setXgAgHome] = useState("");
+  const [xgAway, setXgAway] = useState("");
+  const [xgAgAway, setXgAgAway] = useState("");
   const [result, setResult] = useState("");
 
   // Обработчики изменений для input
@@ -63,9 +65,25 @@ const Match = () => {
     setDescription(e.target.value);
   };
 
+  const handleXgHomeChange = (e) => {
+    setXgHome(e.target.value);
+  };
+
+  const handleXgAgHomeChange = (e) => {
+    setXgAgHome(e.target.value);
+  };
+
+  const handleXgAwayChange = (e) => {
+    setXgAway(e.target.value);
+  };
+
+  const handleXgAgAwayChange = (e) => {
+    setXgAgAway(e.target.value);
+  };
+
   const getPredict = () => {
     const preview = removeStrongTags(info["27"]['1'])
-   
+
     const facts = info["27"]["3"].map(el => {
       return removeStrongTags(el['1'])
     })
@@ -118,24 +136,24 @@ const Match = () => {
         odd: value[0][1]
       }
     })
-    .filter(el => el.odd > 1.6 && el.odd < 5) 
-    .map(el => {
-      const filteredOdds = odds.filter(item => item.period === 3)
-      const matchedItem = filteredOdds.find(item => el.key === item.odd); 
-      return matchedItem ? { name: matchedItem.name, odd: el.odd } : undefined;
-    })
-    .filter(el => el !== undefined)
-    .map(el => {
-      return `${el.name} - ${el.odd}`
+      .filter(el => el.odd > 1.6 && el.odd < 5)
+      .map(el => {
+        const filteredOdds = odds.filter(item => item.period === 3)
+        const matchedItem = filteredOdds.find(item => el.key === item.odd);
+        return matchedItem ? { name: matchedItem.name, odd: el.odd } : undefined;
+      })
+      .filter(el => el !== undefined)
+      .map(el => {
+        return `${el.name} - ${el.odd}`
+      })
+
+    const lastMatchesHome = lastMatches[0].splice(0, 5).map(el => {
+      return `${new Date(el["4"]).toDateString()} ${el["7"]} ${el["10"]} - ${el["18"]} ${el["15"]}`
     })
 
-   const lastMatchesHome = lastMatches[0].splice(0, 5).map(el => {
-     return `${new Date(el["4"]).toDateString()} ${el["7"]} ${el["10"]} - ${el["18"]} ${el["15"]}`
-   })
-
-   const lastMatchesAway = lastMatches[1].splice(0, 5).map(el => {
-    return `${new Date(el["4"]).toDateString()} ${el["7"]} ${el["10"]} - ${el["18"]} ${el["15"]}`
-  })
+    const lastMatchesAway = lastMatches[1].splice(0, 5).map(el => {
+      return `${new Date(el["4"]).toDateString()} ${el["7"]} ${el["10"]} - ${el["18"]} ${el["15"]}`
+    })
 
     const result = `
     Составь прогноз на матч, проанализируй все, проведи все возможные рассчеты, смоделируй на основе сильных, слабых сторон команд и стиля игры как будет проходить игра и выбери саму лучшую ставку. Матч ${info[7][1]}-${info[8][1]}
@@ -159,12 +177,16 @@ const Match = () => {
     Статистика: Ср. забитые голы ${info[7][1]}: ${stats.avgGoalsForHome} ; Ср. пропущенные голы ${info[7][1]}: ${stats.avgGoalsAgHome}; Ср. забитые голы ${info[8][1]}: ${stats.avgGoalsForHome}; Ср. пропущенные голы ${info[8][1]}: ${stats.avgGoalsAgAway};
     Ставки и коэффициенты: ${oddsAll}
     ${strengthsHome ? `Сильные стороны ${info[7][1]}: ${strengthsHome}` : ""} 
-    ${strengthsAway ? `Сильные стороны ${info[8][1]}: ${strengthsAway}`: ""}
+    ${strengthsAway ? `Сильные стороны ${info[8][1]}: ${strengthsAway}` : ""}
     ${weaknessesHome ? `Слабые стороны ${info[7][1]}: ${weaknessesHome};` : ""}
     ${weaknessesAway ? `Слабые стороны ${info[8][1]}: ${weaknessesAway};` : ""}
     ${playStyleHome ? `Стиль игры ${info[7][1]}: ${playStyleHome};` : ""}
     ${playStyleAway ? `Стиль игры ${info[8][1]}: ${playStyleAway};` : ""}
     ${description ? `Описание матча: ${description}.` : ""}
+    ${xgHome ? `Xg ${info[7][1]}: ${xgHome};` : ""}
+    ${xgAway ? `Xg ${info[8][1]}: ${xgAway};` : ""}
+    ${xgAgHome ? `Xg пропущенные ${info[7][1]}: ${xgAgHome};` : ""}
+    ${xgAgAway ? `Xg пропущенные ${info[8][1]}: ${xgAgAway};` : ""}
     `
 
     setResult(result)
@@ -263,8 +285,8 @@ const Match = () => {
             <div>
               <h2 className="text-center font-bold text-slate-200">Сильные стороны Домашней команды</h2>
               <div className="flex justify-evenly my-3">
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   value={strengthsHome}
                   className="px-2 py-2 rounded-lg w-[200px]"
                   onChange={handleStrengthsHomeChange}
@@ -274,8 +296,8 @@ const Match = () => {
             <div>
               <h2 className="text-center font-bold text-slate-200">Слабые стороны Домашней команды</h2>
               <div className="flex justify-evenly my-3">
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   value={weaknessesHome}
                   className="px-2 py-2 rounded-lg w-[200px]"
                   onChange={handleWeaknessesHomeChange}
@@ -285,8 +307,8 @@ const Match = () => {
             <div>
               <h2 className="text-center font-bold text-slate-200">Стиль игры Домашней команды</h2>
               <div className="flex justify-evenly my-3">
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   value={playStyleHome}
                   className="px-2 py-2 rounded-lg w-[200px]"
                   onChange={handlePlayStyleHomeChange}
@@ -296,8 +318,8 @@ const Match = () => {
             <div>
               <h2 className="text-center font-bold text-slate-200">Сильные стороны Гостевой команды</h2>
               <div className="flex justify-evenly my-3">
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   value={strengthsAway}
                   className="px-2 py-2 rounded-lg w-[200px]"
                   onChange={handleStrengthsAwayChange}
@@ -307,8 +329,8 @@ const Match = () => {
             <div>
               <h2 className="text-center font-bold text-slate-200">Слабые стороны Гостевой команды</h2>
               <div className="flex justify-evenly my-3">
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   value={weaknessesAway}
                   className="px-2 py-2 rounded-lg w-[200px]"
                   onChange={handleWeaknessesAwayChange}
@@ -318,8 +340,8 @@ const Match = () => {
             <div>
               <h2 className="text-center font-bold text-slate-200">Стиль игры Гостевой команды</h2>
               <div className="flex justify-evenly my-3">
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   value={playStyleAway}
                   className="px-2 py-2 rounded-lg w-[200px]"
                   onChange={handlePlayStyleAwayChange}
@@ -329,17 +351,61 @@ const Match = () => {
             <div>
               <h2 className="text-center font-bold text-slate-200">Описание матча</h2>
               <div className="flex justify-evenly my-3">
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   value={description}
                   className="px-2 py-2 rounded-lg w-[200px]"
                   onChange={handleDescriptionChange}
                 />
               </div>
             </div>
-            <div className="flex justify-center mt-10"> 
-              <button 
-                className="px-5 py-2 bg-green-500 text-slate-100 font-bold rounded-xl" 
+            <div>
+              <h2 className="text-center font-bold text-slate-200">Xg Домашней команды</h2>
+              <div className="flex justify-evenly my-3">
+                <input
+                  type="text"
+                  value={xgHome}
+                  className="px-2 py-2 rounded-lg w-[200px]"
+                  onChange={handleXgHomeChange}
+                />
+              </div>
+            </div>
+            <div>
+              <h2 className="text-center font-bold text-slate-200">Xg пропущенные Домашней команды</h2>
+              <div className="flex justify-evenly my-3">
+                <input
+                  type="text"
+                  value={xgAgHome}
+                  className="px-2 py-2 rounded-lg w-[200px]"
+                  onChange={handleXgAgHomeChange}
+                />
+              </div>
+            </div>
+            <div>
+              <h2 className="text-center font-bold text-slate-200">Xg Гостевой команды</h2>
+              <div className="flex justify-evenly my-3">
+                <input
+                  type="text"
+                  value={xgAway}
+                  className="px-2 py-2 rounded-lg w-[200px]"
+                  onChange={handleXgAwayChange}
+                />
+              </div>
+            </div>
+            <div>
+              <h2 className="text-center font-bold text-slate-200">Xg пропущенные Гостевой команды</h2>
+              <div className="flex justify-evenly my-3">
+                <input
+                  type="text"
+                  value={xgAgAway}
+                  className="px-2 py-2 rounded-lg w-[200px]"
+                  onChange={handleXgAgAwayChange}
+                />
+              </div>
+            </div>
+            <div className="flex justify-center mt-10">
+              <button
+                className="px-5 py-2 bg-green-500 text-slate-100 font-bold rounded-xl"
                 onClick={getPredict}
               >
                 Составить промт

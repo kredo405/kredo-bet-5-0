@@ -65,16 +65,14 @@ export default function Velcome() {
               <div className="sm:text-center lg:text-left">
                 <h1 className="text-2xl tracking-tight font-extrabold text-gray-900 sm:text-3xl md:text-4xl flex flex-col">
                   <span className="block xl:inline">
-                    Прогнозирование и аналитика
+                    Создание промтов
                   </span>{" "}
                   <span className="block text-indigo-600 xl:inline">
                     для ставок на спорт
                   </span>
                 </h1>
                 <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                  На сайте представлена продвинутая статистика, денежные потоки,
-                  прогнозы с топовых сайтов, а также математические прогнозы на
-                  основе теории вероятности
+                  На сайте представлен интсрумент для создания промта для AI чатов. На основе промтов AI чаты будут создавать прогнозы 
                 </p>
                 <div className="mt-5 sm:mt-8 sm:flex sm:justify-center flex-wrap lg:justify-start">
                   <div className="rounded-md shadow">

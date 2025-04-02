@@ -18,21 +18,6 @@ const Header = () => {
       link: "/home/football",
       logo: "https://img.icons8.com/?size=100&id=9820&format=png&color=209BFF",
     },
-    {
-      name: "Хокей",
-      link: "/home/hockey",
-      logo: "https://img.icons8.com/?size=100&id=aM8RTSMfO2Hc&format=png&color=000000",
-    },
-    {
-      name: "Баскетбол",
-      link: "/home/basketball",
-      logo: "https://img.icons8.com/?size=100&id=3503&format=png&color=FF7300",
-    },
-    {
-      name: "Теннис",
-      link: "/home/tenis",
-      logo: "https://img.icons8.com/?size=100&id=AF2FJWsPaMoY&format=png&color=000000",
-    },
   ];
 
   return (
@@ -54,7 +39,7 @@ const Header = () => {
                   </Disclosure.Button>
                 </div>
                 <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                  <div className="flex items-center">
+                  <Link to={"/home/top"} className="flex items-center">
                     <img
                       className="block h-14 w-auto lg:hidden"
                       src={logo}
@@ -65,13 +50,13 @@ const Header = () => {
                       src={logo}
                       alt="Your Company"
                     />
-                  </div>
+                  </Link>
                   <div className="hidden sm:ml-16 sm:block">
                     <div className="flex">
                       {navigation.map((item) => (
                         <Link
                           key={item.name}
-                          to={item.link}
+                          to={"/home/top"}
                           className={classNames(
                             "text-gray-300 hover:bg-gray-700 hover:text-white",
                             "rounded-md px-3 py-2 text-sm font-medium flex items-center"
@@ -96,7 +81,7 @@ const Header = () => {
                 {navigation.map((item) => (
                   <Link
                     key={item.name}
-                    to={item.link}
+                    to={"/home/top"}
                     className={classNames(
                       "text-gray-300 hover:bg-gray-700 hover:text-white",
                       "block rounded-md px-3 py-2 text-base font-medium flex items-center"

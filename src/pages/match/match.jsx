@@ -31,9 +31,10 @@ const Match = () => {
   const [playStyleAway, setPlayStyleAway] = useState("");
   const [description, setDescription] = useState("");
   const [xgHome, setXgHome] = useState("");
-  const [xgAgHome, setXgAgHome] = useState("");
   const [xgAway, setXgAway] = useState("");
-  const [xgAgAway, setXgAgAway] = useState("");
+  const [rateHome, setRateHome] = useState("");
+  const [rateAway, setRateAway] = useState("");
+  const [momentPredict, setMomentPredict] = useState("");
   const [result, setResult] = useState("");
 
   // Обработчики изменений для input
@@ -69,16 +70,19 @@ const Match = () => {
     setXgHome(e.target.value);
   };
 
-  const handleXgAgHomeChange = (e) => {
-    setXgAgHome(e.target.value);
-  };
-
   const handleXgAwayChange = (e) => {
     setXgAway(e.target.value);
   };
 
-  const handleXgAgAwayChange = (e) => {
-    setXgAgAway(e.target.value);
+  const handleRateHomeChange = (e) => {
+    setRateHome(e.target.value);
+  };
+
+  const handleRateAwayChange = (e) => {
+    setRateAway(e.target.value);
+  };
+  const handlePredictMomentChange = (e) => {
+    setMomentPredict(e.target.value);
   };
 
   const getPredict = () => {
@@ -128,6 +132,32 @@ const Match = () => {
       avgGoalsForAway: summary[0][1]["8"],
       avgGoalsAgHome: summary[0][0]["9"],
       avgGoalsAgAway: summary[0][1]["9"],
+      gamesHome: summary[0][0]["1"],
+      gamesAway: summary[0][1]["1"],
+      winsHome: summary[0][0]["2"],
+      winsAway: summary[0][1]["2"],
+      drawsHome: summary[0][0]["3"],
+      drawsAway: summary[0][1]["3"],
+      losesHome: summary[0][0]["4"],
+      losesAway: summary[0][1]["4"],
+      awgTotalHome: summary[0][0]["7"],
+      awgTotalAway: summary[0][1]["7"],
+      shotsOnTargetHome: summary[0][0]["20"],
+      shotsOnTargetAway: summary[0][1]["20"],
+      shotsOnTargetOppHome: summary[0][0]["21"],
+      shotsOnTargetOppAway: summary[0][1]["21"],
+      shotsHome: summary[0][0]["32"],
+      shotsAway: summary[0][1]["32"],
+      shotsOppHome: summary[0][0]["33"],
+      shotsOppAway: summary[0][1]["33"],
+      attaksHome: summary[0][0]["36"],
+      attaksAway: summary[0][1]["36"],
+      attaksOppHome: summary[0][0]["37"],
+      attaksOppAway: summary[0][1]["37"],
+      possHome: summary[0][0]["71"],
+      possAway: summary[0][1]["71"],
+      possOppHome: summary[0][0]["72"],
+      possOppAway: summary[0][1]["72"],
     }
 
     const oddsAll = Object.entries(historyOdds).map(([key, value]) => {
@@ -148,49 +178,119 @@ const Match = () => {
       })
 
     const lastMatchesHome = lastMatches[0].splice(0, 5).map(el => {
-      return `${new Date(el["4"]).toDateString()} ${el["7"]} ${el["10"]} - ${el["18"]} ${el["15"]}`
+      return ` ${new Date(el["4"]).toDateString()} ${el["7"]} ${el["10"]} - ${el["18"]} ${el["15"]} `
     })
 
     const lastMatchesAway = lastMatches[1].splice(0, 5).map(el => {
-      return `${new Date(el["4"]).toDateString()} ${el["7"]} ${el["10"]} - ${el["18"]} ${el["15"]}`
+      return ` ${new Date(el["4"]).toDateString()} ${el["7"]} ${el["10"]} - ${el["18"]} ${el["15"]} `
     })
 
-    const result = `
-    Составь прогноз на матч, проанализируй все, проведи все возможные рассчеты, смоделируй на основе сильных, слабых сторон команд и стиля игры как будет проходить игра и выбери саму лучшую ставку. Матч ${info[7][1]}-${info[8][1]}
-    Превью: ${preview};
-    Стадион: ${info[18][2]};
-    Температура воздуха: ${info[18][3]};
-    Погода: ${info[18][4]};
-    Факты: ${facts};
-    Мотивация ${info[7][1]}: 
-    Текущий матч: ${motivationHome.currentMatch};
-    Прошедший матч: ${motivationHome.lastMatch.team1_name} - ${motivationHome.lastMatch.team2_name}: ${motivationHome.lastMatch.text};
-    Следующий матч: ${motivationHome.nextMatch.team1_name} - ${motivationHome.nextMatch.team2_name}: ${motivationHome.nextMatch.text};
-    Мотивация ${info[8][1]}: 
-    Текущий матч: ${motivationAway.currentMatch};
-    Прошедший матч: ${motivationAway.lastMatch.team1_name} - ${motivationAway.lastMatch.team2_name}: ${motivationAway.lastMatch.text};
-    Следующий матч: ${motivationAway.nextMatch.team1_name} - ${motivationAway.nextMatch.team2_name}: ${motivationAway.nextMatch.text};
-    Травмы: ${injuries};
-    Матчи между собой: ${lastMatchesH2h};
-    Последние 5 матчей ${info[7][1]}: ${lastMatchesHome};
-    Последние 5 матчей ${info[8][1]}: ${lastMatchesAway};
-    Статистика: Ср. забитые голы ${info[7][1]}: ${stats.avgGoalsForHome} ; Ср. пропущенные голы ${info[7][1]}: ${stats.avgGoalsAgHome}; Ср. забитые голы ${info[8][1]}: ${stats.avgGoalsForHome}; Ср. пропущенные голы ${info[8][1]}: ${stats.avgGoalsAgAway};
-    Ставки и коэффициенты: ${oddsAll}
-    ${strengthsHome ? `Сильные стороны ${info[7][1]}: ${strengthsHome}` : ""} 
-    ${strengthsAway ? `Сильные стороны ${info[8][1]}: ${strengthsAway}` : ""}
-    ${weaknessesHome ? `Слабые стороны ${info[7][1]}: ${weaknessesHome};` : ""}
-    ${weaknessesAway ? `Слабые стороны ${info[8][1]}: ${weaknessesAway};` : ""}
-    ${playStyleHome ? `Стиль игры ${info[7][1]}: ${playStyleHome};` : ""}
-    ${playStyleAway ? `Стиль игры ${info[8][1]}: ${playStyleAway};` : ""}
-    ${description ? `Описание матча: ${description}.` : ""}
-    ${xgHome ? `Xg ${info[7][1]}: ${xgHome};` : ""}
-    ${xgAway ? `Xg ${info[8][1]}: ${xgAway};` : ""}
-    ${xgAgHome ? `Xg пропущенные ${info[7][1]}: ${xgAgHome};` : ""}
-    ${xgAgAway ? `Xg пропущенные ${info[8][1]}: ${xgAgAway};` : ""}
-    `
+    const generateAiPrompt = (info, preview, facts, motivationHome, motivationAway, injuries, lastMatchesH2h, lastMatchesHome, lastMatchesAway, stats, oddsAll, strengthsHome, strengthsAway, weaknessesHome, weaknessesAway, playStyleHome, playStyleAway, description, xgHome, xgAway, rateHome, rateAway, momentPredict) => {
+      const teamHome = info[7][1];
+      const teamAway = info[8][1];
+      const stadium = info[18][2];
+      const temperature = info[18][3];
+      const weather = info[18][4];
+    
+      const prompt = `
+    Проанализируй все предоставленые мной данные и сформируй прогноз на матч между командами ${teamHome} и ${teamAway}. Учти следующие данные так же проведи все возможные рассчеты для более точного прогнозирования:
+    
+    **1. Общая информация о матче:**
+    - Превью: ${preview}
+    - Стадион: ${stadium}
+    - Температура воздуха: ${temperature}
+    - Погода: ${weather}
+    - Факты о матче: ${facts}
+    
+    **2. Анализ формы команд:**
+    - **Для команды${teamHome} --->:**
+      - Последние 5 матчей: ${lastMatchesHome}
+      - Среднее количество забитых голов в турнире: ${stats.avgGoalsForHome}
+      - Среднее количество пропущенных голов в турнире: ${stats.avgGoalsAgHome}
+      - Средний тотал голов в турнире: ${stats.awgTotalHome}
+      - Удары в створ за матч в турнире: ${stats.shotsOnTargetHome}
+      - Удары в створ у противников за матч в турнире: ${stats.shotsOnTargetOppHome}
+      - Xg/удар (если есть): ${xgHome}
+      - Рейтинг (если есть): ${rateHome}
+      - Сильные стороны (если есть): ${strengthsHome}
+      - Слабые стороны (если есть): ${weaknessesHome}
+      - Стиль игры (если есть): ${playStyleHome}
+    - **${teamAway}:**
+      - Последние 5 матчей: ${lastMatchesAway}
+      - Среднее количество забитых голов в турнире: ${stats.avgGoalsForAway}
+      - Среднее количество пропущенных голов в турнире: ${stats.avgGoalsAgAway}
+      - Средний тотал голов в турнире: ${stats.awgTotalAway}
+      - Удары в створ за матч в турнире: ${stats.shotsOnTargetAway}
+      - Удары в створ у противников за матч в турнире: ${stats.shotsOnTargetOppAway}
+      - Xg/удар (если есть): ${xgAway}
+      - Рейтинг (если есть): ${rateAway}
+      - Сильные стороны (если есть): ${strengthsAway}
+      - Слабые стороны (если есть): ${weaknessesAway}
+      - Стиль игры (если есть): ${playStyleAway}
+    
+    **3. Мотивация команд:**
+    - **${teamHome}:**
+      - Текущий матч: ${motivationHome.currentMatch}
+      - Прошедший матч: ${motivationHome.lastMatch.team1_name} - ${motivationHome.lastMatch.team2_name}: ${motivationHome.lastMatch.text}
+      - Следующий матч: ${motivationHome.nextMatch.team1_name} - ${motivationHome.nextMatch.team2_name}: ${motivationHome.nextMatch.text}
+    - **${teamAway}:**
+      - Текущий матч: ${motivationAway.currentMatch}
+      - Прошедший матч: ${motivationAway.lastMatch.team1_name} - ${motivationAway.lastMatch.team2_name}: ${motivationAway.lastMatch.text}
+      - Следующий матч: ${motivationAway.nextMatch.team1_name} - ${motivationAway.nextMatch.team2_name}: ${motivationAway.nextMatch.text}
+    
+    **4. Травмы:** ${injuries}
+    
+    **5. История личных встреч:** ${lastMatchesH2h}
+    
+    **6. Статистика команд (общая):**
+    - Сыграно матчей в турнире ${teamHome}: ${stats.gamesHome}; Победы в турнире ${teamHome}: ${stats.winsHome}; Ничьи в турнире ${teamHome}: ${stats.drawsHome}; Поражения в турнире ${teamHome}: ${stats.losesHome};
+    - Сыграно матчей в турнире ${teamAway}: ${stats.gamesAway}; Победы в турнире ${teamAway}: ${stats.winsAway}; Ничьи в турнире ${teamAway}: ${stats.drawsAway}; Поражения в турнире ${teamAway}: ${stats.losesAway};
+    - Удары за матч в турнире ${teamHome}: ${stats.shotsHome}; Удары за матч у противников в турнире ${teamHome}: ${stats.shotsOppHome}; Атаки за матч в турнире  ${teamHome}: ${stats.attaksHome}; Атаки за матч у противников в турнире ${teamHome}: ${stats.attaksOppHome}; Владение за матч в турнире ${teamHome}: ${stats.possHome}; Владение за матч у противников в турнире ${teamHome}: ${stats.possOppHome};
+    - Удары за матч в турнире ${teamAway}: ${stats.shotsAway}; Удары за матч у противников в турнире ${teamAway}: ${stats.shotsOppAway}; Атаки за матч в турнире ${teamAway}: ${stats.attaksAway}; Атаки за матч у противников в турнире ${teamAway}: ${stats.attaksOppAway}; Владение за матч в турнире ${teamAway}: ${stats.possAway}; Владение за матч у противников в турнире ${teamAway}: ${stats.possOppAway};
+    
+    **7. Мнения экспертов:** ${description}
 
-    setResult(result)
-  };
+    **8. Предположительные моменты:** ${momentPredict}
+    
+    **9. Коэффициенты букмекеров:** ${oddsAll}
+    
+    
+    **На основе этих данных предложи мне Рекомендацию по наиболее вероятной и обоснованной ставке на этот матч. Предложи несколько вариантов ставок с объяснением (например, исход матча, тотал голов, фора, комбинированные ставки и т.д.).**
+    `;
+      return prompt;
+    };
+    
+    // Пример использования (предполагается, что все переменные info, preview и т.д. уже определены):
+    const aiPrompt = generateAiPrompt(
+      info,
+      preview,
+      facts,
+      motivationHome,
+      motivationAway,
+      injuries,
+      lastMatchesH2h,
+      lastMatchesHome,
+      lastMatchesAway,
+      stats,
+      oddsAll,
+      strengthsHome,
+      strengthsAway,
+      weaknessesHome,
+      weaknessesAway,
+      playStyleHome,
+      playStyleAway,
+      description,
+      xgHome,
+      xgAway,
+      rateHome,
+      rateAway,
+      momentPredict
+    );
+    
+    console.log(aiPrompt);
+    
+    setResult(aiPrompt)
+  }
 
   useEffect(() => {
     // Получаем данные для прогноза
@@ -221,6 +321,8 @@ const Match = () => {
         setSummary(summary.data.match.data);
         setHistoryOdds(historyOdds.data.match.data)
         setLastMatches(lastMatches.data.match.data)
+
+        console.log(summary.data.match.data)
 
         setIsLoading(true);
       } catch (error) {
@@ -282,6 +384,29 @@ const Match = () => {
             </div>
           </div>
           <div>
+          <div>
+              <h2 className="text-center font-bold text-slate-200">Рейтинг домашней команды</h2>
+              <div className="flex justify-evenly my-3">
+                <input
+                  type="text"
+                  value={rateHome}
+                  className="px-2 py-2 rounded-lg w-[200px]"
+                  onChange={handleRateHomeChange}
+                />
+              </div>
+            </div>
+            <div>
+              <h2 className="text-center font-bold text-slate-200">Рейтинг гостевой команды</h2>
+              <div className="flex justify-evenly my-3">
+                <input
+                  type="text"
+                  value={rateAway}
+                  className="px-2 py-2 rounded-lg w-[200px]"
+                  onChange={handleRateAwayChange}
+                />
+              </div>
+            </div>
+            
             <div>
               <h2 className="text-center font-bold text-slate-200">Сильные стороны Домашней команды</h2>
               <div className="flex justify-evenly my-3">
@@ -349,6 +474,17 @@ const Match = () => {
               </div>
             </div>
             <div>
+              <h2 className="text-center font-bold text-slate-200">Прогноз моментов</h2>
+              <div className="flex justify-evenly my-3">
+                <input
+                  type="text"
+                  value={momentPredict}
+                  className="px-2 py-2 rounded-lg w-[200px]"
+                  onChange={handlePredictMomentChange}
+                />
+              </div>
+            </div>
+            <div>
               <h2 className="text-center font-bold text-slate-200">Описание матча</h2>
               <div className="flex justify-evenly my-3">
                 <input
@@ -360,7 +496,7 @@ const Match = () => {
               </div>
             </div>
             <div>
-              <h2 className="text-center font-bold text-slate-200">Xg Домашней команды</h2>
+              <h2 className="text-center font-bold text-slate-200">Xg/Удар Домашней команды</h2>
               <div className="flex justify-evenly my-3">
                 <input
                   type="text"
@@ -371,35 +507,13 @@ const Match = () => {
               </div>
             </div>
             <div>
-              <h2 className="text-center font-bold text-slate-200">Xg пропущенные Домашней команды</h2>
-              <div className="flex justify-evenly my-3">
-                <input
-                  type="text"
-                  value={xgAgHome}
-                  className="px-2 py-2 rounded-lg w-[200px]"
-                  onChange={handleXgAgHomeChange}
-                />
-              </div>
-            </div>
-            <div>
-              <h2 className="text-center font-bold text-slate-200">Xg Гостевой команды</h2>
+              <h2 className="text-center font-bold text-slate-200">Xg/Удар Гостевой команды</h2>
               <div className="flex justify-evenly my-3">
                 <input
                   type="text"
                   value={xgAway}
                   className="px-2 py-2 rounded-lg w-[200px]"
                   onChange={handleXgAwayChange}
-                />
-              </div>
-            </div>
-            <div>
-              <h2 className="text-center font-bold text-slate-200">Xg пропущенные Гостевой команды</h2>
-              <div className="flex justify-evenly my-3">
-                <input
-                  type="text"
-                  value={xgAgAway}
-                  className="px-2 py-2 rounded-lg w-[200px]"
-                  onChange={handleXgAgAwayChange}
                 />
               </div>
             </div>

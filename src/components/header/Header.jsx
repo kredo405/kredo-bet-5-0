@@ -10,7 +10,6 @@ function classNames(...classes) {
 }
 
 const Header = () => {
-  const navigate = useNavigate();
 
   const navigation = [
     {
@@ -51,48 +50,9 @@ const Header = () => {
                       alt="Your Company"
                     />
                   </Link>
-                  <div className="hidden sm:ml-16 sm:block">
-                    <div className="flex">
-                      {navigation.map((item) => (
-                        <Link
-                          key={item.name}
-                          to={"/home/top"}
-                          className={classNames(
-                            "text-gray-300 hover:bg-gray-700 hover:text-white",
-                            "rounded-md px-3 py-2 text-sm font-medium flex items-center"
-                          )}
-                        >
-                          <img
-                            className="w-5 mr-2"
-                            src={item.logo}
-                            alt="logo"
-                          />
-                          <span>{item.name}</span>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
-
-            <Disclosure.Panel className="sm:hidden">
-              <div className=" px-2 pb-3 pt-2">
-                {navigation.map((item) => (
-                  <Link
-                    key={item.name}
-                    to={"/home/top"}
-                    className={classNames(
-                      "text-gray-300 hover:bg-gray-700 hover:text-white",
-                      "block rounded-md px-3 py-2 text-base font-medium flex items-center"
-                    )}
-                  >
-                    <img className="w-5 mr-2" src={item.logo} alt="logo" />
-                    <span>{item.name}</span>
-                  </Link>
-                ))}
-              </div>
-            </Disclosure.Panel>
           </>
         )}
       </Disclosure>

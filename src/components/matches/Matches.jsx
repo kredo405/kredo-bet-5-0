@@ -1,253 +1,190 @@
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useEffect, useState, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { nbbetServices } from "../../services/nbbet";
-import { BackTop, Modal, Empty, Input, Card, Spin } from "antd";
+import { BackTop, Modal, Empty } from "antd";
 import { Loading } from "../Loading/Loading";
+import { nbbetServices } from "../../services/nbbet";
 import { setMatches } from "../../store/slices/matchSlice";
-import { SearchOutlined, FireOutlined } from "@ant-design/icons";
 
-const errorModal = (message) => {
-  Modal.error({ title: message });
-};
-
-const MatchItem = ({ match, navigate }) => {
-  const { id, homeLogo, homeName, awayLogo, awayName, odds, date } = match;
-  
-  // Форматируем дату
-  const formattedDate = useMemo(() => {
-    return new Date(date).toLocaleString("ru-RU", {
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit"
-    });
-  }, [date]);
-
-  return (
-    <Card 
-      className="hover:shadow-lg transition-shadow cursor-pointer mb-4"
-      onClick={() => {
-        navigate("/match");
-        sessionStorage.setItem("link", id);
-      }}
-      bodyStyle={{ padding: "12px" }}
-    >
-      <div className="flex flex-col md:flex-row justify-between items-center">
-        {/* Дата матча */}
-        <div className="text-sm text-gray-500 mb-2 md:mb-0 md:w-1/6">
-          {formattedDate}
-        </div>
-        
-        {/* Команды */}
-        <div className="flex flex-col md:flex-row items-center w-full md:w-3/5">
-          <div className="flex items-center w-full md:w-1/2 mb-2 md:mb-0">
-            <img 
-              className="w-8 h-8 mr-2 object-contain" 
-              src={homeLogo} 
-              alt={homeName} 
-            />
-            <span className="font-medium truncate">{homeName}</span>
-          </div>
-          
-          <div className="mx-2 text-gray-400 font-bold hidden md:block">VS</div>
-          
-          <div className="flex items-center w-full md:w-1/2">
-            <img 
-              className="w-8 h-8 mr-2 object-contain" 
-              src={awayLogo} 
-              alt={awayName} 
-            />
-            <span className="font-medium truncate">{awayName}</span>
-          </div>
-        </div>
-        
-        {/* Коэффициенты */}
-        <div className="flex justify-end space-x-3 mt-2 md:mt-0 w-full md:w-1/5">
-          {odds?.winHome && (
-            <div className="bg-green-100 text-green-800 px-2 py-1 rounded font-bold min-w-[40px] text-center">
-              {odds.winHome.toFixed(2)}
-            </div>
-          )}
-          {odds?.draw && (
-            <div className="bg-blue-100 text-blue-800 px-2 py-1 rounded font-bold min-w-[40px] text-center">
-              {odds.draw.toFixed(2)}
-            </div>
-          )}
-          {odds?.winAway && (
-            <div className="bg-amber-100 text-amber-800 px-2 py-1 rounded font-bold min-w-[40px] text-center">
-              {odds.winAway.toFixed(2)}
-            </div>
-          )}
-        </div>
-      </div>
-    </Card>
-  );
-};
-
-const LeagueSection = ({ league, navigate }) => {
-  if (!league.matches || league.matches.length === 0) return null;
-  
-  return (
-    <div key={league.id} className="mb-8">
-      <div className="flex items-center bg-gradient-to-r from-blue-50 to-cyan-50 p-3 rounded-t-lg border-b border-blue-200">
-        <FireOutlined className="text-red-500 mr-2" />
-        <h2 className="text-lg font-bold text-gray-800">
-          {league.name} · {league.country}
-        </h2>
-      </div>
-      
-      <div className="bg-white rounded-b-lg p-2">
-        {league.matches.map(match => (
-          <MatchItem 
-            key={match.id} 
-            match={match} 
-            navigate={navigate} 
-          />
-        ))}
-      </div>
-    </div>
-  );
+const showErrorModal = (message) => {
+  Modal.error({ title: "Ошибка", content: message });
 };
 
 const Matches = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
   
-  // Форматируем данные при загрузке
-  const [leagues, setLeagues] = useState([]);
+  const [allLeagues, setAllLeagues] = useState([]);
   const [filteredLeagues, setFilteredLeagues] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  // Загрузка данных
   useEffect(() => {
     const fetchMatches = async () => {
       try {
-        setIsLoading(true);
-        const response = await nbbetServices.getAllMatches();
-        
-        // Форматируем данные в более читаемую структуру
-        const formattedLeagues = response.data.matches.data.leagues
-          .map(league => ({
-            id: league[0],
-            name: league[1],
-            country: league[3],
-            matches: league[4]
-              .filter(match => match[4] >= Date.now()) // Будущие матчи
-              .map(match => ({
-                id: match[3],
-                date: match[4],
-                homeName: match[7],
-                homeLogo: match[8],
-                awayName: match[15],
-                awayLogo: match[16],
-                odds: match[5] ? {
-                  winHome: match[5][1],
-                  draw: match[5][2],
-                  winAway: match[5][3]
-                } : null
-              }))
-          }))
-          .filter(league => league.matches.length > 0); // Фильтруем пустые лиги
-        
-        setLeagues(formattedLeagues);
-        setFilteredLeagues(formattedLeagues);
-        dispatch(setMatches(formattedLeagues));
-      } catch (error) {
-        console.error("Ошибка при загрузке матчей:", error);
-        errorModal("Не удалось загрузить данные матчей");
-      } finally {
         setIsLoading(false);
+        const response = await nbbetServices.getAllMatches();
+        const leagues = response.data.matches.data.leagues;
+
+        // Сохраняем оригинальные данные для Redux и локального использования
+        setAllLeagues(leagues);
+        
+        // Фильтрация для отображения (без изменения оригинальных данных)
+        const displayLeagues = leagues
+          .map(league => ({
+            ...league,
+            "4": league["4"].filter(match => match["4"] >= Date.now())
+          }))
+          .filter(league => league["4"].length > 0);
+
+        setFilteredLeagues(displayLeagues);
+        
+        // Передаем в Redux оригинальные данные без изменений
+        dispatch(setMatches(leagues));
+        setIsLoading(true);
+      } catch (error) {
+        console.error("Ошибка загрузки матчей:", error);
+        showErrorModal(error.message);
       }
     };
 
     fetchMatches();
   }, [dispatch]);
 
-  // Фильтрация по поисковому запросу
   useEffect(() => {
     if (!searchQuery.trim()) {
-      setFilteredLeagues(leagues);
-      return;
-    }
-
-    const query = searchQuery.toLowerCase();
-    const filtered = leagues.filter(league => {
-      const leagueMatch = league.name.toLowerCase().includes(query) || 
-                         league.country.toLowerCase().includes(query);
-      
-      // Если лига совпадает или есть совпадения по матчам
-      if (leagueMatch) return true;
-      
-      // Проверяем матчи в лиге
-      const hasMatchingMatches = league.matches.some(match => 
-        match.homeName.toLowerCase().includes(query) || 
-        match.awayName.toLowerCase().includes(query)
-      );
-      
-      return hasMatchingMatches;
-    });
-
-    setFilteredLeagues(filtered);
-  }, [searchQuery, leagues]);
-
-  // Состояние пустого результата
-  const isEmpty = useMemo(() => {
-    return !isLoading && filteredLeagues.length === 0;
-  }, [isLoading, filteredLeagues]);
-
-  return (
-    <div className="max-w-6xl mx-auto px-4 py-6">
-      <BackTop />
-      
-      {/* Заголовок и поиск */}
-      <div className="mb-8">
+      // Используем предварительно отфильтрованные данные для отображения
+      const displayLeagues = allLeagues
+        .map(league => ({
+          ...league,
+          "4": league["4"].filter(match => match["4"] >= Date.now())
+        }))
+        .filter(league => league["4"].length > 0);
         
-        <Input
-          size="large"
-          placeholder="Поиск по лиге, стране или команде..."
-          prefix={<SearchOutlined className="text-gray-400" />}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="rounded-lg shadow-sm"
-        />
-      </div>
+      setFilteredLeagues(displayLeagues);
+    } else {
+      const query = searchQuery.toLowerCase();
+      const filtered = allLeagues
+        .filter(league => league["1"].toLowerCase().includes(query))
+        .map(league => ({
+          ...league,
+          "4": league["4"].filter(match => match["4"] >= Date.now())
+        }))
+        .filter(league => league["4"].length > 0);
+        
+      setFilteredLeagues(filtered);
+    }
+  }, [searchQuery, allLeagues]);
 
-      {isLoading ? (
-        <div className="flex justify-center my-12">
-          <Spin size="large" />
+  const renderMatchItem = (match) => {
+    const {
+      "3": id,
+      "5": odds,
+      "7": homeTeam,
+      "8": homeLogo,
+      "15": awayTeam,
+      "16": awayLogo,
+    } = match;
+
+    return (
+      <div
+        key={id}
+        onClick={() => {
+          navigate("/match");
+          sessionStorage.setItem("link", id);
+        }}
+        className="hover:bg-sky-300 w-full cursor-pointer h-16 bg-slate-50 flex justify-around items-center mb-2.5 px-2 border-1 rounded-xl border-solid border-slate-300"
+      >
+        <div className="flex pr-2 items-center w-4/12">
+          <img
+            className="w-[20px] md:w-[30px]"
+            src={homeLogo}
+            alt={homeTeam}
+          />
+          <span className="px-1 md:px-3 font-mono text-slate-700 text-sm lg:text-xl">
+            {homeTeam}
+          </span>
         </div>
-      ) : isEmpty ? (
-        <div className="flex flex-col items-center justify-center py-20 bg-white rounded-lg shadow">
+        <div className="flex pl-2 items-center w-4/12">
+          <img
+            className="w-[20px] md:w-[30px]"
+            src={awayLogo}
+            alt={awayTeam}
+          />
+          <span className="px-1 md:px-3 font-mono text-slate-700 text-sm lg:text-xl">
+            {awayTeam}
+          </span>
+        </div>
+        <div className="flex flex-col md:flex-row justify-end items-end w-2/12">
+          <span className="text-xs md:text-base lg:text-lg lg:font-bold px-1 lg:px-2 font-mono text-green-600">
+            {odds?.["1"]?.toFixed(1)}
+          </span>
+          <span className="text-xs md:text-base lg:text-lg lg:font-bold px-1 lg:px-2 font-mono text-amber-600">
+            {odds?.["2"]?.toFixed(1)}
+          </span>
+          <span className="text-xs md:text-base lg:text-lg lg:font-bold px-1 lg:px-2 font-mono text-cyan-500">
+            {odds?.["3"]?.toFixed(1)}
+          </span>
+        </div>
+      </div>
+    );
+  };
+
+  const renderLeagueSection = (league, index) => {
+    const { "1": name, "3": country, "4": matches } = league;
+
+    return (
+      <div key={`${name}_${index}`} className="mb-2 p-2">
+        <div className="w-full h-14 flex justify-between items-center bg-sky-300 mb-2">
+          <div className="flex items-center ml-2 w-full">
+            <span className="p-2 font-bold font-mono text-lg text-gray-900">
+              {country} · {name}
+            </span>
+          </div>
+        </div>
+
+        <div>{matches.map(renderMatchItem)}</div>
+      </div>
+    );
+  };
+
+  const renderContent = () => {
+    if (!isLoading) return <Loading />;
+    
+    if (filteredLeagues.length === 0) {
+      return (
+        <div className="h-screen flex justify-center items-center">
           <Empty
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
             description={
-              <span className="text-gray-600">
-                {searchQuery ? "Ничего не найдено" : "На данный момент нет матчей"}
+              <span className="font-mono text-lg font-medium text-gray-100">
+                На данный момент нет матчей
               </span>
             }
           />
-          {searchQuery && (
-            <button 
-              className="mt-4 text-blue-600 hover:text-blue-800"
-              onClick={() => setSearchQuery("")}
-            >
-              Сбросить поиск
-            </button>
-          )}
         </div>
-      ) : (
-        <div>
-          {filteredLeagues.map(league => (
-            <LeagueSection 
-              key={`${league.id}-${league.country}`} 
-              league={league} 
-              navigate={navigate} 
-            />
-          ))}
+      );
+    }
+
+    return filteredLeagues.map(renderLeagueSection);
+  };
+
+  return (
+    <div>
+      <div className="container lg:px-44 pt-10">
+        <BackTop />
+        
+        <div className="mb-10">
+          <input
+            className="rounded-lg w-full md:w-5/12 px-3 py-2"
+            placeholder="Введите название страны"
+            type="search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
-      )}
+
+        {renderContent()}
+      </div>
     </div>
   );
 };

@@ -4,7 +4,7 @@ import Matches from "../../components/matches/Matches";
 
 const Home = () => {
   return (
-    <div className="overflow-scroll bg-[url('https://sportishka.com/uploads/posts/2022-08/1660150573_1-sportishka-com-p-futbolnii-fon-dlya-prezentatsii-sport-kras-1.jpg')] bg-fixed bg-cover h-screen">
+    <div className="overflow-y-scroll bg-gradient-to-b from-gray-900 via-blue-900 to-gray-900 h-screen">
       <div className="">
         <Header />
         <Matches />

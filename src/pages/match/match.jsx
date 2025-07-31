@@ -4,9 +4,9 @@ import { BackTop, Modal, Card, Collapse, Input, Button } from "antd";
 import { Loading } from "../../components/Loading/Loading";
 import { nbbetServices } from "../../services/nbbet";
 import getOdds from "../../utils/getOdds";
-import { 
-  MoreOutlined, 
-  TeamOutlined, 
+import {
+  MoreOutlined,
+  TeamOutlined,
   BarChartOutlined,
   TrophyOutlined,
   EditOutlined,
@@ -26,18 +26,18 @@ const removeStrongTags = (str) => {
 };
 
 const TeamCard = ({ team, logo, name, onInputChange, values }) => (
-  <Card 
+  <Card
     className="bg-opacity-50 bg-slate-800 backdrop-blur-sm border-cyan-400"
     title={<span className="text-cyan-300 font-semibold">{name}</span>}
     headStyle={{ borderColor: '#0891b2' }}
   >
     <div className="flex flex-col items-center">
-      <img 
-        className="w-20 h-20 object-contain mb-3 bg-white p-1 rounded-full" 
-        src={logo} 
-        alt={name} 
+      <img
+        className="w-20 h-20 object-contain mb-3 bg-white p-1 rounded-full"
+        src={logo}
+        alt={name}
       />
-      
+
       <div className="w-full space-y-3">
         <Input
           prefix={<TrophyOutlined className="text-cyan-300" />}
@@ -209,7 +209,7 @@ const Match = () => {
       const stadium = state.info[18][2];
       const temperature = state.info[18][3];
       const weather = state.info[18][4];
-    
+
       return `
 Проанализируй все предоставленые данные и сформируй прогноз на матч между командами ${teamHome} и ${teamAway}. Учти следующие данные так же проведи все возможные рассчеты для более точного прогнозирования:
 
@@ -281,10 +281,10 @@ const Match = () => {
 **На основе этих данных предложи рекомендацию по наиболее вероятной и обоснованной ставке на этот матч. Предложи несколько вариантов ставок с объяснением (например, исход матча, тотал голов, фора, комбинированные ставки и т.д.).**
 `;
     };
-    
-    setState(prev => ({ 
-      ...prev, 
-      result: generateAiPrompt() 
+
+    setState(prev => ({
+      ...prev,
+      result: generateAiPrompt()
     }));
   };
 
@@ -323,16 +323,13 @@ const Match = () => {
     fetchData();
   }, []);
 
-  if (!state.isLoading) return <Loading />;
-
   return (
     <div className="bg-gradient-to-b from-gray-900 via-blue-900 to-gray-900 min-h-screen bg-fixed">
       <Header />
       <BackTop />
-      
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
+      {!state.isLoading ? <Loading /> : <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Заголовок матча */}
-        <Card 
+        <Card
           className="bg-opacity-70 bg-slate-800 border-cyan-500 mb-8 shadow-lg"
           bodyStyle={{ padding: "16px" }}
         >
@@ -350,14 +347,14 @@ const Match = () => {
 
         {/* Команды */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <TeamCard 
+          <TeamCard
             team="Home"
             logo={state.info[7]?.[2]}
             name={state.info[7]?.[1]}
             onInputChange={handleInputChange}
             values={state}
           />
-          
+
           <div className="flex flex-col items-center justify-center">
             <div className="flex flex-col items-center">
               <MoreOutlined className="text-4xl text-cyan-400 mb-2" />
@@ -372,8 +369,8 @@ const Match = () => {
               </p>
             </div>
           </div>
-          
-          <TeamCard 
+
+          <TeamCard
             team="Away"
             logo={state.info[8]?.[2]}
             name={state.info[8]?.[1]}
@@ -383,18 +380,18 @@ const Match = () => {
         </div>
 
         {/* Дополнительные поля */}
-        <Collapse 
-          ghost 
+        <Collapse
+          ghost
           expandIconPosition="end"
           className="bg-transparent mb-6"
         >
-          <Panel 
+          <Panel
             header={
               <span className="text-cyan-300 text-lg font-medium">
-                <EditOutlined className="mr-2" /> 
+                <EditOutlined className="mr-2" />
                 Дополнительные параметры анализа
               </span>
-            } 
+            }
             key="1"
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -407,7 +404,7 @@ const Match = () => {
                   onChange={(e) => handleInputChange("momentPredict", e.target.value)}
                   className="mb-4"
                 />
-                
+
                 <h3 className="text-cyan-300 mb-3">Экспертное мнение</h3>
                 <TextArea
                   rows={3}
@@ -416,10 +413,10 @@ const Match = () => {
                   onChange={(e) => handleInputChange("description", e.target.value)}
                 />
               </Card>
-              
+
               <div className="flex flex-col justify-center items-center">
-                <Button 
-                  type="primary" 
+                <Button
+                  type="primary"
                   size="large"
                   onClick={getPredict}
                   className="bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-500 hover:to-teal-500 h-14 w-full max-w-xs font-bold text-lg shadow-lg"
@@ -436,11 +433,11 @@ const Match = () => {
 
         {/* Результат */}
         {state.result && (
-          <Card 
-            title={<span className="text-cyan-300">Сгенерированный промт для AI</span>} 
+          <Card
+            title={<span className="text-cyan-300">Сгенерированный промт для AI</span>}
             className="bg-slate-800 bg-opacity-70 border-cyan-500"
             extra={
-              <Button 
+              <Button
                 icon={<CopyOutlined />}
                 onClick={() => navigator.clipboard.writeText(state.result)}
                 className="flex items-center text-cyan-300 border-cyan-300"
@@ -454,7 +451,8 @@ const Match = () => {
             </div>
           </Card>
         )}
-      </div>
+      </div>}
+
     </div>
   );
 };

@@ -53,7 +53,7 @@ const Authorization = () => {
                 localStorage.setItem("name", user.displayName);
                 dispatch(setToken(token));
                 if (token) {
-                    navigate("/home", { replace: true });
+                    navigate("/home/top", { replace: true });
                 }
             })
             .catch((error) => {
@@ -88,7 +88,7 @@ const Authorization = () => {
                 localStorage.setItem("name", user.displayName);
                 dispatch(setToken(token));
                 if (token) {
-                    navigate("/home", { replace: true });
+                    navigate("/home/top", { replace: true });
                 }
             })
             .catch((error) => {
@@ -123,7 +123,7 @@ const Authorization = () => {
                 localStorage.setItem("name", user.displayName);
                 dispatch(setToken(token));
                 if (token) {
-                    navigate("/home", { replace: true });
+                    navigate("/home/top", { replace: true });
                 }
             })
             .catch((error) => {
@@ -154,7 +154,7 @@ const Authorization = () => {
                 sessionStorage.setItem("email", user.email);
                 dispatch(setToken(user.accessToken));
                 if (user.accessToken) {
-                    navigate("/home", { replace: true });
+                    navigate("/home/top", { replace: true });
                 }
             })
             .catch((error) => {

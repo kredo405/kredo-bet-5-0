@@ -1,115 +1,83 @@
 import { Link } from "react-router-dom";
 import { Popover } from "@headlessui/react";
-// import { Modal } from "antd";
 import logo from "./Kredo-bet.png";
 import fon2 from "./fon2.png";
 
-// const errorModal = (message) => {
-//     Modal.error({
-//         title: message,
-//     });
-// };
-
 export default function Velcome() {
   return (
-    <div className="container">
-      <div className="relative bg-white overflow-hidden">
-        <div className="max-w-7xl mx-auto">
-          <div className="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
-            <svg
-              className="hidden lg:block absolute right-0 inset-y-0 h-full w-48 text-white transform translate-x-1/2"
-              fill="currentColor"
-              viewBox="0 0 100 100"
-              preserveAspectRatio="none"
-              aria-hidden="true"
-            >
-              <polygon points="50,0 100,0 50,100 0,100" />
-            </svg>
-
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-white">
+      <div className="relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-0 left-0 w-full h-72 bg-gradient-to-r from-indigo-100/30 to-purple-100/30 transform -skew-y-6 -translate-y-32" />
+        <div className="absolute bottom-0 right-0 w-64 h-64 rounded-full bg-indigo-200/20 blur-3xl" />
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="relative z-10 py-8 md:py-12 lg:py-16">
             <Popover>
-              <div className="relative pt-6 px-4 sm:px-6 lg:px-8">
-                <nav
-                  className="relative flex items-center justify-between sm:h-10 lg:justify-start"
-                  aria-label="Global"
-                >
-                  <div className="flex items-center flex-grow flex-shrink-0 lg:flex-grow-0">
-                    <div className="flex items-center justify-between w-full md:w-auto">
-                      <a href="#">
-                        <span className="sr-only">Kredo-Bet</span>
-                        <img
-                          alt="Kredo-bet"
-                          className="w-44 sm:h-32"
-                          src={logo}
-                        />
-                      </a>
-                    </div>
-                  </div>
-                </nav>
-              </div>
-
-              <Popover.Panel
-                focus
-                className="absolute z-10 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden"
-              >
-                <div className="rounded-lg shadow-md bg-white ring-1 ring-black ring-opacity-5 overflow-hidden">
-                  <div className="px-5 pt-4 flex items-center justify-between">
-                    <div>
-                      <img className="h-16 w-auto" src={logo} alt="logo" />
-                    </div>
-                  </div>
+              <nav className="flex items-center justify-between">
+                <div className="flex-shrink-0">
+                  <img 
+                    alt="Kredo-bet" 
+                    className="w-36 sm:w-44 transition-transform duration-300 hover:scale-105"
+                    src={logo}
+                  />
                 </div>
-              </Popover.Panel>
+              </nav>
             </Popover>
 
-            <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
-              <div className="sm:text-center lg:text-left">
-                <h1 className="text-2xl tracking-tight font-extrabold text-gray-900 sm:text-3xl md:text-4xl flex flex-col">
-                  <span className="block xl:inline">
-                    Создание промтов
-                  </span>{" "}
-                  <span className="block text-indigo-600 xl:inline">
-                    для ставок на спорт
-                  </span>
-                </h1>
-                <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                  На сайте представлен интсрумент для создания промта для AI чатов. На основе промтов AI чаты будут создавать прогнозы 
-                </p>
-                <div className="mt-5 sm:mt-8 sm:flex sm:justify-center flex-wrap lg:justify-start">
-                  <div className="rounded-md shadow">
+            <div className="flex flex-col-reverse lg:flex-row items-center gap-12 mt-12 md:mt-16 lg:mt-24">
+              {/* Text content */}
+              <div className="flex-1 lg:pr-12">
+                <div className="max-w-xl">
+                  <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-gray-900">
+                    <span className="block">Создание промтов</span>
+                    <span className="block mt-3 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
+                      для ставок на спорт
+                    </span>
+                  </h1>
+                  
+                  <p className="mt-6 text-lg md:text-xl text-gray-600 leading-relaxed">
+                    Профессиональный инструмент для создания AI-промтов. Генерируйте точные прогнозы 
+                    с помощью нейросетей и повышайте успешность ваших ставок.
+                  </p>
+                  
+                  <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-md">
                     <Link
                       to="/registration"
-                      className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10 mt-3"
+                      className="px-6 py-4 text-center font-bold rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
                     >
                       Регистрация
                     </Link>
-                  </div>
-                  <div className="mt-3 sm:mt-0 sm:ml-3">
                     <Link
                       to="/auth"
-                      className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10"
+                      className="px-6 py-4 text-center font-bold rounded-xl bg-white text-indigo-600 border-2 border-indigo-100 shadow-md hover:border-indigo-300 transition-colors duration-300"
                     >
                       Войти
                     </Link>
-                  </div>
-                  <div className="mt-3 sm:mt-0 flex justify-center">
                     <Link
                       to="/home/top"
-                      className="w-full flex items-center text-center justify-center px-8 py-3  text-base font-medium  text-orange-700 bg-white hover:text-orange-800 md:py-4 md:text-lg md:px-10"
+                      className="sm:col-span-2 px-6 py-4 text-center font-semibold rounded-xl bg-transparent text-gray-700 hover:bg-gray-50 transition-colors duration-300 group"
                     >
                       Продолжить без регистрации
+                      <span className="ml-2 inline-block transition-transform group-hover:translate-x-1">→</span>
                     </Link>
                   </div>
                 </div>
               </div>
-            </main>
+              
+              {/* Image */}
+              <div className="flex-1 flex justify-center lg:justify-end w-full">
+                <div className="relative">
+                  <div className="absolute -inset-4 bg-gradient-to-r from-indigo-400/10 to-purple-400/10 rounded-2xl transform rotate-3 blur-sm" />
+                  <img
+                    className="relative w-full max-w-lg object-contain rounded-xl shadow-xl border-8 border-white"
+                    src={fon2}
+                    alt="AI прогнозы"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="lg:absolute lg:inset-y-0 lg:inset-2/4 lg:w-8/12">
-          <img
-            className="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-screen"
-            src={fon2}
-            alt="fon"
-          />
         </div>
       </div>
     </div>

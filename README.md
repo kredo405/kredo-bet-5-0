@@ -19,7 +19,7 @@
 1. Клонируйте репозиторий:
 ```bash
 git clone https://github.com/kredo405/kredo-bet-5-0.git
-cd kredo-bet
+cd kredo-bet-5-0
 ```
 2. Установите зависимости:
 ```bash
